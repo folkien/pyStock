@@ -37,7 +37,7 @@ long_rolling_msft = msft.rolling(window=100).mean()
 # Plot everything by leveraging the very powerful matplotlib package
 fig, ax = plt.subplots(figsize=(16,9))
 
-ax.plot(msft.index, msft, label='MSFT')
+ax.plot(msft.index, msft, label='ELZ')
 ax.plot(short_rolling_msft.index, short_rolling_msft, label='20 days rolling')
 ax.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
 
