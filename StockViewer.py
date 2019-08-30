@@ -1,6 +1,8 @@
-from pandas_datareader import data
+#!/usr/bin/python2.7
 import matplotlib.pyplot as plt
 import pandas as pd
+import sys
+from pandas_datareader import data
 
 
 # We would like all available data from 01/01/2000 until 12/31/2016.
@@ -8,7 +10,11 @@ start_date = '2010-01-01'
 end_date = '2019-01-03'
 
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-panel_data = data.DataReader('ELZ', 'stooq', start_date, end_date)
+panel_data = data.DataReader("ELZ", 'stooq', start_date, end_date)
+
+if len(panel_data) == 0:
+    print "No Stooq data for entry!"
+    sys.exit(1)
 
 # Getting just the adjusted closing prices. This will return a Pandas DataFrame
 # The index in this DataFrame is the major index of the panel_data.
@@ -42,7 +48,7 @@ ax.plot(short_rolling_msft.index, short_rolling_msft, label='20 days rolling')
 ax.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
 
 ax.set_xlabel('Date')
-ax.set_ylabel('Adjusted closing price (zł)')
+ax.set_ylabel('Adjusted closing price (zl)')
 ax.legend()
 
 plt.show()
