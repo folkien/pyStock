@@ -1,8 +1,17 @@
 #!/usr/bin/python2.7
 import matplotlib.pyplot as plt
 import pandas as pd
-import sys
+import sys, argparse
 from pandas_datareader import data
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock name code")
+args = parser.parse_args()
+
+#Assert
+if (not args.stockCode):
+    print "No stockCode!"
+    sys.exit(1)
 
 
 # We would like all available data from 01/01/2000 until 12/31/2016.
@@ -10,7 +19,7 @@ start_date = '2010-01-01'
 end_date = '2019-01-03'
 
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-panel_data = data.DataReader("ELZ", 'stooq', start_date, end_date)
+panel_data = data.DataReader(args.stockCode, 'stooq', start_date, end_date)
 
 if len(panel_data) == 0:
     print "No Stooq data for entry!"
@@ -43,7 +52,7 @@ long_rolling_msft = msft.rolling(window=100).mean()
 # Plot everything by leveraging the very powerful matplotlib package
 fig, ax = plt.subplots(figsize=(16,9))
 
-ax.plot(msft.index, msft, label='ELZ')
+ax.plot(msft.index, msft, label=args.stockCode)
 ax.plot(short_rolling_msft.index, short_rolling_msft, label='20 days rolling')
 ax.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
 
