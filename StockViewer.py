@@ -58,6 +58,7 @@ ax.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
 
 ax.set_xlabel('Date')
 ax.set_ylabel('Adjusted closing price (zl)')
+ax.grid()
 ax.legend()
 
 plt.show()
