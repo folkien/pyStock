@@ -52,17 +52,15 @@ msft = close
 short_rolling_msft = msft.rolling(window=20).mean()
 long_rolling_msft = msft.rolling(window=100).mean()
 
-# Plot everything by leveraging the very powerful matplotlib package
-fig, ax = plt.subplots(figsize=(16,9))
 
-ax.plot(msft.index, msft, label=args.stockCode)
-ax.plot(short_rolling_msft.index, short_rolling_msft, label='20 days rolling')
-ax.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
-
-ax.set_xlabel('Date')
-ax.set_ylabel('Adjusted closing price (zl)')
-ax.grid()
-ax.legend()
-
+plt.plot(msft.index, msft, label=args.stockCode)
+plt.plot(short_rolling_msft.index, short_rolling_msft, label='20 days rolling')
+plt.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
+plt.xlabel('Date')
+plt.ylabel('Adjusted closing price (zl)')
+plt.grid()
+plt.legend()
+if (args.plotToFile):
+    plt.savefig("plots/"+args.stockCode+"."+end_date+"plot.png")
 plt.show()
 
