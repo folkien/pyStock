@@ -7,6 +7,10 @@ from pandas_datareader import data
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock name code")
+parser.add_argument("-d", "--beginDate", type=str, required=False, help="Begin date")
+parser.add_argument("-Y", "--lastYear", action='store_true', required=False, help="Last Year")
+parser.add_argument("-M", "--lastMonth", action='store_true', required=False, help="Last Month")
+parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
 parser.add_argument("-g", "--plotToFile", action='store_true', required=False, help="Plot to file")
 args = parser.parse_args()
 
@@ -18,8 +22,25 @@ if (not args.stockCode):
 
 # Dates
 currentDateTime = datetime.datetime.now()
-start_date  = '2010-01-01'
+## End date
 end_date    =  currentDateTime.strftime("%Y-%m-%d")
+## Start date
+if (args.beginDate):
+    start_date  = args.beginDate
+else:
+    start_date  = '2010-01-01'
+# Check last year
+if (args.lastYear):
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=365)
+    start_date  =  tmpDate.strftime("%Y-%m-%d")
+# Check last month
+if (args.lastMonth):
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30)
+    start_date  =  tmpDate.strftime("%Y-%m-%d")
+# Check last Week
+if (args.lastWeek):
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=7)
+    start_date  =  tmpDate.strftime("%Y-%m-%d")
 
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
 panel_data = data.DataReader(args.stockCode, 'stooq', start_date, end_date)
