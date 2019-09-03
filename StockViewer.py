@@ -2,10 +2,12 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys, argparse
+import datetime
 from pandas_datareader import data
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock name code")
+parser.add_argument("-g", "--plotToFile", action='store_true', required=False, help="Plot to file")
 args = parser.parse_args()
 
 #Assert
@@ -14,9 +16,10 @@ if (not args.stockCode):
     sys.exit(1)
 
 
-# We would like all available data from 01/01/2000 until 12/31/2016.
-start_date = '2010-01-01'
-end_date = '2019-01-03'
+# Dates
+currentDateTime = datetime.datetime.now()
+start_date  = '2010-01-01'
+end_date    =  currentDateTime.strftime("%Y-%m-%d")
 
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
 panel_data = data.DataReader(args.stockCode, 'stooq', start_date, end_date)
