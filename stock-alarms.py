@@ -29,6 +29,8 @@ def alarmsAdd(name,reference,alarmType,value):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--addAlarm", action='store_true', required=False, help="")
+parser.add_argument("-d", "--deleteAlarm", action='store_true', required=False, help="")
+parser.add_argument("-c", "--checkAlarms", action='store_true', required=False, help="")
 parser.add_argument("-n", "--stockCode", type=str, required=False, help="")
 parser.add_argument("-r", "--referencePrice", type=int, required=False, help="")
 parser.add_argument("-t", "--type", type=str, required=False, help="")
@@ -37,7 +39,7 @@ parser.add_argument("-W", "--lastWeek", action='store_true', required=False, hel
 args = parser.parse_args()
 
 #Assert
-if (not args.addAlarm):
+if (not args.addAlarm and not args.checkAlarms):
     print "Missing event"
     sys.exit(1)
 
@@ -55,21 +57,31 @@ tmpDate = datetime.datetime.now() - datetime.timedelta(days=30)
 start_date  =  tmpDate.strftime("%Y-%m-%d")
 
 alarmsRead()
+
+# 0. Adding alarms
+# #####################################################33
 if (args.addAlarm):
     alarmsAdd(args.stockCode,args.referencePrice,args.type,args.value)
     alarmsWrite()
 
-
-# 1. Get DATA from URL
+# 1. Removing alarms
 # #####################################################33
-# User pandas_reader.data.DataReader to load the desired data. As simple as that.
-panel_data = data.DataReader(args.stockCode, 'stooq', start_date, end_date)
 
-if len(panel_data) == 0:
-    print "No Stooq data for entry!"
-    sys.exit(1)
+# 2. Checking alarms
+# #####################################################33
+for alarm in alarms:
+    # User pandas_reader.data.DataReader to load the desired data. As simple as that.
+    panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
 
-# Getting just the adjusted closing prices. This will return a Pandas DataFrame
-# The index in this DataFrame is the major index of the panel_data.
-close = panel_data['Close']
+    if len(panel_data) != 0:
+        # Getting just the adjusted closing prices. This will return a Pandas DataFrame
+        # The index in this DataFrame is the major index of the panel_data.
+        close = panel_data['Close']
+        if abs(close[-1] - alarm['reference'])>alarm['value']:
+            print "Alarm for"+alarm['name']+", price "+close[-1]+"!"
+    else:
+        print "No Stooq data for entry!"
+
+
+
 
