@@ -77,8 +77,15 @@ for alarm in alarms:
         # Getting just the adjusted closing prices. This will return a Pandas DataFrame
         # The index in this DataFrame is the major index of the panel_data.
         close = panel_data['Close']
-        if abs(close[-1] - alarm['reference'])>alarm['value']:
-            print "Alarm for"+alarm['name']+", price "+close[-1]+"!"
+        price = close[-1]
+        print "Check of "+str(price)+"with "+str(alarm['reference'])
+        if alarm['type'] == "percent":
+            valueChange=(alarm['reference']*alarm['value'])/100
+            if abs(close[-1] - alarm['reference'])>valueChange:
+                print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
+        else:
+            if abs(close[-1] - alarm['reference'])>alarm['value']:
+                print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
     else:
         print "No Stooq data for entry!"
 
