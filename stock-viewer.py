@@ -46,6 +46,8 @@ if (args.lastWeek):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=7)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 
+# 1. Get DATA from URL
+# #####################################################33
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
 panel_data = data.DataReader(args.stockCode, 'stooq', start_date, end_date)
 
@@ -57,6 +59,8 @@ if len(panel_data) == 0:
 # The index in this DataFrame is the major index of the panel_data.
 close = panel_data['Close']
 
+# 2. Reindex data and calculate average
+# #####################################################33
 # Getting all weekdays between 01/01/2000 and 12/31/2016
 all_weekdays = pd.date_range(start=start_date, end=end_date, freq='B')
 
@@ -76,6 +80,8 @@ msft = close
 average = msft.rolling(window=int(args.averageDays),min_periods=1).mean()
 
 
+# 3. Plot data
+# #####################################################33
 plt.plot(msft.index, msft, label=args.stockCode)
 plt.plot(average.index, average, label=str(args.averageDays)+' days mean')
 plt.xlabel('Date')
@@ -83,6 +89,9 @@ plt.ylabel('Closing price (zl)')
 plt.grid()
 plt.legend()
 if (args.plotToFile):
-    plt.savefig("plots/"+args.stockCode+"."+end_date+"plot.png")
-plt.show()
+    outputFilename="plots/"+args.stockCode+"."+end_date+"plot.png"
+    plt.savefig(outputFilename)
+    print outputFilename
+else:
+    plt.show()
 
