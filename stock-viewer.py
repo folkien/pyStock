@@ -8,6 +8,7 @@ from pandas_datareader import data
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock name code")
 parser.add_argument("-d", "--beginDate", type=str, required=False, help="Begin date")
+parser.add_argument("-a", "--averageDays", type=int, required=False, help="Day to calc mean")
 parser.add_argument("-Y", "--lastYear", action='store_true', required=False, help="Last Year")
 parser.add_argument("-M", "--lastMonth", action='store_true', required=False, help="Last Month")
 parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
@@ -18,6 +19,9 @@ args = parser.parse_args()
 if (not args.stockCode):
     print "No stockCode!"
     sys.exit(1)
+
+if (not args.averageDays):
+    args.averageDays=30
 
 
 # Dates
@@ -53,7 +57,6 @@ if len(panel_data) == 0:
 # The index in this DataFrame is the major index of the panel_data.
 close = panel_data['Close']
 
-
 # Getting all weekdays between 01/01/2000 and 12/31/2016
 all_weekdays = pd.date_range(start=start_date, end=end_date, freq='B')
 
@@ -69,16 +72,14 @@ close = close.fillna(method='ffill')
 # Get the MSFT timeseries. This now returns a Pandas Series object indexed by date.
 msft = close
 
-# Calculate the 20 and 100 days moving averages of the closing prices
-short_rolling_msft = msft.rolling(window=20).mean()
-long_rolling_msft = msft.rolling(window=100).mean()
+# Calculate the days moving averages
+average = msft.rolling(window=int(args.averageDays),min_periods=1).mean()
 
 
 plt.plot(msft.index, msft, label=args.stockCode)
-plt.plot(short_rolling_msft.index, short_rolling_msft, label='20 days rolling')
-plt.plot(long_rolling_msft.index, long_rolling_msft, label='100 days rolling')
+plt.plot(average.index, average, label=str(args.averageDays)+' days mean')
 plt.xlabel('Date')
-plt.ylabel('Adjusted closing price (zl)')
+plt.ylabel('Closing price (zl)')
 plt.grid()
 plt.legend()
 if (args.plotToFile):
