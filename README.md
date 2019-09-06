@@ -6,8 +6,9 @@ https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pand
 
 # TODO
 - config .json z aktywami,
-- config .json z alarmami,
-- Alarmy procentowe, wartościowe, na nazwe, od bazowej wartośći,
+- Alarmy : 
+ -- aktywny i nieaktywne alarmy,
+ -- pokazywanie alarmów,
 - Wysyłanie emaili,
 - Sprawdzanie najnowszych raportów dla inwestorów,
 - Monitorowanie trendów oraz alarmy z trendów,
