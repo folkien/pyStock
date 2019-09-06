@@ -27,7 +27,7 @@ def alarmsWrite():
     global alarmsConfigFile
     global alarms
     with open(alarmsConfigFile, 'w') as f:
-        json.dump(alarms, f)
+        json.dump(alarms, f, indent=4, sort_keys=True)
 
 def alarmsShow():
     global alarmsConfigFile
