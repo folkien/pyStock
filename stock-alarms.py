@@ -84,16 +84,15 @@ if (args.addAlarm):
 # #####################################################33
 for i in range(len(alarms)):
     alarm = alarms[i]
-    if (alarm['state'] == AlarmState.Active):
-        # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-        panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
+    # User pandas_reader.data.DataReader to load the desired data. As simple as that.
+    panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
 
-        if len(panel_data) != 0:
-            # Getting just the adjusted closing prices. This will return a Pandas DataFrame
-            # The index in this DataFrame is the major index of the panel_data.
-            close = panel_data['Close']
-            price = close[-1]
-            print "Check of "+str(price)+"with "+str(alarm['reference'])
+    if len(panel_data) != 0:
+        close = panel_data['Close']
+        price = close[-1]
+
+        print "Check of "+str(price)+"with "+str(alarm['reference'])
+        if (alarm['state'] == AlarmState.Active):
             if alarm['type'] == "percent":
                 valueChange=(alarm['reference']*alarm['value'])/100
                 if abs(close[-1] - alarm['reference'])>valueChange:
@@ -106,7 +105,11 @@ for i in range(len(alarms)):
                     alarms[i]['state'] = AlarmState.Inactive
                     alarmsIsChanged = True
         else:
-            print "No Stooq data for entry!"
+            # Check hysteresis and return back
+            print  "Inactive"
+    else:
+        print "No Stooq data for entry!"
+
 
 # 4. Write alarms if were changed
 # #####################################################33
