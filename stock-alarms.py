@@ -23,6 +23,12 @@ def alarmsWrite():
     with open(alarmsConfigFile, 'w') as f:
         json.dump(alarms, f)
 
+def alarmsShow():
+    global alarmsConfigFile
+    global alarms
+    for alarm in alarms:
+        print alarm
+
 def alarmsAdd(name,reference,alarmType,value):
     global alarms
     alarms.append({"name":name, "reference":reference, "type":alarmType, "value":value})
