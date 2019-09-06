@@ -40,6 +40,21 @@ def alarmsAdd(name,reference,alarmType,value,state):
     alarms.append({"name":name, "reference":reference,
                    "type":alarmType, "value":value, "state":state})
 
+def alarmCheck(value,alarm):
+    diffrence = abs(close[-1] - alarm['reference'])
+    if alarm['type'] == "percent":
+        valueChange=(alarm['reference']*alarm['value'])/100
+    else:
+        valueChange=alarm['value']
+
+    # Check if alarm happend!
+    if (diffrence > valueChange):
+        print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
+        alarms[i]['state'] = AlarmState.Inactive
+        return True
+    return False
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--addAlarm", action='store_true', required=False, help="")
 parser.add_argument("-d", "--deleteAlarm", action='store_true', required=False, help="")
@@ -91,19 +106,9 @@ for i in range(len(alarms)):
         close = panel_data['Close']
         price = close[-1]
 
-        print "Check of "+str(price)+"with "+str(alarm['reference'])
         if (alarm['state'] == AlarmState.Active):
-            if alarm['type'] == "percent":
-                valueChange=(alarm['reference']*alarm['value'])/100
-                if abs(close[-1] - alarm['reference'])>valueChange:
-                    print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
-                    alarms[i]['state'] = AlarmState.Inactive
-                    alarmsIsChanged = True
-            else:
-                if abs(close[-1] - alarm['reference'])>alarm['value']:
-                    print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
-                    alarms[i]['state'] = AlarmState.Inactive
-                    alarmsIsChanged = True
+            if (alarmCheck(price,alarm) == True):
+                alarmsIsChanged=True
         else:
             # Check hysteresis and return back
             print  "Inactive"
