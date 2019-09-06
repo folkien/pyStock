@@ -39,7 +39,7 @@ def alarmsShow():
 def alarmsAdd(name,reference,alarmType,value,state):
     global alarms
     alarms.append({"name":name, "reference":float(reference),
-                   "type":str(alarmType), "value":float(value), "state":state})
+                   "type":str(alarmType), "value":float(value), "state":int(state.value)})
 
 def alarmCheck(value,alarm):
     diffrence = abs(close[-1] - alarm['reference'])
