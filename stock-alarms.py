@@ -44,15 +44,15 @@ def alarmsAdd(name,reference,alarmType,value,state):
 def alarmCheck(value,alarm):
     diffrence = abs(close[-1] - alarm['reference'])
     if alarm['type'] == "percent":
-        valueChange=(alarm['reference']*alarm['value'])/100
+        valueChange=float(alarm['reference']*alarm['value'])/100
     else:
         valueChange=alarm['value']
-    valueChangeReset=valueChange-valueChange*hysteresis/100
+    valueChangeReset=valueChange-float(valueChange*hysteresis)/100
 
     # Check if alarm happend!
     if ((alarm['state'] == AlarmState.Active) and (diffrence > valueChange)):
-        print "Alarm for "+str(alarm['name'])+"! Price "+str(price)+\
-              "! Change "+str(valueChange)+"."
+        print "!Alarm! "+str(alarm['name'])+" price "+str(price)+" "\
+              "(ref. "+str(alarm['reference'])+" +/-"+str(valueChange)+")!"
         alarms[i]['state'] = AlarmState.Inactive
         return True
     # Check if alarm should be reseted!
