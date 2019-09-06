@@ -38,8 +38,8 @@ def alarmsShow():
 
 def alarmsAdd(name,reference,alarmType,value,state):
     global alarms
-    alarms.append({"name":name, "reference":reference,
-                   "type":alarmType, "value":value, "state":state})
+    alarms.append({"name":name, "reference":float(reference),
+                   "type":str(alarmType), "value":float(value), "state":state})
 
 def alarmCheck(value,alarm):
     diffrence = abs(close[-1] - alarm['reference'])
@@ -68,9 +68,9 @@ parser.add_argument("-a", "--addAlarm", action='store_true', required=False, hel
 parser.add_argument("-d", "--deleteAlarm", action='store_true', required=False, help="")
 parser.add_argument("-c", "--checkAlarms", action='store_true', required=False, help="")
 parser.add_argument("-n", "--stockCode", type=str, required=False, help="")
-parser.add_argument("-r", "--referencePrice", type=int, required=False, help="")
+parser.add_argument("-r", "--referencePrice", type=float, required=False, help="")
 parser.add_argument("-t", "--type", type=str, required=False, help="")
-parser.add_argument("-v", "--value", type=int, required=False, help="")
+parser.add_argument("-v", "--value", type=float, required=False, help="")
 parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
 args = parser.parse_args()
 
