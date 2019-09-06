@@ -15,6 +15,7 @@ class AlarmState(Enum):
 alarmsConfigFile="config/alarms.json"
 alarmsIsChanged=False
 alarms=[]
+hysteresis=10 # percent value
 
 def alarmsRead():
     global alarmsConfigFile
@@ -46,12 +47,18 @@ def alarmCheck(value,alarm):
         valueChange=(alarm['reference']*alarm['value'])/100
     else:
         valueChange=alarm['value']
+    valueChangeReset=valueChange-valueChange*hysteresis/100
 
     # Check if alarm happend!
-    if (diffrence > valueChange):
-        print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
+    if ((alarm['state'] == AlarmState.Active) and (diffrence > valueChange)):
+        print "Alarm for "+str(alarm['name'])+"! Price "+str(price)+\
+              "! Change "+str(valueChange)+"."
         alarms[i]['state'] = AlarmState.Inactive
         return True
+    # Check if alarm should be reseted!
+    elif ((alarm['state'] == AlarmState.Inactive) and (diffrence <= valueChangeReset)):
+        print "Alarm reseted!"
+        alarms[i]['state'] = AlarmState.Active
     return False
 
 
@@ -106,12 +113,8 @@ for i in range(len(alarms)):
         close = panel_data['Close']
         price = close[-1]
 
-        if (alarm['state'] == AlarmState.Active):
-            if (alarmCheck(price,alarm) == True):
-                alarmsIsChanged=True
-        else:
-            # Check hysteresis and return back
-            print  "Inactive"
+        if (alarmCheck(price,alarm) == True):
+            alarmsIsChanged=True
     else:
         print "No Stooq data for entry!"
 
