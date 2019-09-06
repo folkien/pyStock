@@ -6,8 +6,14 @@ import datetime
 import json
 import os
 from pandas_datareader import data
+from enum import Enum
+
+class AlarmState(Enum):
+    Inactive = 0
+    Active = 1
 
 alarmsConfigFile="config/alarms.json"
+alarmsIsChanged=False
 alarms=[]
 
 def alarmsRead():
@@ -29,9 +35,10 @@ def alarmsShow():
     for alarm in alarms:
         print alarm
 
-def alarmsAdd(name,reference,alarmType,value):
+def alarmsAdd(name,reference,alarmType,value,state):
     global alarms
-    alarms.append({"name":name, "reference":reference, "type":alarmType, "value":value})
+    alarms.append({"name":name, "reference":reference,
+                   "type":alarmType, "value":value, "state":state})
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--addAlarm", action='store_true', required=False, help="")
@@ -67,34 +74,43 @@ alarmsRead()
 # 0. Adding alarms
 # #####################################################33
 if (args.addAlarm):
-    alarmsAdd(args.stockCode,args.referencePrice,args.type,args.value)
-    alarmsWrite()
+    alarmsAdd(args.stockCode,args.referencePrice,args.type,args.value,AlarmState.Active)
+    alarmsIsChanged = True
 
 # 1. Removing alarms
 # #####################################################33
 
 # 2. Checking alarms
 # #####################################################33
-for alarm in alarms:
-    # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-    panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
+for i in range(len(alarms)):
+    alarm = alarms[i]
+    if (alarm['state'] == AlarmState.Active):
+        # User pandas_reader.data.DataReader to load the desired data. As simple as that.
+        panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
 
-    if len(panel_data) != 0:
-        # Getting just the adjusted closing prices. This will return a Pandas DataFrame
-        # The index in this DataFrame is the major index of the panel_data.
-        close = panel_data['Close']
-        price = close[-1]
-        print "Check of "+str(price)+"with "+str(alarm['reference'])
-        if alarm['type'] == "percent":
-            valueChange=(alarm['reference']*alarm['value'])/100
-            if abs(close[-1] - alarm['reference'])>valueChange:
-                print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
+        if len(panel_data) != 0:
+            # Getting just the adjusted closing prices. This will return a Pandas DataFrame
+            # The index in this DataFrame is the major index of the panel_data.
+            close = panel_data['Close']
+            price = close[-1]
+            print "Check of "+str(price)+"with "+str(alarm['reference'])
+            if alarm['type'] == "percent":
+                valueChange=(alarm['reference']*alarm['value'])/100
+                if abs(close[-1] - alarm['reference'])>valueChange:
+                    print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
+                    alarms[i]['state'] = AlarmState.Inactive
+                    alarmsIsChanged = True
+            else:
+                if abs(close[-1] - alarm['reference'])>alarm['value']:
+                    print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
+                    alarms[i]['state'] = AlarmState.Inactive
+                    alarmsIsChanged = True
         else:
-            if abs(close[-1] - alarm['reference'])>alarm['value']:
-                print "Alarm for "+str(alarm['name'])+", price "+str(price)+"!"
-    else:
-        print "No Stooq data for entry!"
+            print "No Stooq data for entry!"
 
-
+# 4. Write alarms if were changed
+# #####################################################33
+if (alarmsIsChanged == True):
+    alarmsWrite()
 
 
