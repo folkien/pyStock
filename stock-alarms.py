@@ -41,6 +41,19 @@ def alarmsAdd(name,reference,alarmType,value,state):
     alarms.append({"name":name, "reference":float(reference),
                    "type":str(alarmType), "value":float(value), "state":int(state.value)})
 
+def alarmsRemove(name,reference,alarmType,value):
+    global alarms
+    try:
+        alarms.remove({"name":name, "reference":float(reference),
+                    "type":str(alarmType), "value":float(value), "state":AlarmState.Active})
+    except ValueError:
+        pass
+    try:
+        alarms.remove({"name":name, "reference":float(reference),
+                    "type":str(alarmType), "value":float(value), "state":AlarmState.Inactive})
+    except ValueError:
+        pass
+
 def alarmCheck(value,alarm):
     diffrence = abs(close[-1] - alarm['reference'])
     if alarm['type'] == "percent":
@@ -75,7 +88,7 @@ parser.add_argument("-W", "--lastWeek", action='store_true', required=False, hel
 args = parser.parse_args()
 
 #Assert
-if (not args.addAlarm and not args.checkAlarms):
+if (not args.addAlarm and not args.checkAlarms and not args.deleteAlarm):
     print "Missing event"
     sys.exit(1)
 
@@ -84,6 +97,10 @@ if (args.addAlarm):
         print "Missing arguments for adding."
         sys.exit(1)
 
+if (args.deleteAlarm):
+    if (not args.stockCode or not args.referencePrice or not args.type or not args.value):
+        print "Missing arguments for removal."
+        sys.exit(1)
 
 ## End date
 currentDateTime = datetime.datetime.now()
@@ -97,11 +114,15 @@ alarmsRead()
 # 0. Adding alarms
 # #####################################################33
 if (args.addAlarm):
+    alarmsRemove(args.stockCode,args.referencePrice,args.type,args.value)
     alarmsAdd(args.stockCode,args.referencePrice,args.type,args.value,AlarmState.Active)
     alarmsIsChanged = True
 
 # 1. Removing alarms
 # #####################################################33
+if (args.deleteAlarm):
+    alarmsRemove(args.stockCode,args.referencePrice,args.type,args.value)
+    alarmsIsChanged = True
 
 # 2. Checking alarms
 # #####################################################33
