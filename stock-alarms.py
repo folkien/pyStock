@@ -54,6 +54,9 @@ def alarmsRemove(name,reference,alarmType,value):
     except ValueError:
         pass
 
+def alarmPrint(alarm):
+    print alarm
+
 def alarmCheck(value,alarm):
     diffrence = abs(close[-1] - alarm['reference'])
     if alarm['type'] == "percent":
@@ -77,9 +80,10 @@ def alarmCheck(value,alarm):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-a", "--addAlarm", action='store_true', required=False, help="")
-parser.add_argument("-d", "--deleteAlarm", action='store_true', required=False, help="")
-parser.add_argument("-c", "--checkAlarms", action='store_true', required=False, help="")
+parser.add_argument("-a", "--addAlarm",    action='store_true', required=False, help="Adds given alarm")
+parser.add_argument("-d", "--deleteAlarm", action='store_true', required=False, help="Removes alarm")
+parser.add_argument("-c", "--checkAlarms", action='store_true', required=False, help="Check all alarms")
+parser.add_argument("-p", "--printAlarms", action='store_true', required=False, help="Print all alarms")
 parser.add_argument("-n", "--stockCode", type=str, required=False, help="")
 parser.add_argument("-r", "--referencePrice", type=float, required=False, help="")
 parser.add_argument("-t", "--type", type=str, required=False, help="")
@@ -88,7 +92,7 @@ parser.add_argument("-W", "--lastWeek", action='store_true', required=False, hel
 args = parser.parse_args()
 
 #Assert
-if (not args.addAlarm and not args.checkAlarms and not args.deleteAlarm):
+if (not args.addAlarm and not args.checkAlarms and not args.deleteAlarm and not args.printAlarms):
     print "Missing event"
     sys.exit(1)
 
@@ -128,17 +132,21 @@ if (args.deleteAlarm):
 # #####################################################33
 for i in range(len(alarms)):
     alarm = alarms[i]
-    # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-    panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
+    if (args.printAlarms):
+        alarmPrint(alarm)
 
-    if len(panel_data) != 0:
-        close = panel_data['Close']
-        price = close[-1]
+    if (args.checkAlarms):
+        # User pandas_reader.data.DataReader to load the desired data. As simple as that.
+        panel_data = data.DataReader(alarm['name'], 'stooq', start_date, end_date)
 
-        if (alarmCheck(price,alarm) == True):
-            alarmsIsChanged=True
-    else:
-        print "No Stooq data for entry!"
+        if len(panel_data) != 0:
+            close = panel_data['Close']
+            price = close[-1]
+
+            if (alarmCheck(price,alarm) == True):
+                alarmsIsChanged=True
+        else:
+            print "No Stooq data for entry!"
 
 
 # 4. Write alarms if were changed
