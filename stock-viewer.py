@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys, argparse
 import datetime
+import numpy
 from pandas_datareader import data
 
 
@@ -41,6 +42,16 @@ def SetAverage(data, averageDays):
     average = msft.rolling(window=int(averageDays),min_periods=1).mean()
 
     return average
+
+# Calculate diff
+def Diffrentiate(dataset):
+    diff=numpy.diff(dataset).tolist()
+    diff.append(0,0)
+    return diff
+
+# Calculate OBV index thanks to the volume
+def SetOBV(price,volume):
+    return 0
 
 
 
@@ -94,18 +105,41 @@ if (args.lastWeek):
 panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
-closePrice    = SetReindex(panel_data['Close'],start_date,end_date)
-avgClosePrice = SetAverage(closePrice,args.averageDays)
+closePrice     = SetReindex(panel_data['Close'],start_date,end_date)
+avgClosePrice  = SetAverage(closePrice,args.averageDays)
+diffClosePrice = Diffrentiate(closePrice.values)
+# Volume
+volume = SetReindex(panel_data['Volume'],start_date,end_date)
 
 
 # 3. Plot data
 # #####################################################33
+# Price
+plot1=plt.subplot(311)
 plt.plot(closePrice.index, closePrice, label=args.stockCode)
 plt.plot(avgClosePrice.index, avgClosePrice, label=str(args.averageDays)+' days mean')
 plt.xlabel('Date')
 plt.ylabel('Closing price (zl)')
 plt.grid()
 plt.legend()
+
+# Diff
+plot2=plt.subplot(312, sharex=plot1)
+plt.plot(closePrice.index,  diffClosePrice, label="Zmiana")
+plt.xlabel('Date')
+plt.ylabel('[zl]')
+plt.grid()
+plt.legend()
+
+# Volume
+plot3=plt.subplot(313, sharex=plot1)
+plt.plot(volume.index, volume, label="Volume")
+plt.xlabel('Date')
+plt.ylabel('Jednostki')
+plt.grid()
+plt.legend()
+
+# Plot to file or show
 if (args.plotToFile):
     outputFilename="plots/"+args.stockCode+"."+end_date+"plot.png"
     plt.savefig(outputFilename)
