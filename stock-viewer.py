@@ -51,7 +51,19 @@ def Diffrentiate(dataset):
 
 # Calculate OBV index thanks to the volume
 def SetOBV(price,volume):
-    return 0
+    lastOBV=volume.values[1]
+    lastPrice=price.values[1]
+    obv=[ lastOBV ]
+
+    for i in range(len(price.values)):
+        if (lastPrice > price.values[i]):
+            lastOBV-=volume.values[i]
+        else:
+            lastOBV+=volume.values[i]
+        obv.append(lastOBV)
+        lastPrice=price.values[i]
+
+    return obv
 
 
 
