@@ -177,11 +177,15 @@ if (args.lastWeek):
 panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
-mins, maxs = FindPeaks(panel_data['Close'], 0.3)
-mins          = SetReindex(mins,start_date,end_date, False)
-maxs          = SetReindex(maxs,start_date,end_date, False)
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
+
+# Find max and mins
+PriceRange=closePrice.max()-closePrice.min()
+print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
+mins, maxs       = FindPeaks(panel_data['Close'], PriceRange/10)
+mins             = SetReindex(mins,start_date,end_date, False)
+maxs             = SetReindex(maxs,start_date,end_date, False)
 # Volume
 SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
 volume = SetReindex(panel_data['Volume'],start_date,end_date)
