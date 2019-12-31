@@ -21,7 +21,7 @@ def GetData(code,begin,end):
     return receivedData
 
 # Reindex weekly data
-def SetReindex(data,start_date,end_date):
+def SetReindex(data,start_date,end_date,fillna=True):
     # Getting all weekdays between 01/01/2000 and 12/31/2016
     all_weekdays = pd.date_range(start=start_date, end=end_date, freq='B')
 
@@ -32,7 +32,8 @@ def SetReindex(data,start_date,end_date):
     # Reindexing will insert missing values (NaN) for the dates that were not present
     # in the original set. To cope with this, we can fill the missing by replacing them
     # with the latest available price for each instrument.
-    data = data.fillna(method='ffill')
+    if (fillna == True):
+        data = data.fillna(method='ffill')
 
     return data
 
@@ -120,10 +121,10 @@ def FindPeaks(data, delta):
                 last_min_pos = i
                 search_max = True
 
-        maxs.values[i] = 0
-        mins.values[i] = 0
+        maxs.values[i] = NaN
+        mins.values[i] = NaN
         
-    return mins, maxs
+    return mins.dropna(), maxs.dropna()
 
 
 # Arguments and config
@@ -177,8 +178,8 @@ panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
 mins, maxs = FindPeaks(panel_data['Close'], 0.3)
-mins          = SetReindex(mins,start_date,end_date)
-maxs          = SetReindex(maxs,start_date,end_date)
+mins          = SetReindex(mins,start_date,end_date, False)
+maxs          = SetReindex(maxs,start_date,end_date, False)
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 # Volume
