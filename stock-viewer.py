@@ -4,6 +4,7 @@ import pandas as pd
 import sys, argparse
 import datetime
 import numpy
+import copy
 from pandas_datareader import data
 
 
@@ -53,7 +54,7 @@ def Diffrentiate(dataset):
 def SetOBV(price,volume):
     lastOBV=volume.values[1]
     lastPrice=price.values[1]
-    obv=volume
+    obv=copy.deepcopy(volume)
 
     for i in range(1, len(price.values)):
         # If price drop then volume wih minus value
@@ -125,8 +126,7 @@ avgClosePrice  = SetAverage(closePrice,args.averageDays)
 # Volume
 volume = SetReindex(panel_data['Volume'],start_date,end_date)
 obv = SetOBV(panel_data['Close'], panel_data['Volume'])
-obv= SetReindex(obv,start_date,end_date)
-print obv
+obv = SetReindex(obv,start_date,end_date)
 
 
 # 3. Plot data
@@ -142,7 +142,7 @@ plt.legend()
 
 # Volume
 plot3=plt.subplot(212, sharex=plot1)
-plt.plot(volume.index, obv, label="OBV")
+plt.plot(obv.index, obv, label="OBV")
 plt.plot(volume.index, volume, label="Volume")
 plt.xlabel('Date')
 plt.ylabel('Jednostki')
