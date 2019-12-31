@@ -6,6 +6,7 @@ import datetime
 import numpy
 import copy
 from pandas_datareader import data
+from numpy import NaN
 
 
 # Get DATA from URL
@@ -82,6 +83,44 @@ def SetOBV(price,volume):
 
     return obv
 
+def FindPeaks(data, delta):
+    output=copy.deepcopy(data)
+    last_max = data.values[0]
+    last_min = data.values[0]
+    last_max_pos = 0
+    last_min_pos = 0
+    search_max = True
+    
+    # Find max/min in loop
+    for i in range(len(data.values)):
+        current = data.values[i]
+        # Save last max
+        if (current > last_max):
+            last_max = current
+            last_max_pos = i
+        # Save last min
+        if (current < last_min):
+            last_min = current
+            last_min_pos = i
+            
+        if (search_max == True):
+            # Save last max value
+            if (current < (last_max-delta)):
+                output.values[last_max_pos] = last_max
+                last_max = current
+                last_max_pos = i
+                search_max = False
+        else:
+            # Save last min value
+            if (current > (last_min+delta)):
+                output.values[last_min_pos] = last_min
+                last_min = current
+                last_min_pos = i
+                search_max = True
+
+        output.values[i] = NaN
+        
+    return output
 
 
 # Arguments and config
@@ -134,7 +173,9 @@ if (args.lastWeek):
 panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
-closePrice     = SetReindex(panel_data['Close'],start_date,end_date)
+minmax           = FindPeaks(panel_data['Close'], 0.1)
+minmax           = SetReindex(minmax,start_date,end_date)
+closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 # Volume
 SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
@@ -148,8 +189,8 @@ obv = SetReindex(obv,start_date,end_date)
 # Price
 plot1=plt.subplot(211)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
+plt.plot(minmax.index,minmax,'ro', label="Peaks")
 PlotWilliamsIndicator(jaw, teeth, lips)
-# plt.plot(avgClosePrice.index, avgClosePrice, label=str(args.averageDays)+' days mean')
 plt.xlabel('Date')
 plt.ylabel('Closing price (zl)')
 plt.grid()
