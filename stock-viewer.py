@@ -195,6 +195,7 @@ obv = SetReindex(obv,start_date,end_date)
 
 # 3. Plot data
 # #####################################################33
+fig = plt.figure(figsize=(16.0, 9.0))
 # Price
 plot1=plt.subplot(211)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
