@@ -53,14 +53,17 @@ def Diffrentiate(dataset):
 def SetOBV(price,volume):
     lastOBV=volume.values[1]
     lastPrice=price.values[1]
-    obv=[ lastOBV ]
+    obv=volume
 
-    for i in range(len(price.values)):
+    for i in range(1, len(price.values)):
+        # If price drop then volume wih minus value
         if (lastPrice > price.values[i]):
             lastOBV-=volume.values[i]
+        # If price rise then volume with positiive
         else:
             lastOBV+=volume.values[i]
-        obv.append(lastOBV)
+
+        obv.values[i] = lastOBV
         lastPrice=price.values[i]
 
     return obv
@@ -119,15 +122,17 @@ panel_data  = GetData(args.stockCode, start_date, end_date)
 # Get Close price and average
 closePrice     = SetReindex(panel_data['Close'],start_date,end_date)
 avgClosePrice  = SetAverage(closePrice,args.averageDays)
-diffClosePrice = Diffrentiate(closePrice.values)
 # Volume
 volume = SetReindex(panel_data['Volume'],start_date,end_date)
+obv = SetOBV(panel_data['Close'], panel_data['Volume'])
+obv= SetReindex(obv,start_date,end_date)
+print obv
 
 
 # 3. Plot data
 # #####################################################33
 # Price
-plot1=plt.subplot(311)
+plot1=plt.subplot(211)
 plt.plot(closePrice.index, closePrice, label=args.stockCode)
 plt.plot(avgClosePrice.index, avgClosePrice, label=str(args.averageDays)+' days mean')
 plt.xlabel('Date')
@@ -135,16 +140,9 @@ plt.ylabel('Closing price (zl)')
 plt.grid()
 plt.legend()
 
-# Diff
-plot2=plt.subplot(312, sharex=plot1)
-plt.plot(closePrice.index,  diffClosePrice, label="Zmiana")
-plt.xlabel('Date')
-plt.ylabel('[zl]')
-plt.grid()
-plt.legend()
-
 # Volume
-plot3=plt.subplot(313, sharex=plot1)
+plot3=plt.subplot(212, sharex=plot1)
+plt.plot(volume.index, obv, label="OBV")
 plt.plot(volume.index, volume, label="Volume")
 plt.xlabel('Date')
 plt.ylabel('Jednostki')
