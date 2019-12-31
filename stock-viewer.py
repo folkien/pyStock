@@ -35,19 +35,16 @@ def SetReindex(data,start_date,end_date):
 
     return data
 
-def SetAverage(data, averageDays):
-    # Get the MSFT timeseries. This now returns a Pandas Series object indexed by date.
-    msft = data
-
-    # Calculate the days moving averages
-    average = msft.rolling(window=int(averageDays),min_periods=1).mean()
+def SetMovingAverage(data, window, shiftPeriods = 0):
+    average = data.rolling(window=int(window),min_periods=1).mean()
+    average.shift(periods=shiftPeriods)
 
     return average
 
 def SetWilliamsIndicator(price):
-    jaw = price.rolling(window=13,min_periods=1).mean()
-    teeth = price.rolling(window=8,min_periods=1).mean()
-    lips  = price.rolling(window=5,min_periods=1).mean()
+    jaw   = SetMovingAverage(price,  13, 8)
+    teeth = SetMovingAverage(price,   8, 5)
+    lips  = SetMovingAverage(price,   5, 3)
     
     return jaw, teeth, lips
 
@@ -139,7 +136,6 @@ panel_data  = GetData(args.stockCode, start_date, end_date)
 # Get Close price and average
 closePrice     = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
-avgClosePrice  = SetAverage(closePrice,args.averageDays)
 # Volume
 SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
 volume = SetReindex(panel_data['Volume'],start_date,end_date)
@@ -157,6 +153,7 @@ PlotWilliamsIndicator(jaw, teeth, lips)
 plt.xlabel('Date')
 plt.ylabel('Closing price (zl)')
 plt.grid()
+plt.title("Cena w czasie")
 plt.legend()
 
 # Volume
@@ -166,6 +163,7 @@ plt.plot(volume.index, volume, label="Volume")
 plt.xlabel('Date')
 plt.ylabel('Jednostki')
 plt.grid()
+plt.title("Zmiany volumenu i OBV")
 plt.legend()
 
 # Plot to file or show
