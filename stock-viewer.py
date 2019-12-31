@@ -44,28 +44,44 @@ def SetAverage(data, averageDays):
 
     return average
 
+def SetWilliamsIndicator(price):
+    jaw = price.rolling(window=13,min_periods=1).mean()
+    teeth = price.rolling(window=8,min_periods=1).mean()
+    lips  = price.rolling(window=5,min_periods=1).mean()
+    
+    return jaw, teeth, lips
+
+def PlotWilliamsIndicator(jaw,teeth,lips):
+    plt.plot(jaw.index, jaw, "#0000FF", label="Jaw", linewidth=1.0)
+    plt.plot(teeth.index, teeth, "#FF0000", label="Teeth", linewidth=1.0)
+    plt.plot(lips.index, lips, "#00FF00", label="Lips", linewidth=1.0)
+
 # Calculate diff
 def Diffrentiate(dataset):
     diff=numpy.diff(dataset).tolist()
     diff.append(0,0)
     return diff
 
-# Calculate OBV index thanks to the volume
-def SetOBV(price,volume):
-    lastOBV=volume.values[1]
-    lastPrice=price.values[1]
-    obv=copy.deepcopy(volume)
+# Change volume to use trend also
+def SetVolumeWithTrend(price,volume):
+    lastPrice=price.values[0]
 
-    for i in range(1, len(price.values)):
+    for i in range(1,len(price.values)):
         # If price drop then volume wih minus value
         if (lastPrice > price.values[i]):
-            lastOBV-=volume.values[i]
-        # If price rise then volume with positiive
-        else:
-            lastOBV+=volume.values[i]
-
-        obv.values[i] = lastOBV
+            volume.values[i]=-volume.values[i]
+            
         lastPrice=price.values[i]
+
+
+# Calculate OBV index thanks to the volume
+def SetOBV(price,volume):
+    lastOBV=0
+    obv=copy.deepcopy(volume)
+
+    for i in range(len(price.values)):
+        lastOBV+=volume.values[i]
+        obv.values[i] = lastOBV
 
     return obv
 
@@ -122,8 +138,10 @@ panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
 closePrice     = SetReindex(panel_data['Close'],start_date,end_date)
+jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 avgClosePrice  = SetAverage(closePrice,args.averageDays)
 # Volume
+SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
 volume = SetReindex(panel_data['Volume'],start_date,end_date)
 obv = SetOBV(panel_data['Close'], panel_data['Volume'])
 obv = SetReindex(obv,start_date,end_date)
@@ -133,8 +151,9 @@ obv = SetReindex(obv,start_date,end_date)
 # #####################################################33
 # Price
 plot1=plt.subplot(211)
-plt.plot(closePrice.index, closePrice, label=args.stockCode)
-plt.plot(avgClosePrice.index, avgClosePrice, label=str(args.averageDays)+' days mean')
+plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
+PlotWilliamsIndicator(jaw, teeth, lips)
+# plt.plot(avgClosePrice.index, avgClosePrice, label=str(args.averageDays)+' days mean')
 plt.xlabel('Date')
 plt.ylabel('Closing price (zl)')
 plt.grid()
