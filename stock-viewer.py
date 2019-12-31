@@ -84,7 +84,9 @@ def SetOBV(price,volume):
     return obv
 
 def FindPeaks(data, delta):
-    output=copy.deepcopy(data)
+    maxs=copy.deepcopy(data)
+    mins=copy.deepcopy(data)
+    
     last_max = data.values[0]
     last_min = data.values[0]
     last_max_pos = 0
@@ -106,21 +108,22 @@ def FindPeaks(data, delta):
         if (search_max == True):
             # Save last max value
             if (current < (last_max-delta)):
-                output.values[last_max_pos] = last_max
+                maxs.values[last_max_pos] = last_max
                 last_max = current
                 last_max_pos = i
                 search_max = False
         else:
             # Save last min value
             if (current > (last_min+delta)):
-                output.values[last_min_pos] = last_min
+                mins.values[last_min_pos] = last_min
                 last_min = current
                 last_min_pos = i
                 search_max = True
 
-        output.values[i] = NaN
+        maxs.values[i] = 0
+        mins.values[i] = 0
         
-    return output
+    return mins, maxs
 
 
 # Arguments and config
@@ -173,8 +176,9 @@ if (args.lastWeek):
 panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
-minmax           = FindPeaks(panel_data['Close'], 0.1)
-minmax           = SetReindex(minmax,start_date,end_date)
+mins, maxs = FindPeaks(panel_data['Close'], 0.3)
+mins          = SetReindex(mins,start_date,end_date)
+maxs          = SetReindex(maxs,start_date,end_date)
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 # Volume
@@ -189,7 +193,8 @@ obv = SetReindex(obv,start_date,end_date)
 # Price
 plot1=plt.subplot(211)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
-plt.plot(minmax.index,minmax,'ro', label="Peaks")
+plt.plot(maxs.index,maxs,'go', label="Maxs")
+plt.plot(mins.index,mins,'ro', label="Mins")
 PlotWilliamsIndicator(jaw, teeth, lips)
 plt.xlabel('Date')
 plt.ylabel('Closing price (zl)')
