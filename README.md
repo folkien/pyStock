@@ -50,6 +50,8 @@ Info about
 https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pandas-datareader-returns-empty-dataframe-in-pyth
 
 # TODO
+- timery i serwisy do systemctl,
+- config .json z wykresami (kod stooq / kod bankier)
 - config .json z aktywami,
 - Alarmy : 
  -- aktywny i nieaktywne alarmy,
