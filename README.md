@@ -50,8 +50,9 @@ Info about
 https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pandas-datareader-returns-empty-dataframe-in-pyth
 
 # TODO
+- config .json z wykresami (kod stooq / kod bankier) - rozbudowania sterowania generowania wykresów i porównania akcji,
+- Dodanie tekstowych statystyk i informacji pod wykresami,
 - timery i serwisy do systemctl,
-- config .json z wykresami (kod stooq / kod bankier)
 - config .json z aktywami,
 - Alarmy : 
  -- aktywny i nieaktywne alarmy,
@@ -59,3 +60,4 @@ https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pand
 - Wysyłanie emaili,
 - Sprawdzanie najnowszych raportów dla inwestorów,
 - Monitorowanie trendów oraz alarmy z trendów,
+
