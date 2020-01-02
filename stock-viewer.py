@@ -63,29 +63,29 @@ def Diffrentiate(dataset):
     diff.append(0,0)
     return diff
 
-# Change volume to neg/pos value 
-def SetVolumeWithTrend(price,volume):
+# Change volumeTotal to neg/pos value 
+def SetVolumeWithTrend(price,volumeTotal):
     lastPrice=price.values[-1]
 
     # We start from end because data from Stooq is reversed
     for i in reversed(range(1,len(price.values))):
-        # If price drop then volume wih minus value
+        # If price drop then volumeTotal wih minus value
         if (lastPrice > price.values[i]):
-            volume.values[i]=-volume.values[i]
+            volumeTotal.values[i]=-volumeTotal.values[i]
 
         lastPrice=price.values[i]
 
 
-# Calculate OBV index thanks to the volume
-def SetOBV(price,volume):
+# Calculate OBV index thanks to the volumeTotal
+def SetOBV(price,volumeTotal):
     lastOBV=0
-    obv=copy.deepcopy(volume)
+    obvTotal=copy.deepcopy(volumeTotal)
 
-    for i in reversed(range(len(volume.values))):
-        lastOBV+=volume.values[i]
-        obv.values[i] = lastOBV
+    for i in reversed(range(len(volumeTotal.values))):
+        lastOBV+=volumeTotal.values[i]
+        obvTotal.values[i] = lastOBV
 
-    return obv
+    return obvTotal
 
 def FindPeaks(data, delta):
     maxs=copy.deepcopy(data)
@@ -185,6 +185,7 @@ if (args.lastWeek):
 panel_data  = GetData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
+closePriceTotal  = panel_data['Close']
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 
@@ -196,42 +197,52 @@ mins             = SetReindex(mins,start_date,end_date, False)
 maxs             = SetReindex(maxs,start_date,end_date, False)
 # Volume
 SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
-obv = SetOBV(panel_data['Close'], panel_data['Volume'])
-volume = panel_data['Volume']
-volume = SetReindex(panel_data['Volume'],start_date,end_date)
-obvRange = SetReindex(obv,start_date,end_date)
+obvTotal    = SetOBV(panel_data['Close'], panel_data['Volume'])
+volumeTotal = panel_data['Volume']
+volume      = SetReindex(panel_data['Volume'],start_date,end_date)
+obv         = SetReindex(obvTotal,start_date,end_date)
 
 
 # 3. Plot data
-# #####################################################33
+# #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
+
+
 # Price
-plot1=plt.subplot(311)
+# #####################################################
+plot1=plt.subplot(221)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.plot(maxs.index,maxs,'go', label="Maxs")
 plt.plot(mins.index,mins,'ro', label="Mins")
 PlotWilliamsIndicator(jaw, teeth, lips)
 plt.ylabel('Price (zl)')
 plt.grid()
-plt.title("Cena w czasie")
+plt.title("Cena")
+plt.legend()
+
+# Total close price
+plot2=plt.subplot(222)
+plt.plot(closePriceTotal.index, closePriceTotal, "#000000", label=args.stockCode)
+plt.plot(closePrice.index, closePrice, 'r', label="")
+plt.ylabel('Price (zl)')
+plt.grid()
 plt.legend()
 
 # Volume
-plot2=plt.subplot(312, sharex=plot1)
-# plt.plot(obv.index, obv, label="OBV")
-plt.plot(volume.index, volume, label="Volume")
-plt.ylabel('Amount')
+# #####################################################
+plot3=plt.subplot(223, sharex=plot1)
+plt.plot(obv.index, obv, label="Volume")
+plt.ylabel('Volume')
 plt.grid()
-plt.title("Volume change")
+plt.title("Vol. i OBV")
 plt.legend()
 
 # OBV
-plot3=plt.subplot(313)
-plt.plot(obv.index, obv, label="OBV")
-plt.plot(obvRange.index, obvRange, 'r')
-plt.ylabel('Amount')
+plot4=plt.subplot(224, sharex=plot2)
+plt.plot(obvTotal.index, obvTotal, label="OBV")
+plt.plot(obv.index, obv, 'r', label="")
+plt.ylabel('OBV')
 plt.grid()
-plt.title("OBV")
 plt.legend()
 
 # Plot to file or show
