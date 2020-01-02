@@ -5,7 +5,7 @@ Stock market analyzer and alarams.
 
 # Usage
 
-Stock viewer.
+## Stock viewer.
 
 ```bash
 usage: stock-viewer.py [-h] -n STOCKCODE [-d BEGINDATE] [-a AVERAGEDAYS] [-Y]
@@ -25,7 +25,18 @@ optional arguments:
   -g, --plotToFile      Plot to file
 ```
 
-Stock alarms
+Last year of apple 
+```bash
+./stock-viewer.py -n AAPL.US -Y
+```
+
+Plot Apple last 6M to file
+```bash
+./stock-viewer.py -n AAPL.US -6M -g
+```
+
+
+## Stock alarms
 
 ```bash
 usage: stock-alarms.py [-h] [-a] [-d] [-c] [-p] [-n STOCKCODE]
