@@ -37,17 +37,19 @@ def SetReindex(data,start_date,end_date,fillna=True):
 
     return data
 
+# Creation of moving average with specific window and shift
 def SetMovingAverage(data, window, shiftPeriods = 0):
     average = data.rolling(window=int(window),min_periods=1).mean()
     average.shift(periods=shiftPeriods)
 
     return average
 
+# Creation of Williams indicator for data 
 def SetWilliamsIndicator(price):
     jaw   = SetMovingAverage(price,  13, 8)
     teeth = SetMovingAverage(price,   8, 5)
     lips  = SetMovingAverage(price,   5, 3)
-    
+
     return jaw, teeth, lips
 
 def PlotWilliamsIndicator(jaw,teeth,lips):
@@ -61,15 +63,16 @@ def Diffrentiate(dataset):
     diff.append(0,0)
     return diff
 
-# Change volume to use trend also
+# Change volume to neg/pos value 
 def SetVolumeWithTrend(price,volume):
-    lastPrice=price.values[0]
+    lastPrice=price.values[-1]
 
-    for i in range(1,len(price.values)):
+    # We start from end because data from Stooq is reversed
+    for i in reversed(range(1,len(price.values))):
         # If price drop then volume wih minus value
         if (lastPrice > price.values[i]):
             volume.values[i]=-volume.values[i]
-            
+
         lastPrice=price.values[i]
 
 
@@ -78,7 +81,7 @@ def SetOBV(price,volume):
     lastOBV=0
     obv=copy.deepcopy(volume)
 
-    for i in range(len(price.values)):
+    for i in reversed(range(len(volume.values))):
         lastOBV+=volume.values[i]
         obv.values[i] = lastOBV
 
@@ -87,13 +90,13 @@ def SetOBV(price,volume):
 def FindPeaks(data, delta):
     maxs=copy.deepcopy(data)
     mins=copy.deepcopy(data)
-    
+
     last_max = data.values[0]
     last_min = data.values[0]
     last_max_pos = 0
     last_min_pos = 0
     search_max = True
-    
+
     # Find max/min in loop
     for i in range(len(data.values)):
         current = data.values[i]
@@ -105,7 +108,7 @@ def FindPeaks(data, delta):
         if (current < last_min):
             last_min = current
             last_min_pos = i
-            
+
         if (search_max == True):
             # Save last max value
             if (current < (last_max-delta)):
@@ -123,7 +126,7 @@ def FindPeaks(data, delta):
 
         maxs.values[i] = NaN
         mins.values[i] = NaN
-        
+
     return mins.dropna(), maxs.dropna()
 
 
@@ -188,9 +191,10 @@ mins             = SetReindex(mins,start_date,end_date, False)
 maxs             = SetReindex(maxs,start_date,end_date, False)
 # Volume
 SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
-volume = SetReindex(panel_data['Volume'],start_date,end_date)
 obv = SetOBV(panel_data['Close'], panel_data['Volume'])
-obv = SetReindex(obv,start_date,end_date)
+volume = panel_data['Volume']
+volume = SetReindex(panel_data['Volume'],start_date,end_date)
+obv    = SetReindex(obv,start_date,end_date)
 
 
 # 3. Plot data
