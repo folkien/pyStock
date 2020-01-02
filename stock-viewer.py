@@ -137,6 +137,7 @@ parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock na
 parser.add_argument("-d", "--beginDate", type=str, required=False, help="Begin date")
 parser.add_argument("-a", "--averageDays", type=int, required=False, help="Day to calc mean")
 parser.add_argument("-Y", "--lastYear", action='store_true', required=False, help="Last Year")
+parser.add_argument("-6M", "--last6Months", action='store_true', required=False, help="Last 6 Months")
 parser.add_argument("-M", "--lastMonth", action='store_true', required=False, help="Last Month")
 parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
 parser.add_argument("-g", "--plotToFile", action='store_true', required=False, help="Plot to file")
@@ -163,6 +164,10 @@ else:
 # Check last year
 if (args.lastYear):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=365)
+    start_date  =  tmpDate.strftime("%Y-%m-%d")
+# Check last month
+if (args.last6Months):
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30*6)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 # Check last month
 if (args.lastMonth):
@@ -194,32 +199,39 @@ SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
 obv = SetOBV(panel_data['Close'], panel_data['Volume'])
 volume = panel_data['Volume']
 volume = SetReindex(panel_data['Volume'],start_date,end_date)
-obv    = SetReindex(obv,start_date,end_date)
+obvRange = SetReindex(obv,start_date,end_date)
 
 
 # 3. Plot data
 # #####################################################33
 fig = plt.figure(figsize=(16.0, 9.0))
 # Price
-plot1=plt.subplot(211)
+plot1=plt.subplot(311)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.plot(maxs.index,maxs,'go', label="Maxs")
 plt.plot(mins.index,mins,'ro', label="Mins")
 PlotWilliamsIndicator(jaw, teeth, lips)
-plt.xlabel('Date')
-plt.ylabel('Closing price (zl)')
+plt.ylabel('Price (zl)')
 plt.grid()
 plt.title("Cena w czasie")
 plt.legend()
 
 # Volume
-plot3=plt.subplot(212, sharex=plot1)
-plt.plot(obv.index, obv, label="OBV")
+plot2=plt.subplot(312, sharex=plot1)
+# plt.plot(obv.index, obv, label="OBV")
 plt.plot(volume.index, volume, label="Volume")
-plt.xlabel('Date')
-plt.ylabel('Jednostki')
+plt.ylabel('Amount')
 plt.grid()
-plt.title("Zmiany volumenu i OBV")
+plt.title("Volume change")
+plt.legend()
+
+# OBV
+plot3=plt.subplot(313)
+plt.plot(obv.index, obv, label="OBV")
+plt.plot(obvRange.index, obvRange, 'r')
+plt.ylabel('Amount')
+plt.grid()
+plt.title("OBV")
 plt.legend()
 
 # Plot to file or show
