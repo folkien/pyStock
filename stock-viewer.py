@@ -45,7 +45,7 @@ def SetMovingAverage(data, window, shiftPeriods = 0):
 
     return average
 
-# Creation of Williams indicator for data 
+# Creation of Williams indicator for data
 def SetWilliamsIndicator(price):
     jaw   = SetMovingAverage(price,  13, 8)
     teeth = SetMovingAverage(price,   8, 5)
@@ -64,7 +64,7 @@ def Diffrentiate(dataset):
     diff.append(0,0)
     return diff
 
-# Change volumeTotal to neg/pos value 
+# Change volumeTotal to neg/pos value
 def SetVolumeWithTrend(price,volumeTotal):
     lastPrice=price.values[-1]
 
@@ -138,7 +138,7 @@ def ReportsSave(filepath):
         f.write("# Report for %s.\n" % (args.stockCode))
         f.write("![Graph](%s)\n\n" % (outputFilename))
         f.close()
-        
+
 
 # Arguments and config
 # #####################################################
@@ -203,6 +203,9 @@ closePriceTotal  = panel_data['Close']
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 
+# Get STD deviation
+stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
+
 # Find max and mins
 PriceRange=closePrice.max()-closePrice.min()
 print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
@@ -256,6 +259,23 @@ plot4=plt.subplot(224, sharex=plot2)
 plt.plot(obvTotal.index, obvTotal, label="OBV")
 plt.plot(obv.index, obv, 'r', label="")
 plt.ylabel('OBV')
+plt.grid()
+plt.legend()
+
+### Show Standard deviatio
+fig2 = plt.figure(figsize=(16.0, 9.0))
+
+# Total close price
+plot5=plt.subplot(211)
+plt.plot(closePriceTotal.index, closePriceTotal, "#000000", label=args.stockCode)
+plt.ylabel('Price (zl)')
+plt.grid()
+plt.legend()
+
+# Total close price
+plot6=plt.subplot(212, sharex=plot5)
+plt.plot(stdTotal.index, stdTotal, "#000000", label=args.stockCode)
+plt.ylabel('Price (zl)')
 plt.grid()
 plt.legend()
 
