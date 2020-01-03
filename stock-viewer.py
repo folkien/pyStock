@@ -136,7 +136,7 @@ def ReportsSave(filepath):
     global args
     with open(filepath, 'a+') as f:
         f.write("# Report for %s.\n" % (args.stockCode))
-        f.write("![Graph](%s)\n" % (outputFilename))
+        f.write("![Graph](%s)\n\n" % (outputFilename))
         f.close()
         
 
