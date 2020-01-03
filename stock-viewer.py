@@ -189,7 +189,9 @@ if (args.lastWeek):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=7)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 
-outputFilename="plots/"+args.stockCode+"."+end_date+"plot.png"
+plotsPath="plots/"
+outputFilename=args.stockCode+"_"+end_date+".png"
+outputFilepath=plotsPath+outputFilename
 # #####################################################
 
 # 1. Get DATA from URL
@@ -259,8 +261,8 @@ plt.legend()
 
 # Plot to file or show
 if (args.plotToFile):
-    plt.savefig(outputFilename)
-    print outputFilename
+    plt.savefig(outputFilepath)
+    print outputFilepath
 else:
     plt.show()
 

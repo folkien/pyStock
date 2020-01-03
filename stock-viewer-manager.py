@@ -77,7 +77,6 @@ for i in range(len(entries)):
 
     if (args.execute):
         entryExecute(entry['arguments'], entry['url'])
-        print "No Stooq data for entry!"
 
 
 # 4. Write entries if were changed
@@ -85,4 +84,8 @@ for i in range(len(entries)):
 if (dataIsChanged == True):
     jsonWrite(configFile, entries)
 
+# 5. Finish execution
+if (args.execute):
+    # Make HTML from report.md
+    print "Finish"
 
