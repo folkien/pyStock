@@ -14,4 +14,5 @@ fi
  # commands install
  cd /usr/bin
  sudo ln -sf ${dir}/stock-viewer.py stock-viewer
+ sudo ln -sf ${dir}/stock-viewer-manager.py stock-viewer-manager
  sudo ln -sf ${dir}/stock-alarms.py stock-alarms
