@@ -281,6 +281,7 @@ plt.legend()
 
 # Plot to file or show
 if (args.plotToFile):
+    plt.figure(fig.number)
     plt.savefig(outputFilepath)
     print outputFilepath
 else:
