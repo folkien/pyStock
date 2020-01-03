@@ -25,7 +25,8 @@ def entryRemove(arguments, url):
 def entryPrint(entry):
     print entry
 
-def entryCheck(value,alarm):
+def entryExecute(arguments, url):
+    os.system("stock-viewer "+arguments+" -g")
     return False
 
 
@@ -67,6 +68,7 @@ for i in range(len(entries)):
         entryPrint(entry)
 
     if (args.execute):
+        entryExecute(entry['arguments'], entry['url'])
         print "No Stooq data for entry!"
 
 
