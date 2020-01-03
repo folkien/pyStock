@@ -1,0 +1,10 @@
+[Unit]
+Description=Call weekly stock service.
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+Unit=StockWeeekly.service
+
+[Install]
+WantedBy=timers.target
