@@ -7,6 +7,7 @@ import os
 from jsonModule import *
 
 configFile="config/viewer.json"
+reportFile="plots/report.md"
 dataIsChanged=False
 entries=[]
 
@@ -26,8 +27,14 @@ def entryPrint(entry):
     print entry
 
 def entryExecute(arguments, url):
-    os.system("stock-viewer "+arguments+" -g")
+    os.system("stock-viewer "+arguments+" -g -r")
     return False
+
+# Save reports to file. Append text.
+def ReportsClean(filepath):
+    with open(filepath, 'w') as f:
+        f.write("")
+        f.close()
 
 
 parser = argparse.ArgumentParser()
@@ -44,6 +51,7 @@ if (not args.add and not args.execute and not args.delete and not args.show):
     print "Missing event"
     sys.exit(1)
 
+ReportsClean(reportFile)
 entries = jsonRead(configFile)
 
 # 0. Adding entries

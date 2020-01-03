@@ -8,6 +8,7 @@ import copy
 from pandas_datareader import data
 from numpy import NaN
 
+reportFile="plots/report.md"
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -129,6 +130,15 @@ def FindPeaks(data, delta):
 
     return mins.dropna(), maxs.dropna()
 
+# Save reports to file. Append text.
+def ReportsSave(filepath):
+    global outputFilename
+    global args
+    with open(filepath, 'a+') as f:
+        f.write("# Report for %s.\n" % (args.stockCode))
+        f.write("![Graph](%s)\n" % (outputFilename))
+        f.close()
+        
 
 # Arguments and config
 # #####################################################
@@ -141,6 +151,7 @@ parser.add_argument("-6M", "--last6Months", action='store_true', required=False,
 parser.add_argument("-M", "--lastMonth", action='store_true', required=False, help="Last Month")
 parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
 parser.add_argument("-g", "--plotToFile", action='store_true', required=False, help="Plot to file")
+parser.add_argument("-r", "--reports", action='store_true', required=False, help="Generate extra reports")
 args = parser.parse_args()
 
 #Assert
@@ -178,6 +189,7 @@ if (args.lastWeek):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=7)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 
+outputFilename="plots/"+args.stockCode+"."+end_date+"plot.png"
 # #####################################################
 
 # 1. Get DATA from URL
@@ -247,9 +259,11 @@ plt.legend()
 
 # Plot to file or show
 if (args.plotToFile):
-    outputFilename="plots/"+args.stockCode+"."+end_date+"plot.png"
     plt.savefig(outputFilename)
     print outputFilename
 else:
     plt.show()
+
+if (args.reports):
+    ReportsSave(reportFile)
 
