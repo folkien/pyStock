@@ -36,6 +36,9 @@ def ReportsClean(filepath):
         f.write("")
         f.close()
 
+# Save reports to file. Append text.
+def ReportsToHTML(filepath):
+    os.system("make -C plots/ html")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--add",    action='store_true', required=False, help="Adds given")
@@ -86,6 +89,5 @@ if (dataIsChanged == True):
 
 # 5. Finish execution
 if (args.execute):
-    # Make HTML from report.md
-    print "Finish"
+    ReportsToHTML(reportFile)
 
