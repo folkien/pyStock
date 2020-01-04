@@ -51,6 +51,7 @@ def entryExecute(arguments, url):
 
 # Save reports to file. Append text.
 def ReportsClean(filepath):
+    os.system("rm -rf plots/*.png")
     with open(filepath, 'w') as f:
         f.write("")
         f.close()
