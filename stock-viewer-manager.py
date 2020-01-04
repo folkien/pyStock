@@ -62,7 +62,7 @@ def ReportsToHTML(filepath):
 def ReportsMail(recipient, reportFile):
     if os.path.isfile(reportFile):
         print("Mail to %s." % (recipient))
-        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Viewer' %s < %s" % (recipient, reportFile))
+        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Viewer' -a plots/*.png -- %s < %s" % (recipient, reportFile))
     else:
         print("File to send via mail not exists!")
 
