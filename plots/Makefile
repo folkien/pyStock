@@ -8,4 +8,4 @@ pdf:
 html:
 	pandoc report.md --toc \
     -V linkcolor:blue \
-	-o report.html
+	-o report.md.html

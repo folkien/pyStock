@@ -60,9 +60,11 @@ def ReportsToHTML(filepath):
     os.system("make -C plots/ html")
     
 def ReportsMail(recipient, reportFile):
-    print("Mail to %s." % (recipient))
-    os.system("mail -s '[Stock] Viewer' %s < %s" % (recipient, reportFile))
-    return 0
+    if os.path.isfile(reportFile):
+        print("Mail to %s." % (recipient))
+        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Viewer' %s < %s" % (recipient, reportFile))
+    else:
+        print("File to send via mail not exists!")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--add",    action='store_true', required=False, help="Adds given")
@@ -129,5 +131,5 @@ if (args.execute):
     ReportsToHTML(reportFile)
     # Send emails to all recipients
     for i in range(len(recipients)):
-        ReportsMail(recipients[i]['address'], reportFile)
+        ReportsMail(recipients[i]['address'], reportFile+".html")
 
