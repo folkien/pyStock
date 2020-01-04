@@ -39,7 +39,7 @@ Example CD Projekt Red plot
 ```bash
  ./stock-viewer.py -n CDR -6M -g
 ```
-![CDPR image](plots/CDR.2020-01-02plot.png)
+![CDPR image](doc/CDR.2020-01-02plot.png)
 
 
 
