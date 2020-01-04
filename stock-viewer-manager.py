@@ -63,7 +63,21 @@ def ReportsToHTML(filepath):
 def ReportsMail(recipient, reportFile):
     if os.path.isfile(reportFile):
         print("Mail to %s." % (recipient))
-        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Viewer' -a plots/*.png -- %s < %s" % (recipient, reportFile))
+        currentDate = datetime.date.today()
+        # Replace images with embedded imaces code
+        os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
+        # Create new file and add HTML, HEADER, BODY tags
+        repFile =  open(reportFile, 'r')
+        tmpFile = open("tmp.html", 'w')
+        tmpFile.write("<html><head></head><body>")
+        tmpFile.write(repFile.read())
+        tmpFile.write("</body></html>")
+        tmpFile.close()
+        repFile.close()
+        # Send email with attamchents through mutt smtp
+        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" % (currentDate.strftime("%d/%m/%Y"), recipient, "tmp.html"))
+        # Clean temporary file
+        os.system("rm -rf tmp.html")
     else:
         print("File to send via mail not exists!")
 
