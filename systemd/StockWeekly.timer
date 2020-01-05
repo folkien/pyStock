@@ -4,7 +4,7 @@ Description=Call weekly stock service.
 [Timer]
 OnCalendar=weekly
 Persistent=true
-Unit=StockWeeekly.service
+Unit=StockWeekly.service
 
 [Install]
 WantedBy=timers.target
