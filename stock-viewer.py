@@ -1,5 +1,4 @@
 #!/usr/bin/python2.7
-import matplotlib.pyplot as plt
 import pandas as pd
 import sys, argparse
 import datetime
@@ -161,6 +160,12 @@ if (not args.stockCode):
 
 if (not args.averageDays):
     args.averageDays=30
+
+# Use non-interactive backend when plot to file used
+if (args.plotToFile):
+    import matplotlib
+    matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 
 # Dates
