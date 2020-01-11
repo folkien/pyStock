@@ -1,4 +1,5 @@
 #!/usr/bin/python2.7
+# append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
 import sys, argparse
 import datetime
@@ -64,7 +65,7 @@ def SetMACD(price):
     
     macdLine = exp1-exp2
     signalLine = macdLine.ewm(span=9, adjust=False).mean()
-    # TODO dodać sygnały kupna i sprzedaży na przeciecia linii
+    # TODO dodac sygnaly kupna i sprzedazy na przeciecia linii
     return macdLine, signalLine
 
 def PlotMACD(macd,signal):
@@ -102,8 +103,8 @@ def SetOBV(price,volumeTotal):
     return obvTotal
 
 def FindPeaks(data, delta):
-    maxs=copy.deepcopy(data)
-    mins=copy.deepcopy(data)
+    maxs=pd.DataFrame()
+    mins=pd.DataFrame()
 
     last_max = data.values[0]
     last_min = data.values[0]
@@ -126,22 +127,21 @@ def FindPeaks(data, delta):
         if (search_max == True):
             # Save last max value
             if (current < (last_max-delta)):
-                maxs.values[last_max_pos] = last_max
+                maxs = maxs.append(pd.DataFrame({'close':last_max},index=[data.index[last_max_pos]]))
+                #maxs.values[last_max_pos] = last_max
                 last_max = current
                 last_max_pos = i
                 search_max = False
         else:
             # Save last min value
             if (current > (last_min+delta)):
-                mins.values[last_min_pos] = last_min
+                mins = mins.append(pd.DataFrame({'close':last_min},index=[data.index[last_min_pos]]))
                 last_min = current
                 last_min_pos = i
                 search_max = True
 
-        maxs.values[i] = NaN
-        mins.values[i] = NaN
 
-    return mins.dropna(), maxs.dropna()
+    return mins, maxs
 
 # Save reports to file. Append text.
 def ReportsSave(filepath):
@@ -229,9 +229,8 @@ stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
 # Find max and mins
 PriceRange=closePrice.max()-closePrice.min()
 print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
-mins, maxs       = FindPeaks(panel_data['Close'], PriceRange/10)
-mins             = SetReindex(mins,start_date,end_date, False)
-maxs             = SetReindex(maxs,start_date,end_date, False)
+mins, maxs       = FindPeaks(closePrice, PriceRange/10)
+
 # Volume
 SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
 obvTotal    = SetOBV(panel_data['Close'], panel_data['Volume'])
