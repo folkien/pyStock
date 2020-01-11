@@ -9,6 +9,7 @@ from pandas_datareader import data
 from numpy import NaN
 
 reportFile="plots/report.md"
+currency="zl"
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -157,11 +158,27 @@ def FindPeaks(data, delta):
     return mins, maxs
 
 # Save reports to file. Append text.
-def ReportsSave(filepath):
+def ReportSave(filepath):
     global outputFilename
     global args
+    global closePrice
+    global closePriceTotal
+    
+    lastPrice      = closePriceTotal.values[0]
+    maxPrice       = closePriceTotal.values.max()
+    minPrice       = closePriceTotal.values.min()
+    maxWindowPrice = closePrice.values.max()
+    minWindowPrice = closePrice.values.min()
+    lastPriceAsPercentOfMaxPrice = (lastPrice*100)/maxPrice
+    growthChance    = (maxPrice*100)/lastPrice - 100
+    lostChance      = 100-(minPrice*100)/lastPrice
+
     with open(filepath, 'a+') as f:
         f.write("# Report for %s.\n" % (args.stockCode))
+        f.write("1. Price **%2.2f**%s - (%u%% of history, growth chance +%u%%, lost chance -%u%%)\n" % 
+                (lastPrice,currency,lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
+        f.write("    * Current -  %2.2f%s - %2.2f%s\n" % (minWindowPrice,currency,maxWindowPrice,currency))
+        f.write("    * History - %2.2f%s - %2.2f%s\n" % (minPrice,currency,maxPrice,currency))
         f.write("![Graph](%s)\n\n" % (outputFilename))
         f.close()
 
@@ -321,5 +338,5 @@ else:
     plt.show()
 
 if (args.reports):
-    ReportsSave(reportFile)
+    ReportSave(reportFile)
 
