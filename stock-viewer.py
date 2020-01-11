@@ -65,12 +65,14 @@ def SetMACD(price):
     
     macdLine = exp1-exp2
     signalLine = macdLine.ewm(span=9, adjust=False).mean()
-    # TODO dodac sygnaly kupna i sprzedazy na przeciecia linii
+
     return macdLine, signalLine
 
 def PlotMACD(macd,signal):
     plt.plot(macd.index, macd, label='AMD MACD', color = '#FF0000')
     plt.plot(signal.index, signal, label='Signal Line', color='#008800')
+    zeroes=FindZeroes(macd.subtract(signal))
+    plt.plot(zeroes.index, zeroes, 'ro', label='Signal Line')
 
 # Calculate diff
 def Diffrentiate(dataset):
@@ -101,6 +103,17 @@ def SetOBV(price,volumeTotal):
         obvTotal.values[i] = lastOBV
 
     return obvTotal
+
+# Find zeroes and zero cuts
+def FindZeroes(data):
+    zeroes=pd.DataFrame()
+    
+    zero_cross = numpy.where(numpy.diff(numpy.sign(data.values)))[0]
+    for i in range(len(zero_cross)):
+        indexPos = zero_cross[i]
+        zeroes = zeroes.append(pd.DataFrame({'close':data.values[indexPos]},index=[data.index[indexPos]]))
+    
+    return zeroes
 
 def FindPeaks(data, delta):
     maxs=pd.DataFrame()
