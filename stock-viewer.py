@@ -57,6 +57,20 @@ def PlotWilliamsIndicator(jaw,teeth,lips):
     plt.plot(teeth.index, teeth, "#FF0000", label="Teeth", linewidth=1.0)
     plt.plot(lips.index, lips, "#00FF00", label="Lips", linewidth=1.0)
 
+## MACD
+def SetMACD(price):
+    exp1 = price.ewm(span=12, adjust=False).mean()
+    exp2 = price.ewm(span=26, adjust=False).mean()
+    
+    macdLine = exp1-exp2
+    signalLine = macdLine.ewm(span=9, adjust=False).mean()
+    # TODO dodać sygnały kupna i sprzedaży na przeciecia linii
+    return macdLine, signalLine
+
+def PlotMACD(macd,signal):
+    plt.plot(macd.index, macd, label='AMD MACD', color = '#FF0000')
+    plt.plot(signal.index, signal, label='Signal Line', color='#008800')
+
 # Calculate diff
 def Diffrentiate(dataset):
     diff=numpy.diff(dataset).tolist()
@@ -207,6 +221,7 @@ panel_data  = GetData(args.stockCode, start_date, end_date)
 closePriceTotal  = panel_data['Close']
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
+macdLine, macdSignal = SetMACD(closePrice)
 
 # Get STD deviation
 stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
@@ -279,7 +294,8 @@ plt.legend()
 
 # Total close price
 plot6=plt.subplot(212, sharex=plot5)
-plt.plot(stdTotal.index, stdTotal, "#000000", label=args.stockCode)
+PlotMACD(macdLine, macdSignal)
+# plt.plot(stdTotal.index, stdTotal, "#000000", label=args.stockCode)
 plt.ylabel('Price (zl)')
 plt.grid()
 plt.legend()
