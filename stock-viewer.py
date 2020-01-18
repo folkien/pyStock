@@ -167,6 +167,12 @@ def FindPeaks(data, delta):
 
     return mins, maxs
 
+def PlotSave(fig):
+    filePath=outputFilepath+str(fig.number)+outputExtension
+    plt.figure(fig.number)
+    plt.savefig(filePath)
+    print filePath 
+
 # Save reports to file. Append text.
 def ReportSave(filepath):
     global outputFilename
@@ -249,7 +255,8 @@ if (args.lastWeek):
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 
 plotsPath="plots/"
-outputFilename=args.stockCode+"_"+end_date+".png"
+outputExtension=".png"
+outputFilename=args.stockCode+"_"+end_date+"_"
 outputFilepath=plotsPath+outputFilename
 # #####################################################
 
@@ -321,8 +328,12 @@ plt.ylabel('OBV')
 plt.grid()
 plt.legend()
 
+# Plot to file
+if (args.plotToFile):
+    PlotSave(fig)
+
 ### Show Standard deviatio
-fig2 = plt.figure(figsize=(16.0, 9.0))
+fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
 plot5=plt.subplot(211)
@@ -341,12 +352,13 @@ plt.legend()
 
 # Plot to file or show
 if (args.plotToFile):
-    plt.figure(fig.number)
-    plt.savefig(outputFilepath)
-    print outputFilepath
-else:
-    plt.show()
+    PlotSave(fig)
 
+# Create reports
 if (args.reports):
     ReportSave(reportFile)
+    
+# Show all plots
+if (not args.plotToFile):
+    plt.show()
 
