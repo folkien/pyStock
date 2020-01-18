@@ -68,9 +68,9 @@ Info about
 https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pandas-datareader-returns-empty-dataframe-in-pyth
 
 # TODO Viewer
-- config .json z wykresami (kod stooq / kod bankier) - rozbudowania sterowania generowania wykresów i porównania akcji,
-- Dodanie tekstowych statystyk i informacji pod wykresami,
 - config .json z aktywami,
+- RSI
+- inne wskaźniki
 
 # TODO Alarmy : 
  -- aktywny i nieaktywne alarmy,
