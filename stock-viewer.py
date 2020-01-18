@@ -8,9 +8,6 @@ import copy
 from pandas_datareader import data
 from numpy import NaN
 
-reportFile="plots/report.md"
-currency="zl"
-
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
 def GetData(code,begin,end):
@@ -168,9 +165,11 @@ def FindPeaks(data, delta):
     return mins, maxs
 
 def PlotSave(fig):
+    global graphsCreated
     filePath=outputFilepath+str(fig.number)+outputExtension
     plt.figure(fig.number)
     plt.savefig(filePath)
+    graphsCreated.append(filePath)
     print filePath 
 
 # Save reports to file. Append text.
@@ -190,14 +189,26 @@ def ReportSave(filepath):
     lostChance      = 100-(minPrice*100)/lastPrice
 
     with open(filepath, 'a+') as f:
+        # Write statistics
         f.write("# Report for %s.\n" % (args.stockCode))
         f.write("1. Price **%2.2f**%s - (%u%% of history, growth chance +%u%%, lost chance -%u%%)\n" % 
                 (lastPrice,currency,lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
         f.write("    * Current -  %2.2f%s - %2.2f%s\n" % (minWindowPrice,currency,maxWindowPrice,currency))
         f.write("    * History - %2.2f%s - %2.2f%s\n" % (minPrice,currency,maxPrice,currency))
-        f.write("![Graph](%s)\n\n" % (outputFilename))
+        # Insert all created graphs
+        f.write("\n")
+        for path in graphsCreated:
+            f.write("![Graph](%s)\n\n" % (path))
+        f.write("\n")
+        # Close file
         f.close()
 
+# Const objects
+# #####################################################
+reportFile="plots/report.md"
+currency="zl"
+plotsPath="plots/"
+outputExtension=".png"
 
 # Arguments and config
 # #####################################################
@@ -254,11 +265,12 @@ if (args.lastWeek):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=7)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 
-plotsPath="plots/"
-outputExtension=".png"
+
+# Dynamic variables
+# #####################################################
 outputFilename=args.stockCode+"_"+end_date+"_"
 outputFilepath=plotsPath+outputFilename
-# #####################################################
+graphsCreated=[]
 
 # 1. Get DATA from URL
 # #####################################################
