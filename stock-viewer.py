@@ -121,40 +121,49 @@ def FindPeaks(data, delta):
     maxs=pd.DataFrame()
     mins=pd.DataFrame()
 
-    last_max = data.values[0]
-    last_min = data.values[0]
-    last_max_pos = 0
-    last_min_pos = 0
-    search_max = True
+    # Loop max iterations
+    MaxLoopIteration=10
+    # Loop iteration
+    loopIteration = 0
 
-    # Find max/min in loop
-    for i in range(len(data.values)):
-        current = data.values[i]
-        # Save last max
-        if (current > last_max):
-            last_max = current
-            last_max_pos = i
-        # Save last min
-        if (current < last_min):
-            last_min = current
-            last_min_pos = i
-
-        if (search_max == True):
-            # Save last max value
-            if (current < (last_max-delta)):
-                maxs = maxs.append(pd.DataFrame({'close':last_max},index=[data.index[last_max_pos]]))
-                #maxs.values[last_max_pos] = last_max
+    while ((loopIteration<MaxLoopIteration) and (maxs.empty or mins.empty)):
+        # Algorithm data
+        last_max = data.values[0]
+        last_min = data.values[0]
+        last_max_pos = 0
+        last_min_pos = 0
+        search_max = True
+        
+        # Algorithm loop - Find max/min in loop
+        for i in range(len(data.values)):
+            current = data.values[i]
+            # Save last max
+            if (current > last_max):
                 last_max = current
                 last_max_pos = i
-                search_max = False
-        else:
-            # Save last min value
-            if (current > (last_min+delta)):
-                mins = mins.append(pd.DataFrame({'close':last_min},index=[data.index[last_min_pos]]))
+            # Save last min
+            if (current < last_min):
                 last_min = current
                 last_min_pos = i
-                search_max = True
 
+            if (search_max == True):
+                # Save last max value
+                if (current < (last_max-delta)):
+                    maxs = maxs.append(pd.DataFrame({'close':last_max},index=[data.index[last_max_pos]]))
+                    #maxs.values[last_max_pos] = last_max
+                    last_max = current
+                    last_max_pos = i
+                    search_max = False
+            else:
+                # Save last min value
+                if (current > (last_min+delta)):
+                    mins = mins.append(pd.DataFrame({'close':last_min},index=[data.index[last_min_pos]]))
+                    last_min = current
+                    last_min_pos = i
+                    search_max = True
+        # Adjust delta for another loop search if min/max not found
+        delta = (delta*80)/100
+        loopIteration+=1
 
     return mins, maxs
 
