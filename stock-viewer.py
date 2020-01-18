@@ -235,11 +235,13 @@ def ReportSave(filepath):
     with open(filepath, 'a+') as f:
         # Write statistics
         f.write("# Report for %s.\n" % (args.stockCode))
-        f.write("1. Price **%2.2f**%s - (%u%% of history, growth chance +%u%%, lost chance -%u%%)\n" % 
+        f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
+                 growth chance <span style='color:green'>+%u%%</span>, \
+                 lost chance <span style='color:red'>-%u%%</span>)\n" % 
                 (lastPrice,currency,lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
-        f.write("    * Current -  %2.2f%s - %2.2f%s\n" % (minWindowPrice,currency,maxWindowPrice,currency))
-        f.write("    * History - %2.2f%s - %2.2f%s\n" % (minPrice,currency,maxPrice,currency))
-        f.write("    * Volume chng. (2 weeks) - med. %2.2f, max +%2.2f, min %2.2f\n" % 
+        f.write("    * Current - **%2.2f%s - %2.2f%s**\n" % (minWindowPrice,currency,maxWindowPrice,currency))
+        f.write("    * History - **%2.2f%s - %2.2f%s**\n" % (minPrice,currency,maxPrice,currency))
+        f.write("    * Volume chng. (2 weeks) - med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n" % 
                 (volumeSubset.median(), volumeSubset.max(),volumeSubset.min()))
         # Insert all created graphs
         f.write("\n")
