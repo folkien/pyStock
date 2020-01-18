@@ -66,7 +66,7 @@ def ReportsMail(recipient, reportFile):
         print("Mail to %s." % (recipient))
         currentDate = datetime.date.today()
         # Replace images with embedded imaces code
-        os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
+        os.system("sed -i 's/img src=\"plots\//img src=\"cid:/g' %s" % (reportFile))
         # Create new file and add HTML, HEADER, BODY tags
         repFile =  open(reportFile, 'r')
         tmpFile = open("tmp.html", 'w')
