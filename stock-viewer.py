@@ -36,6 +36,7 @@ def SetReindex(data,start_date,end_date,fillna=True):
     # with the latest available price for each instrument.
     if (fillna == True):
         data = data.fillna(method='ffill')
+        data = data.dropna()
 
     return data
 
