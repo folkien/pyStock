@@ -68,9 +68,18 @@ def SetMACD(price):
     return macdLine, signalLine
 
 def PlotMACD(macd,signal):
+    #Create ZeroLine
+    zeroLine=pd.DataFrame()
+    zeroLine=zeroLine.append(pd.DataFrame({'close':0},
+                                          index=[macd.index[0]]))
+    zeroLine=zeroLine.append(pd.DataFrame({'close':0},
+                                          index=[macd.index[-1]]))
+    # Create Buy/Sell
+    fromBottom,fromTop=FindIntersections(macd, signal)
+    # Plot
+    plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
     plt.plot(macd.index, macd, label='AMD MACD', color = '#FF0000')
     plt.plot(signal.index, signal, label='Signal Line', color='#008800')
-    fromBottom,fromTop=FindIntersections(macd, signal)
     plt.plot(fromBottom.index, fromBottom, 'ro', label='Buy')
     plt.plot(fromTop.index, fromTop, 'go', label='Sell')
 
