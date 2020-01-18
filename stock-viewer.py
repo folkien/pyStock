@@ -37,6 +37,17 @@ def SetReindex(data,start_date,end_date,fillna=True):
 
     return data
 
+# Reindex weekly data
+def GetSubsetByDates(inputData,start_date,end_date,fillna=True):
+    subset=pd.DataFrame()
+    
+    for i in range(len(inputData.values)):
+        if ((inputData.index[i]>=start_date) and (inputData.index[i]<=end_date)):
+            subset = subset.append(pd.DataFrame({'close':inputData.values[i]},
+                                                index=[inputData.index[i]]))
+    
+    return subset
+
 # Creation of moving average with specific window and shift
 def SetMovingAverage(data, window, shiftPeriods = 0):
     average = data.rolling(window=int(window),min_periods=1).mean()
