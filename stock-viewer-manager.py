@@ -67,16 +67,9 @@ def ReportsMail(recipient, reportFile):
         currentDate = datetime.date.today()
         # Replace images with embedded imaces code
         os.system("sed -i 's/img src=\"plots\//img src=\"cid:/g' %s" % (reportFile))
-        # Create new file and add HTML, HEADER, BODY tags
-        repFile =  open(reportFile, 'r')
-        tmpFile = open("tmp.html", 'w')
-        tmpFile.write("<html><head></head><body>")
-        tmpFile.write(repFile.read())
-        tmpFile.write("</body></html>")
-        tmpFile.close()
-        repFile.close()
         # Send email with attamchents through mutt smtp
-        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" % (currentDate.strftime("%d/%m/%Y"), recipient, "tmp.html"))
+        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" % 
+                  (currentDate.strftime("%d/%m/%Y"), recipient, reportFile))
         # Clean temporary file
         os.system("rm -rf tmp.html")
     else:
