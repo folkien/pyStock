@@ -6,6 +6,8 @@ pdf:
     -V geometry:margin=2cm \
 	--latex-engine=xelatex -o ECG.pdf && okular ECG.pdf
 html:
-	pandoc report.md --toc \
+	pandoc -s report.md \
     -V linkcolor:blue \
+	-H header.html \
+	--metadata title="pyStock report" \
 	-o report.md.html
