@@ -217,6 +217,8 @@ def ReportSave(filepath):
     global args
     global closePrice
     global closePriceTotal
+    global volume
+    global volumeTotal
     
     lastPrice      = closePriceTotal.values[0]
     maxPrice       = closePriceTotal.values.max()
@@ -226,6 +228,9 @@ def ReportSave(filepath):
     lastPriceAsPercentOfMaxPrice = (lastPrice*100)/maxPrice
     growthChance    = (maxPrice*100)/lastPrice - 100
     lostChance      = 100-(minPrice*100)/lastPrice
+    # Volume statistics
+    volumeSubset    = GetSubsetByDates(volume, last2Weeks, today)
+    volumeAvgChange = volumeSubset.median()
 
     with open(filepath, 'a+') as f:
         # Write statistics
@@ -234,6 +239,8 @@ def ReportSave(filepath):
                 (lastPrice,currency,lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
         f.write("    * Current -  %2.2f%s - %2.2f%s\n" % (minWindowPrice,currency,maxWindowPrice,currency))
         f.write("    * History - %2.2f%s - %2.2f%s\n" % (minPrice,currency,maxPrice,currency))
+        f.write("    * Volume chng. (2 weeks) - med. %2.2f, max +%2.2f, min %2.2f\n" % 
+                (volumeSubset.median(), volumeSubset.max(),volumeSubset.min()))
         # Insert all created graphs
         f.write("\n")
         for path in graphsCreated:
