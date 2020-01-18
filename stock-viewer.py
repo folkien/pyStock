@@ -268,9 +268,14 @@ import matplotlib.pyplot as plt
 
 
 # Dates
-currentDateTime = datetime.datetime.now()
+today       = datetime.datetime.now()
+lastYear    = datetime.datetime.now() - datetime.timedelta(days=365)
+last6Months = datetime.datetime.now() - datetime.timedelta(days=30*6)
+lastMonth   = datetime.datetime.now() - datetime.timedelta(days=30)
+last2Weeks  = datetime.datetime.now() - datetime.timedelta(days=14)
+lastWeek    = datetime.datetime.now() - datetime.timedelta(days=7)
 ## End date
-end_date    =  currentDateTime.strftime("%Y-%m-%d")
+end_date    = today.strftime("%Y-%m-%d")
 ## Start date
 if (args.beginDate):
     start_date  = args.beginDate
