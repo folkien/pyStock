@@ -60,18 +60,16 @@ def ReportsClean(filepath):
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
     os.system("make -C plots/ html")
+    # Replace images with embedded imaces code
+    os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
     
 def ReportsMail(recipient, reportFile):
     if os.path.isfile(reportFile):
         print("Mail to %s." % (recipient))
         currentDate = datetime.date.today()
-        # Replace images with embedded imaces code
-        os.system("sed -i 's/img src=\"plots\//img src=\"cid:/g' %s" % (reportFile))
         # Send email with attamchents through mutt smtp
         os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" % 
                   (currentDate.strftime("%d/%m/%Y"), recipient, reportFile))
-        # Clean temporary file
-        os.system("rm -rf tmp.html")
     else:
         print("File to send via mail not exists!")
 

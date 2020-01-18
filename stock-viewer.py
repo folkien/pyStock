@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
-import sys, argparse
+import sys, os, argparse
 import datetime
 import numpy
 import copy
@@ -246,7 +246,7 @@ def ReportSave(filepath):
         # Insert all created graphs
         f.write("\n")
         for path in graphsCreated:
-            f.write("![Graph](%s)\n\n" % (path))
+            f.write("![Graph](%s)\n\n" % (os.path.basename(path)))
         f.write("\n")
         # Close file
         f.close()
