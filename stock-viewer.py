@@ -337,7 +337,7 @@ fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
 plot5=plt.subplot(211)
-plt.plot(closePriceTotal.index, closePriceTotal, "#000000", label=args.stockCode)
+plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.ylabel('Price (zl)')
 plt.grid()
 plt.legend()
