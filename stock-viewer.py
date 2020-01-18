@@ -70,8 +70,8 @@ def SetMACD(price):
 def PlotMACD(macd,signal):
     plt.plot(macd.index, macd, label='AMD MACD', color = '#FF0000')
     plt.plot(signal.index, signal, label='Signal Line', color='#008800')
-    zeroes=FindZeroes(macd.subtract(signal))
-    plt.plot(zeroes.index, zeroes, 'ro', label='Signal Line')
+    intersections=FindIntersections(macd, signal)
+    plt.plot(intersections.index, intersections, 'ro', label='Signal Line')
 
 # Calculate diff
 def Diffrentiate(dataset):
@@ -113,6 +113,20 @@ def FindZeroes(data):
         zeroes = zeroes.append(pd.DataFrame({'close':data.values[indexPos]},index=[data.index[indexPos]]))
     
     return zeroes
+
+# Find both signals intersections
+def FindIntersections(x,y):
+    diffrence=x.subtract(y)
+
+    intersections=pd.DataFrame()
+    
+    zero_cross = numpy.where(numpy.diff(numpy.sign(diffrence.values)))[0]
+    for i in range(len(zero_cross)):
+        indexPos = zero_cross[i]
+        intersections = intersections.append(pd.DataFrame({'close':x.values[indexPos]},index=[diffrence.index[indexPos]]))
+    
+    return intersections
+
 
 def FindPeaks(data, delta):
     maxs=pd.DataFrame()
