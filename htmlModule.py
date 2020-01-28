@@ -43,10 +43,15 @@ class htmlFetcher:
         def clean(self):
                 self.text	 = ""
                 self.results = {}
+                
+        "Do all work and return extracted selection"
+        def Process(self):
+            self.fetchHtmlData()
+            selection = self.getSelection()
+            self.clean()
+            return selection
 
-actualDate = "test"
 testDocument = htmlFetcher("https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=ELZAB",
                            "div", "box300 boxGrey border3 right")
-testDocument.fetchHtmlData()
-print testDocument.getSelection()
+print testDocument.Process()
 
