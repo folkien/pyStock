@@ -36,13 +36,16 @@ class htmlFetcher:
 
         "Gets filteres selection"
         def getSelection(self):
-            soup = BeautifulSoup(self.text,"lxml")
-            return soup.find(self.htmlElement,class_=self.htmlElementClasses)
+            if (not self.text):
+                return ""
+            else:
+                soup = BeautifulSoup(self.text,"lxml")
+                return str(soup.find(self.htmlElement,class_=self.htmlElementClasses))
 
         "Clean class local data"
         def clean(self):
-                self.text	 = ""
-                self.results = {}
+            self.text	 = ""
+            self.results = {}
                 
         "Do all work and return extracted selection"
         def Process(self):
