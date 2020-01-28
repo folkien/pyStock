@@ -5,6 +5,7 @@ import datetime
 import json
 import os
 from jsonModule import *
+from htmlModule import *
 
 configFile="config/viewer.json"
 recipientsFile="config/recipients.json"
@@ -13,6 +14,10 @@ entries=[]
 recipients=[]
 dataIsChanged=False
 recipientsIsChanged=False
+
+# Html fetcher default data - configured for bankier.pl
+defaultHtmlElement="div"
+defaultHtmlElementClasses="box300 boxGrey border3 right"
 
 # Entry handling
 def recipientsAdd(address):
@@ -31,23 +36,34 @@ def recipientsRemove(address):
         pass
 
 # Entry handling
-def entryAdd(arguments,url):
+def entryAdd(arguments,url,element,classes):
     global entries
-    entries.append({"arguments":arguments, "url":url })
+    entries.append({"arguments":arguments, "url":url, "htmlElement":element, "htmlClasses":classes })
 
-def entryRemove(arguments, url):
+def entryRemove(arguments, url, element, classes):
     global entries
     try:
-        entries.remove({"arguments":arguments, "url":url })
+        entries.remove({"arguments":arguments, "url":url, "htmlElement":element, "htmlClasses":classes})
     except ValueError:
         pass
 
 def entryPrint(entry):
     print entry
 
-def entryExecute(arguments, url):
-    os.system("stock-viewer "+arguments+" -g -r")
+def entryExecute(entry):
+    os.system("stock-viewer "+entry["arguments"]+" -g -r")
+    # Use HTML fetcher to fetch additional data
+    if (entry["url"] != ""):
+        fetcher = htmlFetcher(entry["url"],entry["htmlElement"],entry["htmlClasses"])
+        ReportsAppend(reportFile, fetcher.Process())
     return False
+
+# Appends data to reports file
+def ReportsAppend(filepath, data):
+    if os.path.isfile(filepath):
+        with open(filepath, 'w') as f:
+            f.write(data)
+            f.close()
 
 # Save reports to file. Append text.
 def ReportsClean(filepath):
@@ -99,8 +115,8 @@ recipients = jsonRead(recipientsFile)
 # 0. Adding entries
 # #####################################################33
 if (args.add):
-    entryRemove(args.arguments, args.url)
-    entryAdd(args.arguments, args.url)
+    entryRemove(args.arguments, args.url, defaultHtmlElement, defaultHtmlElementClasses)
+    entryAdd(args.arguments, args.url, defaultHtmlElement, defaultHtmlElementClasses)
     dataIsChanged = True
     
 if (args.addRecipient is not None):
@@ -110,7 +126,7 @@ if (args.addRecipient is not None):
 # 1. Removing entries
 # #####################################################33
 if (args.delete):
-    entryRemove(args.arguments, args.url)
+    entryRemove(args.arguments, args.url, defaultHtmlElement, defaultHtmlElementClasses)
     dataIsChanged = True
 
 # 2. Checking entries
@@ -122,7 +138,7 @@ for i in range(len(entries)):
         entryPrint(entry)
 
     if (args.execute):
-        entryExecute(entry['arguments'], entry['url'])
+        entryExecute(entry)
 
 
 # 4. Write entries if were changed

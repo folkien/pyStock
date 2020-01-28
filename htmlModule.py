@@ -51,7 +51,7 @@ class htmlFetcher:
             self.clean()
             return selection
 
-testDocument = htmlFetcher("https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=ELZAB",
-                           "div", "box300 boxGrey border3 right")
-print testDocument.Process()
+# testDocument = htmlFetcher("https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=ELZAB",
+#                            "div", "box300 boxGrey border3 right")
+# print testDocument.Process()
 
