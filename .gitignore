@@ -105,3 +105,4 @@ venv.bak/
 
 plots/*
 config/*
+.settings/

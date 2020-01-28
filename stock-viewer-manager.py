@@ -51,17 +51,19 @@ def entryPrint(entry):
     print entry
 
 def entryExecute(entry):
-    os.system("stock-viewer "+entry["arguments"]+" -g -r")
+    if (os.system("stock-viewer "+entry["arguments"]+" -g -r") != 0):
+        print "Command failed!"
+
     # Use HTML fetcher to fetch additional data
     if (entry["url"] != ""):
         fetcher = htmlFetcher(entry["url"],entry["htmlElement"],entry["htmlClasses"])
-        ReportsAppend(reportFile, fetcher.Process())
+        ReportsAppend(reportFile, fetcher.Process()+"\n")
     return False
 
 # Appends data to reports file
 def ReportsAppend(filepath, data):
     if os.path.isfile(filepath):
-        with open(filepath, 'w') as f:
+        with open(filepath, 'a+') as f:
             f.write(data)
             f.close()
 
