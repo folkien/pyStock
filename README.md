@@ -71,6 +71,7 @@ https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pand
 - config .json z aktywami,
 - RSI
 - inne wskaźniki
+- Poprawić URL w linkach z HTML fetchera
 
 # TODO Alarmy : 
  -- aktywny i nieaktywne alarmy,
