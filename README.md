@@ -42,9 +42,32 @@ optional arguments:
   -r, --reports         Generate extra reports
 ```
 
-Last year of apple with markdown reports into report.md
+Last year of google with markdown reports into report.md
 ```bash
-./stock-viewer.py -n AAPL.US -Y -r
+./stock-viewer.py -n GOOG.US -Y -r
+```
+![CDPR image](doc/GOOG.us_2020-01-31_1.png)
+![CDPR image](doc/GOOG.us_2020-01-31_2.png)
+
+Markdown report
+```markdown
+# Report for GOOG.us.
+1. Price **1455.84zl** - (**97%** of history,                  growth chance <span style='color:green'>+2%</span>,                  lost chance <span style='color:red'>-66%</span>)
+    * Current - **1036.23zl - 1486.65zl**
+    * History - **492.55zl - 1486.65zl**
+    * Volume chng. (2 weeks) - med. **1345387.50**, max **+2396215.00**, min **-1784644.00**
+
+
+# Report for GOOG.us.
+1. Price **1455.84zl** - (**97%** of history,                  growth chance <span style='color:green'>+2%</span>,                  lost chance <span style='color:red'>-66%</span>)
+    * Current - **1036.23zl - 1486.65zl**
+    * History - **492.55zl - 1486.65zl**
+    * Volume chng. (2 weeks) - med. **1345387.50**, max **+2396215.00**, min **-1784644.00**
+
+![Graph](GOOG.us_2020-01-31_1.png)
+
+![Graph](GOOG.us_2020-01-31_2.png)
+
 ```
 
 Plot Apple last 6M to file
@@ -56,7 +79,13 @@ Example CD Projekt Red plot
 ```bash
  ./stock-viewer.py -n CDR.pl -6M -g
 ```
-![CDPR image](doc/CDR.2020-01-02plot.png)
+![CDPR image](doc/CDR_2020-01-31_1.png)
+![CDPR image](doc/CDR_2020-01-31_2.png)
+  
+  
+  
+
+
 
 
 ## Stock manager
