@@ -54,8 +54,8 @@ Last year of google with markdown reports into report.md
 ```bash
 ./stock-viewer.py -n GOOG.US -Y -r
 ```
-![CDPR image](doc/GOOG.us_2020-01-31_1.png)
-![CDPR image](doc/GOOG.us_2020-01-31_2.png)
+![image](doc/GOOG.US_2020-02-01_1.png)
+![image](doc/GOOG.US_2020-02-01_2.png)
 
 Markdown report
 ```markdown
@@ -72,10 +72,8 @@ Markdown report
     * History - **492.55zl - 1486.65zl**
     * Volume chng. (2 weeks) - med. **1345387.50**, max **+2396215.00**, min **-1784644.00**
 
-![Graph](GOOG.us_2020-01-31_1.png)
-
-![Graph](GOOG.us_2020-01-31_2.png)
-
+![Graph](GOOG.us_2020-02-01_1.png)
+![Graph](GOOG.us_2020-02-01_2.png)
 ```
 
 Plot Apple last 6M to file
@@ -83,17 +81,16 @@ Plot Apple last 6M to file
 ./stock-viewer.py -n AAPL.US -6M -g
 ```
 
+![image](doc/AAPL.US_2020-02-01_1.png)
+![image](doc/AAPL.US_2020-02-01_2.png)
+
 Example CD Projekt Red plot
 ```bash
  ./stock-viewer.py -n CDR.pl -6M -g
 ```
-![CDPR image](doc/CDR_2020-01-31_1.png)
-![CDPR image](doc/CDR_2020-01-31_2.png)
-  
-  
-  
 
-
+![CDPR image](doc/CDR_2020-02-01_1.png)
+![CDPR image](doc/CDR_2020-02-01_2.png)
 
 
 ## Stock manager
