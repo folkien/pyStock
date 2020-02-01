@@ -38,6 +38,13 @@ def SetReindex(data,start_date,end_date,fillna=True):
 
     return data
 
+# Creates DataFrame line 
+def CreateDataLine(indexes,startValue,endValue):
+    data=pd.DataFrame()
+    data = data.append(pd.DataFrame({'value':startValue},index=[indexes[0]]))
+    data = data.append(pd.DataFrame({'value':endValue},index=[indexes[-1]]))
+    return data
+
 # Reindex weekly data
 def GetSubsetByDates(inputData,start_date,end_date,fillna=True):
     subset=pd.DataFrame()
@@ -81,11 +88,7 @@ def SetMACD(price):
 
 def PlotMACD(macd,signal):
     #Create ZeroLine
-    zeroLine=pd.DataFrame()
-    zeroLine=zeroLine.append(pd.DataFrame({'close':0},
-                                          index=[macd.index[0]]))
-    zeroLine=zeroLine.append(pd.DataFrame({'close':0},
-                                          index=[macd.index[-1]]))
+    zeroLine = CreateDataLine(macd.index, 0, 0)
     # Create Buy/Sell
     fromBottom,fromTop=FindIntersections(macd, signal)
     # Plot
@@ -126,6 +129,13 @@ def SetRSI(prices, n=14):
 
 def PlotRSI(rsi):
     plt.plot(rsi.index, rsi, label='RSI', color = '#FF0000')
+    plt.ylim(top=100,bottom=0)
+    #OverBought
+    overBought = CreateDataLine(rsi.index, 70, 70)
+    plt.plot(overBought.index, overBought, '--', label='Overbought', color = '#AAAAAA')
+    #OverSold
+    overSold = CreateDataLine(rsi.index, 30, 30)
+    plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#AAAAAA')
     return 0
 
 # Calculate diff
