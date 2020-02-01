@@ -26,9 +26,16 @@ email server or with your email mailbox. You can use install & configuration scr
 ## Stock viewer.
 
 Features :
-* Generates plots (closePrice, Volume, Williams indicator, RSI, MACD),
+* Generates plots,
+    * Close price
+    * Volume
+* Oscillators
+    * MACD
+    * RSI
+    * Williams inidicator
 * Save plots to files \*.png
 * Generates/Appends report.md with some usefull informations,
+
 
 ```bash
 usage: stock-viewer.py [-h] -n STOCKCODE [-d BEGINDATE] [-a AVERAGEDAYS] [-Y]
