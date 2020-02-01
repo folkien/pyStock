@@ -169,6 +169,7 @@ or USA google alphabet
 - Read assets and show on plot,
 - Convergence-Divergence add,
 - StockFunctions move to separated module,
+- Added candle plot,
 
 ## TODO Simulator
 - Create simulator,
