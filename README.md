@@ -157,13 +157,16 @@ or USA google alphabet
 - EveryDay checking of states and sending errata with diffrences,
 - Fix for apple stock problem,
 - Add example confs,
+- Add trend lines for max/mins peaks,
 - RSI and add trend power factor,
 - Poprawić URL w linkach z HTML fetchera,
 - Read assets and show on plot,
-- Correct legend to show top-left on plots,
 - Convergence-Divergence add,
 - StockFunctions move to separated module,
 
+## TODO Simulator
+- Create simulator,
+- Add strategy 10%,
 
 ## TODO Manager
 - config .json z aktywami,
