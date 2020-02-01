@@ -4,10 +4,10 @@
 '''
 
 class CountryInfo(object):
-    defaultCountry=['pl']
-    countrySymbol=defaultCountry
 
     def __init__(self, stockCode):
+        defaultCountry='pl'
+        self.countrySymbol=defaultCountry
         self.SetStockCode(stockCode)
     
     def SetStockCode(self, stockCode):
