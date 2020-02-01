@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import  os, urllib2, re, math, datetime 
+import  os, urllib2, re 
 from bs4 import BeautifulSoup
+from urlparse import urlparse
 
 
 "Fetcher gets url data and extracts specified HTML element with specified classes"
@@ -9,6 +10,7 @@ class htmlFetcher:
 
         def __init__(self, url, element, classes):
             self.url = url
+            self.hostname = urlparse(url).hostname
             self.htmlElement = element
             self.htmlElementClasses = classes
             self.text = ""
@@ -25,7 +27,7 @@ class htmlFetcher:
             else:
                 self.text			 = response.read().replace("\n", "")
                 # Sprawdzamy kodowanie strony www
-                result = re.search("charset=[a-zA-Z0-9\-]*", self.text)  # pierwszy filtr
+                result = re.search("charset=\".*?\"", self.text)  # pierwszy filtr
                 if (result != None):
                     # nadpisujemy kodowanie
                     self.coding = result.group(0)[8:]
@@ -40,7 +42,11 @@ class htmlFetcher:
                 return ""
             else:
                 soup = BeautifulSoup(self.text,"lxml")
-                return str(soup.find(self.htmlElement,class_=self.htmlElementClasses))
+                selectionText = str(soup.find(self.htmlElement,class_=self.htmlElementClasses))
+                # Correct selection links to add basename
+                selectionText = re.sub("href=\"\/","href=\"%s/" % (self.hostname),selectionText.decode(self.coding))
+                return selectionText.encode("ascii","ignore")
+
 
         "Clean class local data"
         def clean(self):
