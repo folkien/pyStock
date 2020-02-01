@@ -161,12 +161,15 @@ or USA google alphabet
 ## TODO Viewer
 - EveryDay checking of states and sending errata with diffrences,
 - Add trend lines for max/mins peaks,
-- RSI and add trend power factor,
+- ADD trend power factor,
 - HTML UTF coding fix,
 - Read assets and show on plot,
 - Convergence-Divergence add,
 - StockFunctions move to separated module,
 - Added candle plot,
+TESTS :
+- test and extend MACD + report info,
+- test and extend RSI + report info,
 
 ## TODO Simulator
 - Create simulator,
