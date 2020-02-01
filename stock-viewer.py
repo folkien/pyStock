@@ -7,6 +7,7 @@ import numpy
 import copy
 from pandas_datareader import data
 from numpy import NaN
+from CountryInfo import CountryInfo
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -310,6 +311,9 @@ if (not args.stockCode):
     print "No stockCode!"
     sys.exit(1)
 
+# Create Country Info
+info = CountryInfo(args.stockCode)
+
 if (not args.averageDays):
     args.averageDays=30
 
@@ -396,7 +400,7 @@ plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.plot(maxs.index,maxs,'go', label="Maxs")
 plt.plot(mins.index,mins,'ro', label="Mins")
 PlotWilliamsIndicator(jaw, teeth, lips)
-plt.ylabel('Price (zl)')
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and Volume in period")
 plt.legend(loc='upper left')
@@ -405,7 +409,7 @@ plt.legend(loc='upper left')
 plot2=plt.subplot(222)
 plt.plot(closePriceTotal.index, closePriceTotal, "#000000", label=args.stockCode)
 plt.plot(closePrice.index, closePrice, 'r', label="")
-plt.ylabel('Price (zl)')
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and Volume - alltime")
 plt.legend(loc='upper left')
@@ -437,7 +441,7 @@ fig = plt.figure(figsize=(16.0, 9.0))
 # Total close price
 plot5=plt.subplot(211)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
-plt.ylabel('Price (zl)')
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and oscillators - period")
 plt.legend(loc='upper left')
