@@ -98,12 +98,12 @@ def PlotMACD(macd,signal):
 # Set RSI indicator
 # TODO :
 def SetRSI(prices, n=14):
-    deltas = np.diff(prices)
+    deltas = numpy.diff(prices)
     seed = deltas[:n+1]
     up = seed[seed>=0].sum()/n
     down = -seed[seed<0].sum()/n
     rs = up/down
-    rsi = np.zeros_like(prices)
+    rsi = numpy.zeros_like(prices)
     rsi[:n] = 100. - 100./(1.+rs)
 
     for i in range(n, len(prices)):
@@ -122,10 +122,10 @@ def SetRSI(prices, n=14):
         rs = up/down
         rsi[i] = 100. - 100./(1.+rs)
 
-    return rsi
+    return pd.DataFrame(data=rsi,index=prices.index)
 
 def PlotRSI(rsi):
-    # TODO
+    plt.plot(rsi.index, rsi, label='RSI', color = '#FF0000')
     return 0
 
 # Calculate diff
@@ -371,6 +371,7 @@ closePriceTotal  = panel_data['Close']
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 macdLine, macdSignal = SetMACD(closePrice)
+rsi              = SetRSI(closePrice)
 
 # Get STD deviation
 stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
@@ -439,18 +440,24 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
-plot5=plt.subplot(211)
+plot5=plt.subplot(311)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and oscillators - period")
 plt.legend(loc='upper left')
 
-# Total close price
-plot6=plt.subplot(212, sharex=plot5)
+# MACD
+plot6=plt.subplot(312, sharex=plot5)
 PlotMACD(macdLine, macdSignal)
-# plt.plot(stdTotal.index, stdTotal, "#000000", label=args.stockCode)
 plt.ylabel('Value')
+plt.grid()
+plt.legend(loc='upper left')
+
+# RSI
+plot7=plt.subplot(313, sharex=plot5)
+PlotRSI(rsi)
+plt.ylabel('RSI')
 plt.grid()
 plt.legend(loc='upper left')
 
