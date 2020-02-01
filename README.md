@@ -15,6 +15,12 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 
 (Other OS) No installation tool provided.
 
+## Emails sending
+
+Emails from stock-manager are send through linux command `mutt`. Please install this command and configure it with your local 
+email server or with your email mailbox. You can use install & configuration script from here 
+[Link to .sh script from github](https://github.com/folkien/scripts/blob/master/packages/ubuntu-packages/ssmtp-gmail.sh)
+
 # Usage
 
 ## Stock viewer.
