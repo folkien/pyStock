@@ -1,0 +1,26 @@
+[
+    {
+        "arguments": "-n SON -6M", 
+        "url": "https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=SONEL",
+        "htmlElement": "div",
+        "htmlClasses": "box300 boxGrey border3 right"
+    }, 
+    {
+        "arguments": "-n LKD -6M", 
+        "url": "https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=LOKUM",
+        "htmlElement": "div",
+        "htmlClasses": "box300 boxGrey border3 right"
+    }, 
+    {
+        "arguments": "-n ING -6M", 
+        "url": "https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=INGBSK",
+        "htmlElement": "div",
+        "htmlClasses": "box300 boxGrey border3 right"
+    }, 
+    {
+        "arguments": "-n CDR -6M", 
+        "url": "https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=CDPROJEKT",
+        "htmlElement": "div",
+        "htmlClasses": "box300 boxGrey border3 right"
+    }
+]
