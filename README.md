@@ -5,7 +5,7 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 * stock-viewer - tool for generating stock plots and text reports for given stock code. Diffrent plot options, volume, MACD, Williams indicator or RSI.
 * stock-viewer-manager - tool manager which can send emails with stock reports, generates reports and plots using stock-viewer. Configurable via json settings files.
 
-!! Please fork and contribute! ** Contributors needed to develop project! ** Merge requests with yout features welcomed !!
+!! Please fork and contribute! **Contributors needed to develop project!** Merge requests with yout features welcomed !!
 
 # Installation 
 (Linux) To install all commands and systemd timers and services run script.
