@@ -160,10 +160,9 @@ or USA google alphabet
 
 ## TODO Viewer
 - EveryDay checking of states and sending errata with diffrences,
-- Fix for apple stock problem,
 - Add trend lines for max/mins peaks,
 - RSI and add trend power factor,
-- Poprawić URL w linkach z HTML fetchera,
+- HTML UTF coding fix,
 - Read assets and show on plot,
 - Convergence-Divergence add,
 - StockFunctions move to separated module,
