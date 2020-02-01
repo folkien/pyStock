@@ -5,6 +5,8 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 * stock-viewer - tool for generating stock plots and text reports for given stock code. Diffrent plot options, volume, MACD, Williams indicator or RSI.
 * stock-viewer-manager - tool manager which can send emails with stock reports, generates reports and plots using stock-viewer. Configurable via json settings files.
 
+!! Please fork and contribute! ** Contributors needed to develop project! ** Merge requests with yout features welcomed !!
+
 # Installation 
 (Linux) To install all commands and systemd timers and services run script.
 ```
@@ -151,10 +153,21 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
-- codzienne sprawdzanie stanu i wysyłanie erraty w przypadku zmian lub nowych wskaznikow
+- CountryInfo add mopule with currency etc
+- EveryDay checking of states and sending errata with diffrences,
+- Fix for apple stock problem,
+- Add example confs,
+- RSI and add trend power factor,
+- Poprawić URL w linkach z HTML fetchera,
+- Read assets and show on plot,
+- Correct legend to show top-left on plots,
+- Convergence-Divergence add,
+- StockFunctions move to separated module,
+
+
+## TODO Manager
 - config .json z aktywami,
-- RSI
-- Poprawić URL w linkach z HTML fetchera
+- added everyday option with call checks,
 
 ## TODO Alarmy : 
  -- aktywny i nieaktywne alarmy,
