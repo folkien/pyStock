@@ -159,10 +159,8 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
-- CountryInfo add mopule with currency etc
 - EveryDay checking of states and sending errata with diffrences,
 - Fix for apple stock problem,
-- Add example confs,
 - Add trend lines for max/mins peaks,
 - RSI and add trend power factor,
 - Poprawić URL w linkach z HTML fetchera,
