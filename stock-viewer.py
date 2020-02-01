@@ -398,8 +398,8 @@ plt.plot(mins.index,mins,'ro', label="Mins")
 PlotWilliamsIndicator(jaw, teeth, lips)
 plt.ylabel('Price (zl)')
 plt.grid()
-plt.title("Cena")
-plt.legend()
+plt.title("Price and Volume in period")
+plt.legend(loc='upper left')
 
 # Total close price
 plot2=plt.subplot(222)
@@ -407,7 +407,8 @@ plt.plot(closePriceTotal.index, closePriceTotal, "#000000", label=args.stockCode
 plt.plot(closePrice.index, closePrice, 'r', label="")
 plt.ylabel('Price (zl)')
 plt.grid()
-plt.legend()
+plt.title("Price and Volume - alltime")
+plt.legend(loc='upper left')
 
 # Volume
 # #####################################################
@@ -416,7 +417,7 @@ plt.plot(obv.index, obv, label="Volume")
 plt.ylabel('Volume')
 plt.grid()
 plt.title("Vol. i OBV")
-plt.legend()
+plt.legend(loc='upper left')
 
 # OBV
 plot4=plt.subplot(224, sharex=plot2)
@@ -424,7 +425,7 @@ plt.plot(obvTotal.index, obvTotal, label="OBV")
 plt.plot(obv.index, obv, 'r', label="")
 plt.ylabel('OBV')
 plt.grid()
-plt.legend()
+plt.legend(loc='upper left')
 
 # Plot to file
 if (args.plotToFile):
@@ -438,15 +439,16 @@ plot5=plt.subplot(211)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.ylabel('Price (zl)')
 plt.grid()
-plt.legend()
+plt.title("Price and oscillators - period")
+plt.legend(loc='upper left')
 
 # Total close price
 plot6=plt.subplot(212, sharex=plot5)
 PlotMACD(macdLine, macdSignal)
 # plt.plot(stdTotal.index, stdTotal, "#000000", label=args.stockCode)
-plt.ylabel('Price (zl)')
+plt.ylabel('Value')
 plt.grid()
-plt.legend()
+plt.legend(loc='upper left')
 
 # Plot to file or show
 if (args.plotToFile):
