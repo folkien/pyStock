@@ -163,6 +163,7 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
+- Wstega bollingera,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
 - Add MACD historgram to power of trend,
