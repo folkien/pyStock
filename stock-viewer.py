@@ -214,7 +214,7 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
-plot5=plt.subplot(311)
+plot5=plt.subplot(411)
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
@@ -222,14 +222,21 @@ plt.title("Price and oscillators - period")
 plt.legend(loc='upper left')
 
 # MACD
-plot6=plt.subplot(312, sharex=plot5)
+plot6=plt.subplot(412, sharex=plot5)
 PlotMACD(macdLine, macdSignal)
 plt.ylabel('Value')
 plt.grid()
 plt.legend(loc='upper left')
 
+# MACD hist
+plot7=plt.subplot(413, sharex=plot5)
+PlotMACDHistogram(macdLine, macdSignal)
+plt.ylabel('Value')
+plt.grid()
+plt.legend(loc='upper left')
+
 # RSI
-plot7=plt.subplot(313, sharex=plot5)
+plot8=plt.subplot(414, sharex=plot5)
 PlotRSI(rsi)
 plt.ylabel('RSI')
 plt.grid()
