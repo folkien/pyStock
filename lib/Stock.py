@@ -51,8 +51,8 @@ def PlotMACD(macd,signal):
     plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
     plt.plot(macd.index, macd, label='AMD MACD', color = '#FF0000')
     plt.plot(signal.index, signal, label='Signal Line', color='#008800')
-    plt.plot(fromBottom.index, fromBottom, 'ro', label='Buy')
-    plt.plot(fromTop.index, fromTop, 'go', label='Sell')
+    plt.plot(fromBottom.index, fromBottom, 'go', label='Buy')
+    plt.plot(fromTop.index, fromTop, 'ro', label='Sell')
 
 
 
