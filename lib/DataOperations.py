@@ -72,28 +72,34 @@ def Diffrentiate(dataset):
 def FindZeroes(data):
     zeroes=pd.DataFrame()
     
-    zero_cross = numpy.where(numpy.diff(numpy.sign(data.values)))[0]
-    for i in range(len(zero_cross)):
-        indexPos = zero_cross[i]
-        zeroes = zeroes.append(pd.DataFrame({'close':data.values[indexPos]},index=[data.index[indexPos]]))
+    signs = numpy.sign(data.values)
+    for i in range(1,len(signs)):
+        if (signs[i] != signs[i-1]):
+            zeroes = zeroes.append(pd.DataFrame({'close':data.values[i]},index=[data.index[i]]))
     
     return zeroes
 
 # Find both signals intersections
 def FindIntersections(x,y):
-    diffrence=x.subtract(y)
+    # For dataframes
+    if type(y) is pd.DataFrame:
+        diffrence=x.subtract(y)
+    # for int or float values
+    else:
+        diffrence=x-y
 
     fromBottom=pd.DataFrame()
     fromTop=pd.DataFrame()
     
-    zero_cross = numpy.where(numpy.diff(numpy.sign(diffrence.values)))[0]
-    for i in range(len(zero_cross)):
-        indexPos = zero_cross[i]
-        if ((indexPos!=0) and (diffrence[indexPos-1] > 0)):
-            fromTop = fromTop.append(pd.DataFrame({'close':x.values[indexPos]},index=[diffrence.index[indexPos]]))
-        else:
-            fromBottom = fromBottom.append(pd.DataFrame({'close':x.values[indexPos]},index=[diffrence.index[indexPos]]))
-    
+    signs = numpy.sign(diffrence.values)
+    for i in range(1,len(signs)):
+        # Bottom crossing
+        if (signs[i] == 1) and (signs[i-1] == -1):
+            fromBottom = fromBottom.append(pd.DataFrame({'value':x.values[i]},index=[diffrence.index[i]]))
+        # Top crossing
+        elif (signs[i] == -1) and (signs[i-1] == 1): 
+            fromTop = fromTop.append(pd.DataFrame({'value':x.values[i]},index=[diffrence.index[i]]))
+
     return fromBottom, fromTop
 
 
