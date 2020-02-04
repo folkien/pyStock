@@ -5,7 +5,7 @@ import datetime
 import json
 import os
 from jsonModule import *
-from htmlModule import *
+from lib.htmlModule import *
 
 configFile="config/viewer.json"
 recipientsFile="config/recipients.json"
