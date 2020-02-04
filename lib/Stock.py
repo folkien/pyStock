@@ -6,6 +6,7 @@ Created on 4 lut 2020
 from pandas_datareader import data
 from DataOperations import *
 import matplotlib.pyplot as plt
+from rsi import *
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -53,45 +54,6 @@ def PlotMACD(macd,signal):
     plt.plot(fromBottom.index, fromBottom, 'ro', label='Buy')
     plt.plot(fromTop.index, fromTop, 'go', label='Sell')
 
-# Set RSI indicator
-# TODO :
-def SetRSI(prices, n=14):
-    deltas = numpy.diff(prices)
-    seed = deltas[:n+1]
-    up = seed[seed>=0].sum()/n
-    down = -seed[seed<0].sum()/n
-    rs = up/down
-    rsi = numpy.zeros_like(prices)
-    rsi[:n] = 100. - 100./(1.+rs)
-
-    for i in range(n, len(prices)):
-        delta = deltas[i-1] # cause the diff is 1 shorter
-
-        if delta>0:
-            upval = delta
-            downval = 0.
-        else:
-            upval = 0.
-            downval = -delta
-
-        up = (up*(n-1) + upval)/n
-        down = (down*(n-1) + downval)/n
-
-        rs = up/down
-        rsi[i] = 100. - 100./(1.+rs)
-
-    return pd.DataFrame(data=rsi,index=prices.index)
-
-def PlotRSI(rsi):
-    plt.plot(rsi.index, rsi, label='RSI', color = '#FF0000')
-    plt.ylim(top=100,bottom=0)
-    #OverBought
-    overBought = CreateDataLine(rsi.index, 70, 70)
-    plt.plot(overBought.index, overBought, '--', label='Overbought', color = '#AAAAAA')
-    #OverSold
-    overSold = CreateDataLine(rsi.index, 30, 30)
-    plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#AAAAAA')
-    return 0
 
 
 # Change volumeTotal to neg/pos value

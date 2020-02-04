@@ -22,7 +22,18 @@ def CreateMovingAverage(data, window, shiftPeriods = 0):
 
     return average
 
-# Reindex weekly data
+# Create data subset by value
+def CreateSubsetByValues(inputData,valueMin,valueMax):
+    subset=pd.DataFrame() 
+    
+    for i in range(len(inputData.values)):
+        if ((inputData.values[i]>=valueMin) and (inputData.values[i]<=valueMax)):
+            subset = subset.append(pd.DataFrame({'value':inputData.values[i]},
+                                                index=[inputData.index[i]]))
+    
+    return subset
+
+# Create data subset by date
 def GetSubsetByDates(inputData,start_date,end_date,fillna=True):
     subset=pd.DataFrame() 
     

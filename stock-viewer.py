@@ -145,7 +145,7 @@ closePriceTotal  = panel_data['Close']
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 macdLine, macdSignal = SetMACD(closePrice)
-rsi              = SetRSI(closePrice)
+rsi              = CreateRSI(closePrice)
 
 # Get STD deviation
 stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
