@@ -163,15 +163,14 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
-- Separate DataFrame functions to module,
-- Separate Stock functions to module,
+- Add MACD Convergence-Divergence add,
+- Add RSI Convergence-Divergence
+- Add MACD historgram to power of trend,
 - EveryDay checking of states and sending errata with diffrences,
 - Add trend lines for max/mins peaks,
 - ADD trend power factor,
 - HTML UTF coding fix,
 - Read assets and show on plot,
-- Convergence-Divergence add,
-- StockFunctions move to separated module,
 - Added candle plot,
 TESTS :
 - test and extend MACD + report info,
