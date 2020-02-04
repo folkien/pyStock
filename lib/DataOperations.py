@@ -1,0 +1,119 @@
+#!/usr/bin/python2.7
+# Module with dataframe operations.
+# - 
+# append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
+import pandas as pd
+import sys, os, argparse
+import numpy
+import copy
+from numpy import NaN
+
+# Creates DataFrame line 
+def CreateDataLine(indexes,startValue,endValue):
+    data=pd.DataFrame()
+    data = data.append(pd.DataFrame({'value':startValue},index=[indexes[0]]))
+    data = data.append(pd.DataFrame({'value':endValue},index=[indexes[-1]]))
+    return data
+
+# Creation of moving average with specific window and shift
+def CreateMovingAverage(data, window, shiftPeriods = 0):
+    average = data.rolling(window=int(window),min_periods=1).mean()
+    average.shift(periods=shiftPeriods)
+
+    return average
+
+# Reindex weekly data
+def GetSubsetByDates(inputData,start_date,end_date,fillna=True):
+    subset=pd.DataFrame()
+    
+    for i in range(len(inputData.values)):
+        if ((inputData.index[i]>=start_date) and (inputData.index[i]<=end_date)):
+            subset = subset.append(pd.DataFrame({'close':inputData.values[i]},
+                                                index=[inputData.index[i]]))
+    
+    return subset
+
+# Calculate diff
+def Diffrentiate(dataset):
+    diff=numpy.diff(dataset).tolist()
+    diff.append(0,0)
+    return diff
+
+# Find zeroes and zero cuts
+def FindZeroes(data):
+    zeroes=pd.DataFrame()
+    
+    zero_cross = numpy.where(numpy.diff(numpy.sign(data.values)))[0]
+    for i in range(len(zero_cross)):
+        indexPos = zero_cross[i]
+        zeroes = zeroes.append(pd.DataFrame({'close':data.values[indexPos]},index=[data.index[indexPos]]))
+    
+    return zeroes
+
+# Find both signals intersections
+def FindIntersections(x,y):
+    diffrence=x.subtract(y)
+
+    fromBottom=pd.DataFrame()
+    fromTop=pd.DataFrame()
+    
+    zero_cross = numpy.where(numpy.diff(numpy.sign(diffrence.values)))[0]
+    for i in range(len(zero_cross)):
+        indexPos = zero_cross[i]
+        if ((indexPos!=0) and (diffrence[indexPos-1] > 0)):
+            fromTop = fromTop.append(pd.DataFrame({'close':x.values[indexPos]},index=[diffrence.index[indexPos]]))
+        else:
+            fromBottom = fromBottom.append(pd.DataFrame({'close':x.values[indexPos]},index=[diffrence.index[indexPos]]))
+    
+    return fromBottom, fromTop
+
+
+def FindPeaks(data, delta):
+    maxs=pd.DataFrame()
+    mins=pd.DataFrame()
+
+    # Loop max iterations
+    MaxLoopIteration=10
+    # Loop iteration
+    loopIteration = 0
+
+    while ((loopIteration<MaxLoopIteration) and (maxs.empty or mins.empty)):
+        # Algorithm data
+        last_max = data.values[0]
+        last_min = data.values[0]
+        last_max_pos = 0
+        last_min_pos = 0
+        search_max = True
+        
+        # Algorithm loop - Find max/min in loop
+        for i in range(len(data.values)):
+            current = data.values[i]
+            # Save last max
+            if (current > last_max):
+                last_max = current
+                last_max_pos = i
+            # Save last min
+            if (current < last_min):
+                last_min = current
+                last_min_pos = i
+
+            if (search_max == True):
+                # Save last max value
+                if (current < (last_max-delta)):
+                    maxs = maxs.append(pd.DataFrame({'close':last_max},index=[data.index[last_max_pos]]))
+                    #maxs.values[last_max_pos] = last_max
+                    last_max = current
+                    last_max_pos = i
+                    search_max = False
+            else:
+                # Save last min value
+                if (current > (last_min+delta)):
+                    mins = mins.append(pd.DataFrame({'close':last_min},index=[data.index[last_min_pos]]))
+                    last_min = current
+                    last_min_pos = i
+                    search_max = True
+        # Adjust delta for another loop search if min/max not found
+        delta = (delta*80)/100
+        loopIteration+=1
+
+    return mins, maxs
