@@ -4,7 +4,7 @@ import sys, argparse
 import datetime
 import json
 import os
-from jsonModule import *
+from lib.jsonModule import *
 from lib.htmlModule import *
 
 configFile="config/viewer.json"

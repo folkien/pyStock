@@ -7,7 +7,7 @@ import numpy
 import copy
 from pandas_datareader import data
 from numpy import NaN
-from CountryInfo import CountryInfo
+from lib.CountryInfo import CountryInfo
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
