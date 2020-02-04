@@ -1,4 +1,4 @@
 #!/bin/bash
 
-stock-viewer-manager -e
+stock-manager -e
 
