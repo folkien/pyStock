@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # Need tot go to python 3
 #import mplfinance
 #from mplfinance import candlestick_ohlc
-from DataOperations import *
+from lib.DataOperations import *
 
 # StockData object which creates StockData data
 class StockData:
@@ -32,7 +32,7 @@ class StockData:
             receivedData = data.DataReader(self.stockCode, 'stooq', self.beginDate, self.endDate)
 
             if len(receivedData) == 0:
-                print "No Stooq data for entry!"
+                print("No Stooq data for entry!")
                 sys.exit(1)
 
             return receivedData

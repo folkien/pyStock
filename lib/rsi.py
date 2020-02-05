@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 import numpy
 import matplotlib.pyplot as plt
-from DataOperations import *
+from lib.DataOperations import *
 
 # Creates RSI object
 def CreateRSI(prices,n = 14):

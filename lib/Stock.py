@@ -1,14 +1,11 @@
-'''
-Created on 4 lut 2020
-
-@author: spasz
-'''
+#!/usr/bin/python3
 from pandas_datareader import data
-from DataOperations import *
 import matplotlib.pyplot as plt
-from rsi import *
-from macd import *
-from StockData import *
+import copy
+from lib.rsi import *
+from lib.macd import *
+from lib.StockData import *
+from lib.DataOperations import *
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -16,7 +13,7 @@ def GetData(code,begin,end):
     receivedData = data.DataReader(code, 'stooq', begin, end)
 
     if len(receivedData) == 0:
-        print "No Stooq data for entry!"
+        print("No Stooq data for entry!")
         sys.exit(1)
 
     return receivedData

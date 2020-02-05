@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
 import sys, os, argparse
@@ -17,7 +17,7 @@ def PlotSave(fig):
     plt.figure(fig.number)
     plt.savefig(filePath)
     graphsCreated.append(filePath)
-    print filePath 
+    print(filePath) 
 
 # Save reports to file. Append text.
 def ReportSave(filepath):
@@ -82,7 +82,7 @@ args = parser.parse_args()
 
 #Assert
 if (not args.stockCode):
-    print "No stockCode!"
+    print("No stockCode!")
     sys.exit(1)
 
 # Create Country Info

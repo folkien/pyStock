@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 import pandas as pd
 import sys, argparse
 import datetime
@@ -48,11 +48,11 @@ def entryRemove(arguments, url, element, classes):
         pass
 
 def entryPrint(entry):
-    print entry
+    print(entry)
 
 def entryExecute(entry):
     if (os.system("stock-viewer "+entry["arguments"]+" -g -r") != 0):
-        print "Command failed!"
+        print("Command failed!")
 
     # Use HTML fetcher to fetch additional data
     if (entry["url"] != ""):
@@ -107,7 +107,7 @@ if (not args.add and
     not args.delete and
     not args.addRecipient and 
     not args.show):
-    print "Missing event"
+    print("Missing event")
     sys.exit(1)
 
 ReportsClean(reportFile)

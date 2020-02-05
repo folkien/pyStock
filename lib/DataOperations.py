@@ -3,9 +3,7 @@
 # - 
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
-import sys, os, argparse
 import numpy
-import copy
 from numpy import NaN
 
 # Creates DataFrame line 
