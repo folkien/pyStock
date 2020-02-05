@@ -21,19 +21,23 @@ class htmlFetcher:
             from urllib.request import Request, urlopen
             from urllib.error import URLError, HTTPError
             # odczytujemy stronę www i wyszukujemy pattern
+            resource = urllib.request.urlopen(self.url)
+            self.coding = resource.headers.get_content_charset()
+            self.text  =  resource.read().decode(resource.headers.get_content_charset())
+            return
             try:
-                response = urlopen(self.url)
+                response = urllib.request.urlopen(self.url)
+                self.coding = response.headers.get_content_charset()
             except HTTPError as e:
                 print('Error code: ', e.code)
             except URLError as e:
                 print('Reason: ', e.reason)
             else:
-                self.text = response.read().replace("\n", "")
-                # Sprawdzamy kodowanie strony www
-                result = re.search("charset=\".*?\"", self.text)  # pierwszy filtr
-                if (result != None):
-                    # nadpisujemy kodowanie
-                    self.coding = result.group(0)[8:]
+                #self.coding = response.headers.get_content_charset()
+                print("Encoding is %s" % self.coding)
+                data = response.read().decode(self.coding)
+                self.text = data.replace(b"\n", b"")
+                print("Fetched %uB from %s." % (len(data),self.url))
 
         "Set HTML data to parse"
         def setHtmlData(self, newContent):
