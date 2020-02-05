@@ -6,8 +6,8 @@ Created on 5 lut 2020
 from pandas_datareader import data
 import matplotlib.pyplot as plt
 # Need tot go to python 3
-#import mplfinance
-#from mplfinance import candlestick_ohlc
+import mpl_finance
+from mpl_finance import candlestick2_ohlc
 from lib.DataOperations import *
 
 # StockData object which creates StockData data
@@ -60,6 +60,14 @@ class StockData:
             return 0
 
         # Plot stock data
-        def PlotCandle(self):
-#             candlestick_ochl(self.data)
-            return 0
+        def PlotCandle(self,ax):
+            candlestick2_ohlc(ax,
+                              self.data['Open'].values,
+                              self.data['High'].values,
+                              self.data['Low'].values,
+                              self.data['Close'].values,
+                              width=0.6,
+                              colorup='g',
+                              colordown='r',
+                              alpha=1)
+
