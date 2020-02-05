@@ -144,7 +144,7 @@ panel_data  = GetData(args.stockCode, start_date, end_date)
 closePriceTotal  = panel_data['Close']
 closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
-macdLine, macdSignal = SetMACD(closePrice)
+macd             = CreateMACD(closePrice)
 rsi              = CreateRSI(closePrice)
 
 # Get STD deviation
@@ -223,14 +223,14 @@ plt.legend(loc='upper left')
 
 # MACD
 plot6=plt.subplot(412, sharex=plot5)
-PlotMACD(macdLine, macdSignal)
+macd.Plot()
 plt.ylabel('Value')
 plt.grid()
 plt.legend(loc='upper left')
 
 # MACD hist
 plot7=plt.subplot(413, sharex=plot5)
-PlotMACDHistogram(macdLine, macdSignal)
+macd.Histogram()
 plt.ylabel('Value')
 plt.grid()
 plt.legend(loc='upper left')
