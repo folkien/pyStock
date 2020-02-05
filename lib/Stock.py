@@ -8,6 +8,7 @@ from DataOperations import *
 import matplotlib.pyplot as plt
 from rsi import *
 from macd import *
+from StockData import *
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.

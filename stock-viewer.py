@@ -138,11 +138,11 @@ graphsCreated=[]
 
 # 1. Get DATA from URL
 # #####################################################
-panel_data  = GetData(args.stockCode, start_date, end_date)
+stockData   = StockData(args.stockCode, start_date, end_date)
 
 # Get Close price and average
-closePriceTotal  = panel_data['Close']
-closePrice       = SetReindex(panel_data['Close'],start_date,end_date)
+closePriceTotal  = stockData.GetAllData('Close')
+closePrice       = stockData.GetData('Close')
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 macd             = CreateMACD(closePrice)
 rsi              = CreateRSI(closePrice)
@@ -156,10 +156,10 @@ print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
 mins, maxs       = FindPeaks(closePrice, PriceRange/10)
 
 # Volume
-SetVolumeWithTrend(panel_data['Close'], panel_data['Volume'])
-obvTotal    = SetOBV(panel_data['Close'], panel_data['Volume'])
-volumeTotal = panel_data['Volume']
-volume      = SetReindex(panel_data['Volume'],start_date,end_date)
+SetVolumeWithTrend(stockData.GetAllData('Close'), stockData.GetAllData('Volume'))
+obvTotal    = SetOBV(stockData.GetAllData('Close'), stockData.GetAllData('Volume'))
+volumeTotal = stockData.GetAllData('Volume')
+volume      = stockData.GetData('Volume')
 obv         = SetReindex(obvTotal,start_date,end_date)
 
 
