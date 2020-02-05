@@ -192,3 +192,10 @@ TESTS :
 - Sprawdzanie najnowszych raportów dla inwestorów,
 - Monitorowanie trendów oraz alarmy z trendów,
 
+# Bibliography
+* https://www.edukacjagieldowa.pl/gieldowe-abc/analiza-techniczna/
+* https://money.stackexchange.com/questions/tagged/stocks
+* https://www.investopedia.com/terms/m/macd.asp
+* https://en.wikipedia.org/wiki/MACD
+* https://en.wikipedia.org/wiki/Relative_strength_index
+* https://www.investopedia.com/terms/r/rsi.asp
