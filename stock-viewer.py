@@ -242,6 +242,10 @@ plt.ylabel('RSI')
 plt.grid()
 plt.legend(loc='upper left')
 
+# Plot to file or show
+if (args.plotToFile):
+    PlotSave(fig)
+
 ### FIG 3
 fig = plt.figure(figsize=(16.0, 9.0))
 
