@@ -1,0 +1,10 @@
+[Unit]
+Description=Call daily stock service.
+
+[Timer]
+OnCalendar=*-*-* 18:00:00
+Persistent=true
+Unit=StockDaily.service
+
+[Install]
+WantedBy=timers.target

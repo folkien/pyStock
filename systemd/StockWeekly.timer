@@ -2,7 +2,7 @@
 Description=Call weekly stock service.
 
 [Timer]
-OnCalendar=weekly
+OnCalendar=Mon *-*-* 18:00:00
 Persistent=true
 Unit=StockWeekly.service
 
