@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import  os, urllib2, re 
+import  os, urllib, re
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 "Fetcher gets url data and extracts specified HTML element with specified classes"
@@ -18,14 +18,17 @@ class htmlFetcher:
 
         "Fetches HTML data from given URL"
         def fetchHtmlData(self):
+            from urllib.request import Request, urlopen
+            from urllib.error import URLError, HTTPError
             # odczytujemy stronę www i wyszukujemy pattern
             try:
-                response 			 = urllib2.urlopen(self.url)
-            except urllib2.HTTPError as err:
-                print("Url error!")
-                self.text = ""
+                response = urlopen(self.url)
+            except HTTPError as e:
+                print('Error code: ', e.code)
+            except URLError as e:
+                print('Reason: ', e.reason)
             else:
-                self.text			 = response.read().replace("\n", "")
+                self.text = response.read().replace("\n", "")
                 # Sprawdzamy kodowanie strony www
                 result = re.search("charset=\".*?\"", self.text)  # pierwszy filtr
                 if (result != None):
@@ -52,7 +55,7 @@ class htmlFetcher:
         def clean(self):
             self.text	 = ""
             self.results = {}
-                
+
         "Do all work and return extracted selection"
         def Process(self):
             self.fetchHtmlData()

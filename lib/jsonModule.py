@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 '''
 Created on 3 sty 2020
 
@@ -21,4 +21,4 @@ def jsonWrite(filename,data):
 
 def jsonShow(data):
     for entry in data:
-        print entry
+        print(entry)
