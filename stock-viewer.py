@@ -216,7 +216,6 @@ fig = plt.figure(figsize=(16.0, 9.0))
 # Total close price
 plot5=plt.subplot(411)
 stockData.Plot()
-stockData.PlotCandle()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and oscillators - period")
@@ -241,6 +240,19 @@ plot8=plt.subplot(414, sharex=plot5)
 PlotRSI(rsi)
 plt.ylabel('RSI')
 plt.grid()
+plt.legend(loc='upper left')
+
+### FIG 3
+fig = plt.figure(figsize=(16.0, 9.0))
+
+# Total close price
+plot9=plt.subplot(111)
+stockData.PlotCandle(plot9)
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
+plt.minorticks_on()
+plt.grid(b=True, which='major', axis='both',color='k')
+plt.grid(b=True, which='minor', axis='both')
+plt.title("Price candlestick")
 plt.legend(loc='upper left')
 
 # Plot to file or show

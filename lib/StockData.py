@@ -57,15 +57,23 @@ class StockData:
 
         # Plot all stock data
         def PlotCandleAll(self):
-            return 0
-
-        # Plot stock data
-        def PlotCandle(self,ax):
             candlestick2_ohlc(ax,
                               self.data['Open'].values,
                               self.data['High'].values,
                               self.data['Low'].values,
                               self.data['Close'].values,
+                              width=0.6,
+                              colorup='g',
+                              colordown='r',
+                              alpha=1)
+
+        # Plot stock data
+        def PlotCandle(self,ax):
+            candlestick2_ohlc(ax,
+                              self.dataSubset['Open'].values,
+                              self.dataSubset['High'].values,
+                              self.dataSubset['Low'].values,
+                              self.dataSubset['Close'].values,
                               width=0.6,
                               colorup='g',
                               colordown='r',
