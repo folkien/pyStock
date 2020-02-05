@@ -215,7 +215,8 @@ fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
 plot5=plt.subplot(411)
-plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
+stockData.Plot()
+stockData.PlotCandle()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and oscillators - period")
