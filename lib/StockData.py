@@ -7,6 +7,7 @@ from pandas_datareader import data
 import matplotlib.pyplot as plt
 # Need tot go to python 3
 import mpl_finance
+import sys
 from mpl_finance import candlestick2_ohlc
 from lib.DataOperations import *
 
@@ -36,7 +37,7 @@ class StockData:
                 sys.exit(1)
 
             return receivedData
-        
+
         # Get named data
         def GetAllData(self,name):
             return self.data[name]
@@ -44,7 +45,7 @@ class StockData:
         # Get named data
         def GetData(self,name):
             return self.dataSubset[name]
-        
+
         # Plot all stock data
         def PlotAll(self):
             plt.plot(self.data['Close'].index, self.data['Close'], "#000000", label=self.stockCode)
