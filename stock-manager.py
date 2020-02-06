@@ -80,13 +80,13 @@ def ReportsToHTML(filepath):
     os.system("make -C plots/ html")
     # Replace images with embedded imaces code
     os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
-    
+
 def ReportsMail(recipient, reportFile):
     if os.path.isfile(reportFile):
         print("Mail to %s." % (recipient))
         currentDate = datetime.date.today()
         # Send email with attamchents through mutt smtp
-        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" % 
+        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" %
                   (currentDate.strftime("%d/%m/%Y"), recipient, reportFile))
     else:
         print("File to send via mail not exists!")
@@ -102,10 +102,10 @@ parser.add_argument("-au", "--url", type=str, required=False, help="Bankier URL"
 args = parser.parse_args()
 
 #Assert
-if (not args.add and 
-    not args.execute and 
+if (not args.add and
+    not args.execute and
     not args.delete and
-    not args.addRecipient and 
+    not args.addRecipient and
     not args.show):
     print("Missing event")
     sys.exit(1)
@@ -120,7 +120,7 @@ if (args.add):
     entryRemove(args.arguments, args.url, defaultHtmlElement, defaultHtmlElementClasses)
     entryAdd(args.arguments, args.url, defaultHtmlElement, defaultHtmlElementClasses)
     dataIsChanged = True
-    
+
 if (args.addRecipient is not None):
     recipientsRemove(args.addRecipient)
     recipientsAdd(args.addRecipient)

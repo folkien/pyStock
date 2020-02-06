@@ -1,12 +1,12 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 # Module with dataframe operations.
-# - 
+# -
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
 import numpy
 from numpy import NaN
 
-# Creates DataFrame line 
+# Creates DataFrame line
 def CreateDataLine(indexes,startValue,endValue):
     data=pd.DataFrame()
     data = data.append(pd.DataFrame({'value':startValue},index=[indexes[0]]))
@@ -22,24 +22,24 @@ def CreateMovingAverage(data, window, shiftPeriods = 0):
 
 # Create data subset by value
 def CreateSubsetByValues(inputData,valueMin,valueMax):
-    subset=pd.DataFrame() 
-    
+    subset=pd.DataFrame()
+
     for i in range(len(inputData.values)):
         if ((inputData.values[i]>=valueMin) and (inputData.values[i]<=valueMax)):
             subset = subset.append(pd.DataFrame({'value':inputData.values[i]},
                                                 index=[inputData.index[i]]))
-    
+
     return subset
 
 # Create data subset by date
 def GetSubsetByDates(inputData,start_date,end_date,fillna=True):
-    subset=pd.DataFrame() 
-    
+    subset=pd.DataFrame()
+
     for i in range(len(inputData.values)):
         if ((inputData.index[i]>=start_date) and (inputData.index[i]<=end_date)):
             subset = subset.append(pd.DataFrame({'close':inputData.values[i]},
                                                 index=[inputData.index[i]]))
-    
+
     return subset
 
 # Reindex weekly data
@@ -69,12 +69,12 @@ def Diffrentiate(dataset):
 # Find zeroes and zero cuts
 def FindZeroes(data):
     zeroes=pd.DataFrame()
-    
+
     signs = numpy.sign(data.values)
     for i in range(1,len(signs)):
         if (signs[i] != signs[i-1]):
             zeroes = zeroes.append(pd.DataFrame({'close':data.values[i]},index=[data.index[i]]))
-    
+
     return zeroes
 
 # Find both signals intersections
@@ -88,14 +88,14 @@ def FindIntersections(x,y):
 
     fromBottom=pd.DataFrame()
     fromTop=pd.DataFrame()
-    
+
     signs = numpy.sign(diffrence.values)
     for i in range(1,len(signs)):
         # Bottom crossing
         if (signs[i] == 1) and (signs[i-1] == -1):
             fromBottom = fromBottom.append(pd.DataFrame({'value':x.values[i]},index=[diffrence.index[i]]))
         # Top crossing
-        elif (signs[i] == -1) and (signs[i-1] == 1): 
+        elif (signs[i] == -1) and (signs[i-1] == 1):
             fromTop = fromTop.append(pd.DataFrame({'value':x.values[i]},index=[diffrence.index[i]]))
 
     return fromBottom, fromTop
@@ -117,7 +117,7 @@ def FindPeaks(data, delta):
         last_max_pos = 0
         last_min_pos = 0
         search_max = True
-        
+
         # Algorithm loop - Find max/min in loop
         for i in range(len(data.values)):
             current = data.values[i]

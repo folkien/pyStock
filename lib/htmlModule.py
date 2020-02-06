@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import  os, urllib, re
 from bs4 import BeautifulSoup
@@ -28,15 +28,22 @@ class htmlFetcher:
             except URLError as e:
                 print('Reason: ', e.reason)
             else:
+                # Get encoding, try utf-8 if not found.
                 self.coding = response.headers.get_content_charset()
-                if (self.coding is not None):
+                if (self.coding is None):
+                    self.coding = "utf-8"
+
+                # Get data as string
+                if (len(response.read()) != 0):
                     print("Encoding is %s" % self.coding)
-                    self.text  =  response.read().decode(self.url)
+                    self.text=response.read().decode(self.url)
                     data = response.read().decode(self.coding)
-                    self.text = data.replace(b"\n", b"")
                     print("Fetched %uB from %s." % (len(data),self.url))
+                    self.text = data.replace(b"\n", b"")
+                    return True
                 else:
-                    print("No data!")
+                    print("No data for %s !" % (self.url))
+                    return False
 
         "Set HTML data to parse"
         def setHtmlData(self, newContent):
@@ -61,10 +68,12 @@ class htmlFetcher:
 
         "Do all work and return extracted selection"
         def Process(self):
-            self.fetchHtmlData()
-            selection = self.getSelection()
-            self.clean()
-            return selection
+            if (self.fetchHtmlData() == True):
+                selection = self.getSelection()
+                self.clean()
+                return selection
+            else:
+                return "Fetcher failed for %s.\n\n" % self.url
 
 # testDocument = htmlFetcher("https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=ELZAB",
 #                            "div", "box300 boxGrey border3 right")

@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys, argparse
