@@ -163,6 +163,7 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
+- Fix of no Volume readings - for BTC,
 - Wstega bollingera,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
