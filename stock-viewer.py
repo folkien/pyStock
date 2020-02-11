@@ -215,7 +215,10 @@ fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
 plot5=plt.subplot(411)
-stockData.Plot()
+#stockData.Plot()
+stockData.PlotCandle(plot5)
+stockData.PlotAsBackground()
+plt.minorticks_on()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and oscillators - period")
@@ -251,7 +254,7 @@ fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
 plot9=plt.subplot(111)
-stockData.PlotCandle2(plot9)
+stockData.PlotCandle(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')

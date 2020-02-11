@@ -7,7 +7,6 @@ from pandas_datareader import data
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 # Need tot go to python 3
-import mpl_finance
 import sys
 from mpl_finance import candlestick2_ohlc
 from mpl_finance import candlestick_ohlc
@@ -53,6 +52,12 @@ class StockData:
             plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'], "#000000", label=self.stockCode)
             return 0
 
+        # Plot stock data
+        def PlotAsBackground(self):
+            plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'],"--", color="#777777", 
+                     label=self.stockCode, linewidth=0.5)
+            return 0
+
         # Plot all stock data
         def PlotCandleAll(self):
             candlestick2_ohlc(ax,
@@ -67,30 +72,36 @@ class StockData:
             
         def PlotCandle2(self,ax):     
             # TODO fix missing values
-            width=1
-            width2=0.1
-            pricesup=self.dataSubset[self.dataSubset['Close']>=self.dataSubset['Open']]
-            pricesdown=self.dataSubset[self.dataSubset['Close']<self.dataSubset['Open']]
+            widthBackground= 1.5
+            widthOpenClose = 1
+            widthHighLow   = 0.2
+            minHeight      = 0.1
+            
+            pricesup=self.dataSubset[self.dataSubset['Close'] > self.dataSubset['Open']]
+            pricesdown=self.dataSubset[self.dataSubset['Close'] <= self.dataSubset['Open']]
 
-            plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'], "#777777", label=self.stockCode, linewidth=0.6)
-            plt.bar(pricesup.index,pricesup['Close']-pricesup['Open'],width,  bottom=pricesup['Open'],color='g')
-            plt.bar(pricesup.index,pricesup['High']-pricesup['Close'],width2, bottom=pricesup['Close'],color='g')
-            plt.bar(pricesup.index,pricesup['Low']-pricesup['Open'],width2,   bottom=pricesup['Open'],color='g')
+            # line with close price
+            plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'],"--", color="#777777", label=self.stockCode, linewidth=0.6)
+            
+            # Rising(Close>Open) - Green bars, 
+            plt.bar(pricesup.index, pricesup['Close']-pricesup['Open'], widthOpenClose, bottom=pricesup['Open'], color='g', edgecolor="k")
+            plt.bar(pricesup.index, pricesup['High']-pricesup['Low'],   widthHighLow,   bottom=pricesup['Low'],  color='g')
 
-            plt.bar(pricesdown.index,pricesdown['Close']-pricesdown['Open'],width, bottom=pricesdown['Open'],color='r')
-            plt.bar(pricesdown.index,pricesdown['High']-pricesdown['Open'],width2, bottom=pricesdown['Open'],color='r')
-            plt.bar(pricesdown.index,pricesdown['Low']-pricesdown['Close'],width2, bottom=pricesdown['Close'],color='r')
-            plt.grid()
+            # Falling(Close<=Open) - Red bars
+            plt.bar(pricesdown.index, pricesdown['Open']-pricesdown['Close'], widthOpenClose, bottom=pricesdown['Close'],color='r', edgecolor="k")
+            plt.bar(pricesdown.index, pricesdown['High']-pricesdown['Low'],   widthHighLow,   bottom=pricesdown['Low'],  color='r')
 
         # Plot stock data
         def PlotCandle(self,ax):
-            candlestick2_ohlc(ax,
-                              self.dataSubset['Open'].values,
-                              self.dataSubset['High'].values,
-                              self.dataSubset['Low'].values,
-                              self.dataSubset['Close'].values,
+            quotes = self.dataSubset
+            ax.xaxis_date()
+            # ax.xaxis.set_minor_formatter(dayFormatter)
+            candlestick_ohlc(ax, zip(mdates.date2num(quotes.index.to_pydatetime()),
+                                     quotes['Open'], quotes['High'],
+                                     quotes['Low'], quotes['Close']),
                               width=0.6,
                               colorup='g',
                               colordown='r',
                               alpha=1)
+            ax.autoscale_view()
 
