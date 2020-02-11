@@ -66,11 +66,13 @@ class StockData:
                               alpha=1)
             
         def PlotCandle2(self,ax):     
+            # TODO fix missing values
             width=1
             width2=0.1
             pricesup=self.dataSubset[self.dataSubset['Close']>=self.dataSubset['Open']]
             pricesdown=self.dataSubset[self.dataSubset['Close']<self.dataSubset['Open']]
 
+            plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'], "#777777", label=self.stockCode, linewidth=0.6)
             plt.bar(pricesup.index,pricesup['Close']-pricesup['Open'],width,  bottom=pricesup['Open'],color='g')
             plt.bar(pricesup.index,pricesup['High']-pricesup['Close'],width2, bottom=pricesup['Close'],color='g')
             plt.bar(pricesup.index,pricesup['Low']-pricesup['Open'],width2,   bottom=pricesup['Open'],color='g')
