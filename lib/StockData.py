@@ -99,7 +99,7 @@ class StockData:
             candlestick_ohlc(ax, zip(mdates.date2num(quotes.index.to_pydatetime()),
                                      quotes['Open'], quotes['High'],
                                      quotes['Low'], quotes['Close']),
-                              width=0.6,
+                              width=0.8,
                               colorup='g',
                               colordown='r',
                               alpha=1)
