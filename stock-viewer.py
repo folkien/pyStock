@@ -177,7 +177,7 @@ plt.plot(mins.index,mins,'ro', label="Mins")
 PlotWilliamsIndicator(jaw, teeth, lips)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
-plt.title("Price and Volume in period")
+plt.title("Price and OBV")
 plt.legend(loc='upper left')
 
 # Total close price
@@ -192,17 +192,17 @@ plt.legend(loc='upper left')
 # Volume
 # #####################################################
 plot3=plt.subplot(223, sharex=plot1)
-plt.plot(obv.index, obv, label="Volume")
-plt.ylabel('Volume')
+plt.plot(obv.index, obv, label="OBV")
+plt.ylabel('OBV')
 plt.grid()
-plt.title("Vol. i OBV")
+plt.title("OBV")
 plt.legend(loc='upper left')
 
 # OBV
 plot4=plt.subplot(224, sharex=plot2)
-plt.plot(obvTotal.index, obvTotal, label="OBV")
+plt.plot(obvTotal.index, obvTotal, label="OBV total")
 plt.plot(obv.index, obv, 'r', label="")
-plt.ylabel('OBV')
+plt.ylabel('OBV total')
 plt.grid()
 plt.legend(loc='upper left')
 
