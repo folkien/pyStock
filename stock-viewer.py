@@ -251,7 +251,7 @@ fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
 plot9=plt.subplot(111)
-stockData.PlotCandle(plot9)
+stockData.PlotCandle2(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')

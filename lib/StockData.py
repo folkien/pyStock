@@ -5,23 +5,20 @@ Created on 5 lut 2020
 '''
 from pandas_datareader import data
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 # Need tot go to python 3
 import mpl_finance
 import sys
 from mpl_finance import candlestick2_ohlc
+from mpl_finance import candlestick_ohlc
 from lib.DataOperations import *
 
 # StockData object which creates StockData data
 class StockData:
 
         def __init__(self, stockCode, beginDate, endDate):
-            self.dataSubset = {'Open' : 0, 'High' :0, 'Low' : 0, 'Close' : 0, 'Volume' : 0}
             self.data = self.FetchData(stockCode,beginDate,endDate)
-            self.dataSubset['Open']   =  SetReindex(self.data['Open'],self.beginDate,self.endDate)
-            self.dataSubset['High']   =  SetReindex(self.data['High'],self.beginDate,self.endDate)
-            self.dataSubset['Low']    =  SetReindex(self.data['Low'],self.beginDate,self.endDate)
-            self.dataSubset['Close']  =  SetReindex(self.data['Close'],self.beginDate,self.endDate)
-            self.dataSubset['Volume'] =  SetReindex(self.data['Volume'],self.beginDate,self.endDate)
+            self.dataSubset = SetReindex(self.data,self.beginDate,self.endDate)
 
         # Get DATA from URL
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -67,6 +64,21 @@ class StockData:
                               colorup='g',
                               colordown='r',
                               alpha=1)
+            
+        def PlotCandle2(self,ax):     
+            width=1
+            width2=0.1
+            pricesup=self.dataSubset[self.dataSubset['Close']>=self.dataSubset['Open']]
+            pricesdown=self.dataSubset[self.dataSubset['Close']<self.dataSubset['Open']]
+
+            plt.bar(pricesup.index,pricesup['Close']-pricesup['Open'],width,  bottom=pricesup['Open'],color='g')
+            plt.bar(pricesup.index,pricesup['High']-pricesup['Close'],width2, bottom=pricesup['Close'],color='g')
+            plt.bar(pricesup.index,pricesup['Low']-pricesup['Open'],width2,   bottom=pricesup['Open'],color='g')
+
+            plt.bar(pricesdown.index,pricesdown['Close']-pricesdown['Open'],width, bottom=pricesdown['Open'],color='r')
+            plt.bar(pricesdown.index,pricesdown['High']-pricesdown['Open'],width2, bottom=pricesdown['Open'],color='r')
+            plt.bar(pricesdown.index,pricesdown['Low']-pricesdown['Close'],width2, bottom=pricesdown['Close'],color='r')
+            plt.grid()
 
         # Plot stock data
         def PlotCandle(self,ax):
