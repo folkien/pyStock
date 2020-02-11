@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import  os, urllib, re
+import  os, re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-import urllib
 
 
 "Fetcher gets url data and extracts specified HTML element with specified classes"
@@ -19,24 +18,27 @@ class htmlFetcher:
 
         "Fetches HTML data from given URL"
         def fetchHtmlData(self):
-
-            response = urllib.request.urlopen(self.url)
-            # Get encoding, try utf-8 if not found.
-            self.coding = response.headers.get_content_charset()
-            if (self.coding is None):
-                self.coding = "utf-8"
-
-            # Get data as string
-            if (len(response.read()) != 0):
+            import urllib.request
+            with urllib.request.urlopen(self.url) as response:
+                data = response.read()
+                
+                # Get encoding, try utf-8 if not found.
+                self.coding = response.headers.get_content_charset()
+                if (self.coding is None):
+                    self.coding = "utf-8"
                 print("Encoding is %s" % self.coding)
-                self.text=response.read().decode(self.url)
-                data = response.read().decode(self.coding)
-                print("Fetched %uB from %s." % (len(data),self.url))
-                self.text = data.replace(b"\n", b"")
-                return True
-            else:
-                print("No data for %s !" % (self.url))
-                return False
+
+                # Get data as string
+                if (len(data)!=0):
+                    self.text = data.decode(self.coding)
+                    print("Fetched %uB from %s." % (len(data),self.url))
+                    self.text = self.text.replace("\n", "")
+                    return True
+                else:
+                    print("No data for %s !" % (self.url))
+                    return False
+
+            return False
 
         "Set HTML data to parse"
         def setHtmlData(self, newContent):
@@ -50,8 +52,8 @@ class htmlFetcher:
                 soup = BeautifulSoup(self.text,"lxml")
                 selectionText = str(soup.find(self.htmlElement,class_=self.htmlElementClasses))
                 # Correct selection links to add basename
-                selectionText = re.sub("href=\"\/","href=\"%s/" % (self.hostname),selectionText.decode(self.coding))
-                return selectionText.encode("ascii","ignore")
+                selectionText = re.sub("href=\"\/","href=\"%s/" % (self.hostname),selectionText)
+                return selectionText
 
 
         "Clean class local data"
