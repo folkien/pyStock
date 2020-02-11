@@ -33,7 +33,7 @@ class StockData:
             receivedData = data.DataReader(self.stockCode, 'stooq', self.beginDate, self.endDate)
 
             if len(receivedData) == 0:
-                print("No Stooq data for entry!")
+                print("No Stooq data for entry %s!" % (stockCode))
                 sys.exit(1)
 
             return receivedData
