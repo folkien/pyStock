@@ -17,6 +17,11 @@ class Bollinger:
             self.n     = n
             self.k     = k
             self.mavg, self.upperBand, self.lowerBand  = self.InitBollinger(prices, self.n, self.k)
+            # Signals
+            fromBottom,fromTop = FindIntersections(self.upperBand, prices)
+            self.sell = fromBottom
+            fromBottom,fromTop = FindIntersections(self.lowerBand, prices)
+            self.buy  = fromTop
         
         # Set Bollinger indicator
         def InitBollinger(self,prices,n=20,k=2):
@@ -38,5 +43,13 @@ class Bollinger:
             plt.plot(self.upperBand.index, self.upperBand, '--', linewidth=1.0, color = '#333333', label="Bol.Upper")
             plt.plot(self.lowerBand.index, self.lowerBand, '--', linewidth=1.0, color = '#333333', label="Bol.Lower")
             plt.plot(self.mavg.index, self.mavg, '--', linewidth=1.0, color = '#0000FF',label=("MA %s days" % self.n))
+            
+            # Signals plottting
+            if (self.buy is not None and self.buy.size):
+                plt.plot(self.buy.index, self.buy, 'o', label='Horiz. Buy', color = '#00FF00')
+            if (self.sell is not None and self.sell.size):
+                plt.plot(self.sell.index, self.sell, 'o', label='Horiz. Sell', color = '#FF0000')
+                
+            
             
 
