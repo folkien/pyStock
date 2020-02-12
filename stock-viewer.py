@@ -146,6 +146,7 @@ closePrice       = stockData.GetData('Close')
 jaw, teeth, lips = SetWilliamsIndicator(closePrice)
 macd             = CreateMACD(closePrice)
 rsi              = CreateRSI(closePrice)
+bollinger        = CreateBollinger(closePrice)
 
 # Get STD deviation
 stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
@@ -257,6 +258,7 @@ fig = plt.figure(figsize=(16.0, 9.0))
 # Total close price
 plot9=plt.subplot(111)
 stockData.PlotCandle(plot9)
+bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title("Price candlestick")
 plt.legend(loc='upper left')

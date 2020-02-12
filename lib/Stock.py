@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import copy
 from lib.rsi import *
 from lib.macd import *
+from lib.bollinger import *
 from lib.StockData import *
 from lib.DataOperations import *
 
