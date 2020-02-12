@@ -16,12 +16,19 @@ class Bollinger:
         def __init__(self, prices, n=20, k=2):
             self.n     = n
             self.k     = k
+            self.consolidationLvl = 15 # percent
+            self.variabilityLvl   = 50 # percent
             self.mavg, self.upperBand, self.lowerBand  = self.InitBollinger(prices, self.n, self.k)
+            self.std    = self.upperBand - self.lowerBand 
+            self.absStd = (self.std*100)/self.std.max()
+
             # Signals
             fromBottom,fromTop = FindIntersections(self.upperBand, prices)
             self.sell = fromBottom
             fromBottom,fromTop = FindIntersections(self.lowerBand, prices)
             self.buy  = fromTop
+            self.consolidation = CreateSubsetByValues(self.absStd, 0, self.consolidationLvl)
+            self.variability   = CreateSubsetByValues(self.absStd, self.variabilityLvl, 100)
         
         # Set Bollinger indicator
         def InitBollinger(self,prices,n=20,k=2):
@@ -29,8 +36,6 @@ class Bollinger:
             std  = prices.rolling(window=n,min_periods=1).std()
             upperBand = mavg + (std * 2)
             lowerBand = mavg - (std * 2)
-            # TODO : Find consolidation
-            # TODO : Find zmienność and buy sell signals 
             return mavg, upperBand, lowerBand
 
         # Plot method
@@ -50,6 +55,14 @@ class Bollinger:
             if (self.sell is not None and self.sell.size):
                 plt.plot(self.sell.index, self.sell, 'o', label='Horiz. Sell', color = '#FF0000')
                 
+        # Plot method
+        def PlotAbsDeviation(self):
+            plt.plot(self.absStd.index, self.absStd,  linewidth=1.0, color = '#333333', label="Bol.AbsDeviation")
+            plt.ylim(top=100,bottom=0)
+            if (self.consolidation is not None and self.consolidation.size):
+                plt.plot(self.consolidation.index, self.consolidation, 'o', label='Consolidation', color = 'cyan')
+            if (self.variability is not None and self.variability.size):
+                plt.plot(self.variability.index, self.variability, 'o', label='Variability', color = 'magenta')
             
             
 

@@ -256,11 +256,18 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
-plot9=plt.subplot(111)
+plot9=plt.subplot(211)
 stockData.PlotCandle(plot9)
 bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title("Price candlestick")
+plt.legend(loc='upper left')
+plt.minorticks_on()
+plt.grid(b=True, which='major', axis='both',color='k')
+plt.grid(b=True, which='minor', axis='both')
+
+plot10=plt.subplot(212)
+bollinger.PlotAbsDeviation()
 plt.legend(loc='upper left')
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
