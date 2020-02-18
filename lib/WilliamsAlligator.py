@@ -4,6 +4,7 @@ import pandas as pd
 import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
+from lib.ReportSignals import *
 
 # Creation of Williams for data
 def CreateWilliamsAlligator(prices):
@@ -32,6 +33,11 @@ class WilliamsAlligator:
             teeth = CreateMovingAverage(price,   8, 5)
             lips  = CreateMovingAverage(price,   5, 3)
             return jaw, teeth, lips
+        
+        # Export indicator signals to report
+        def ExportSignals(self, reportSignals):
+            reportSignals.AddDataframeSignals(self.buy,"WilliamsAlligator","buy")
+            reportSignals.AddDataframeSignals(self.sell,"WilliamsAlligator","sell")
 
         # Plot method
         def Plot(self):

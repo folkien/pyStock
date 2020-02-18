@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from numpy.core.defchararray import lower
+from lib.ReportSignals import *
 
 # Creates  object
 def CreateBollinger(prices,n = 20, k=2):
@@ -37,7 +38,11 @@ class Bollinger:
             upperBand = mavg + (std * 2)
             lowerBand = mavg - (std * 2)
             return mavg, upperBand, lowerBand
-
+        # Export indicator signals to report
+        def ExportSignals(self, reportSignals):
+            reportSignals.AddDataframeSignals(self.buy,"MACD","buy")
+            reportSignals.AddDataframeSignals(self.sell,"MACD","sell")
+        
         # Plot method
         def Plot(self):
             # Get index values for the X axis for facebook DataFrame

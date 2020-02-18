@@ -4,6 +4,7 @@ import pandas as pd
 import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
+from lib.ReportSignals import *
 
 # Creates RSI object
 def CreateRSI(prices,n = 14):
@@ -55,6 +56,12 @@ class RSI:
                 rsi[i] = 100. - 100./(1.+rs)
 
             return pd.DataFrame(data=rsi,index=prices.index)
+        
+        # Export indicator signals to report
+        def ExportSignals(self, reportSignals):
+            reportSignals.AddDataframeSignals(self.fromBottom50,"RSI","MayBuy")
+            reportSignals.AddDataframeSignals(self.notSellSignal,"RSI","NotSell")
+            reportSignals.AddDataframeSignals(self.notBuySignal,"RSI","NotBuy")
 
         # Plot method
         def Plot(self):

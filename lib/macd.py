@@ -4,6 +4,7 @@ import pandas as pd
 import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
+from lib.ReportSignals import *
 
 # Creates MACD object
 def CreateMACD(prices):
@@ -33,6 +34,11 @@ class MACD:
             signalLine = macdLine.ewm(span=9, adjust=False).mean()
 
             return macdLine, signalLine
+        
+        # Export indicator signals to report
+        def ExportSignals(self, reportSignals):
+            reportSignals.AddDataframeSignals(self.buy,"MACD","buy")
+            reportSignals.AddDataframeSignals(self.sell,"MACD","sell")
         
         # Plot MACD
         def Plot(self):

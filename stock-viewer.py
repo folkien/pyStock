@@ -11,6 +11,8 @@ from matplotlib import gridspec
 from lib.CountryInfo import CountryInfo
 from lib.DataOperations import *
 from lib.Stock import *
+from lib.ReportSignals import * 
+from lib.TimeInterval import *
 
 def PlotSave(fig):
     global graphsCreated
@@ -60,13 +62,9 @@ def ReportBaseSave(filepath):
         # Close file
         f.close()
 
-# Save extra signals report
-def ReportSignalsSave(filepath):
-    return
-
 # Const objects
 # #####################################################
-executionIntervals = [ "weekly", "daily"]
+executionIntervals = [ "monthly", "weekly", "daily"]
 reportFile="plots/report.md"
 currency="zl"
 plotsPath="plots/"
@@ -102,7 +100,6 @@ if (args.reportsInterval is not None):
 
 # Create Country Info
 info = CountryInfo(args.stockCode)
-
         
 
 # Use non-interactive backend when plot to file used
@@ -149,13 +146,15 @@ if (args.lastWeek):
 outputFilename=args.stockCode+"_"+end_date+"_"
 outputFilepath=plotsPath+outputFilename
 graphsCreated=[]
+reportSignals = CreateReportSignals()
 executionInterval="weekly"
 
 # Update - execution Interval
 if (args.reportsInterval is not None):
     executionInterval = args.reportsInterval
+    
+reportSignals.SetBeginTimestamp(GetIntervalBegin(executionInterval))
 
-# reportSignalsSinceDate=
 
 # 1. Get DATA from URL
 # #####################################################
@@ -169,8 +168,11 @@ macd             = CreateMACD(closePrice)
 rsi              = CreateRSI(closePrice)
 bollinger        = CreateBollinger(closePrice)
 
-# Get STD deviation
-stdTotal = closePriceTotal.rolling(window=int(5),min_periods=1).std()
+# Export all signals to report
+alligator.ExportSignals(reportSignals)
+macd.ExportSignals(reportSignals)
+rsi.ExportSignals(reportSignals)
+bollinger.ExportSignals(reportSignals)
 
 # Find max and mins
 PriceRange=closePrice.max()-closePrice.min()
@@ -307,7 +309,7 @@ if (args.reports):
     if (executionInterval=="weekly"):
         ReportBaseSave(reportFile)
     # Signals report make always
-    ReportSignalsSave(reportFile)
+    reportSignals.Report(reportFile)
     
 # Show all plots
 if (not args.plotToFile):
