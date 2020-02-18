@@ -6,6 +6,10 @@ import pandas as pd
 import numpy
 from numpy import NaN
 
+# Creates empty dataframe
+def CreateEmptyDataFrame():
+    return pd.DataFrame()
+
 # Creates DataFrame line
 def CreateDataLine(indexes,startValue,endValue):
     data=pd.DataFrame()

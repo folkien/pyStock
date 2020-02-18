@@ -35,8 +35,11 @@ def PlotWilliamsIndicator(jaw,teeth,lips):
 
 # Change volumeTotal to neg/pos value
 def SetVolumeWithTrend(price,volumeTotal):
+    # Assert condition
+    if (price.size != volumeTotal.size):
+        return 
+    
     lastPrice=price.values[-1]
-
     # We start from end because data from Stooq is reversed
     for i in reversed(range(1,len(price.values))):
         # If price drop then volumeTotal wih minus value
@@ -47,7 +50,7 @@ def SetVolumeWithTrend(price,volumeTotal):
 
 
 # Calculate OBV index thanks to the volumeTotal
-def SetOBV(price,volumeTotal):
+def SetOBV(volumeTotal):
     lastOBV=0
     obvTotal=copy.deepcopy(volumeTotal)
 

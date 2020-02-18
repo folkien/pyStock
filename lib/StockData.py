@@ -36,11 +36,24 @@ class StockData:
 
         # Get named data
         def GetAllData(self,name):
-            return self.data[name]
+            if (name in self.data.columns):
+                return self.data[name]
+            else:
+                return CreateEmptyDataFrame()
 
         # Get named data
         def GetData(self,name):
-            return self.dataSubset[name]
+            if (name in self.dataSubset.columns):
+                return self.dataSubset[name]
+            else:
+                return CreateEmptyDataFrame()
+        
+        # True if volume exists
+        def hasVolume(self):
+            if ('Volume' in self.data.columns):
+                return True
+            return False
+            
 
         # Plot all stock data
         def PlotAll(self):

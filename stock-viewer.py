@@ -159,7 +159,7 @@ mins, maxs       = FindPeaks(closePrice, PriceRange/10)
 
 # Volume
 SetVolumeWithTrend(stockData.GetAllData('Close'), stockData.GetAllData('Volume'))
-obvTotal    = SetOBV(stockData.GetAllData('Close'), stockData.GetAllData('Volume'))
+obvTotal    = SetOBV(stockData.GetAllData('Volume'))
 volumeTotal = stockData.GetAllData('Volume')
 volume      = stockData.GetData('Volume')
 obv         = SetReindex(obvTotal,start_date,end_date)
@@ -191,22 +191,24 @@ plt.grid()
 plt.title("Price and Volume - alltime")
 plt.legend(loc='upper left')
 
-# Volume
-# #####################################################
-plot3=plt.subplot(223, sharex=plot1)
-plt.plot(obv.index, obv, label="OBV")
-plt.ylabel('OBV')
-plt.grid()
-plt.title("OBV")
-plt.legend(loc='upper left')
+if (stockData.hasVolume()):
+    # OBV
+    # #####################################################
+    plot3=plt.subplot(223, sharex=plot1)
+    plt.plot(obv.index, obv, label="OBV")
+    plt.ylabel('OBV')
+    plt.grid()
+    plt.title("OBV")
+    plt.legend(loc='upper left')
 
-# OBV
-plot4=plt.subplot(224, sharex=plot2)
-plt.plot(obvTotal.index, obvTotal, label="OBV total")
-plt.plot(obv.index, obv, 'r', label="")
-plt.ylabel('OBV total')
-plt.grid()
-plt.legend(loc='upper left')
+    # OBV total
+    # #####################################################
+    plot4=plt.subplot(224, sharex=plot2)
+    plt.plot(obvTotal.index, obvTotal, label="OBV total")
+    plt.plot(obv.index, obv, 'r', label="")
+    plt.ylabel('OBV total')
+    plt.grid()
+    plt.legend(loc='upper left')
 
 # Plot to file
 if (args.plotToFile):
