@@ -154,6 +154,7 @@ if (args.reportsInterval is not None):
     executionInterval = args.reportsInterval
     
 reportSignals.SetBeginTimestamp(GetIntervalBegin(executionInterval))
+reportSignals.SetStockCode(args.stockCode)
 
 
 # 1. Get DATA from URL

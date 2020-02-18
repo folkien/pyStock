@@ -23,12 +23,17 @@ class ReportSignals():
 
     def __init__(self):
         self.signals = []
+        self.stockCode = ""
         self.beginTimestamp = datetime.datetime.now()  - datetime.timedelta(days=1)
         
     # set begin timestamp
     def SetBeginTimestamp(self,timestamp):
         if (type(timestamp) == datetime.datetime):
             self.beginTimestamp = timestamp
+            
+    # set stock Code for report
+    def SetStockCode(self,code):
+        self.stockCode = code
         
     # Add single signal
     def AddSignal(self,t,parentName,signalName):
@@ -43,16 +48,24 @@ class ReportSignals():
     # Report to file
     def Report(self,filepath):
         if (len(self.signals)>0):
+            # Sort
             sortedSignals = sorted(self.signals,key=lambda x: x.timestamp, reverse=True)
             
-            with open(filepath, 'a+') as f:
-                f.write("## Signals :\n")
-                for signal in sortedSignals:
-                    if (signal.timestamp > self.beginTimestamp):
+            # Filter data
+            filteredSignals = []
+            for signal in sortedSignals:
+                if (signal.timestamp > self.beginTimestamp):
+                    filteredSignals.append(signal)
+                else:
+                    break
+            
+            # Create report
+            if (filteredSignals is not None and (len(filteredSignals)>0)):
+                with open(filepath, 'a+') as f:
+                    f.write("## Signals for %s :\n" % (self.stockCode))
+                    for signal in filteredSignals:
                         signal.Report(f)
-                    else:
-                        break
-                f.write("\n")
-                f.close()
+                    f.write("\n")
+                    f.close()
 
         
