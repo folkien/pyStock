@@ -8,4 +8,4 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 cd ${DIR}/../
-./stock-viewer-manager.py "$@"
+./stock-manager.py "$@"
