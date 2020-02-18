@@ -5,6 +5,7 @@ import copy
 from lib.rsi import *
 from lib.macd import *
 from lib.bollinger import *
+from lib.WilliamsAlligator import *
 from lib.StockData import *
 from lib.DataOperations import *
 
@@ -18,20 +19,6 @@ def GetData(code,begin,end):
         sys.exit(1)
 
     return receivedData
-
-# Creation of Williams indicator for data
-def SetWilliamsIndicator(price):
-    jaw   = CreateMovingAverage(price,  13, 8)
-    teeth = CreateMovingAverage(price,   8, 5)
-    lips  = CreateMovingAverage(price,   5, 3)
-
-    return jaw, teeth, lips
-
-def PlotWilliamsIndicator(jaw,teeth,lips):
-    plt.plot(jaw.index, jaw, "#0000FF", label="Jaw", linewidth=1.0)
-    plt.plot(teeth.index, teeth, "#FF0000", label="Teeth", linewidth=1.0)
-    plt.plot(lips.index, lips, "#00FF00", label="Lips", linewidth=1.0)
-
 
 # Change volumeTotal to neg/pos value
 def SetVolumeWithTrend(price,volumeTotal):
