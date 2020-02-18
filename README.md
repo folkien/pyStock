@@ -164,7 +164,6 @@ or USA google alphabet
 
 ## TODO Viewer
 - EveryDay checking of states and sending errata with diffrences,
-- Fix of no Volume readings - for BTC,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
 - Add trend lines for max/mins peaks,
