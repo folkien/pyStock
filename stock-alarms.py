@@ -34,7 +34,7 @@ def alarmsShow():
     global alarmsConfigFile
     global alarms
     for alarm in alarms:
-        print alarm
+        print(alarm)
 
 def alarmsAdd(name,reference,alarmType,value,state):
     global alarms
@@ -55,7 +55,7 @@ def alarmsRemove(name,reference,alarmType,value):
         pass
 
 def alarmPrint(alarm):
-    print alarm
+    print(alarm)
 
 def alarmCheck(value,alarm):
     diffrence = abs(close[-1] - alarm['reference'])
@@ -67,13 +67,13 @@ def alarmCheck(value,alarm):
 
     # Check if alarm happend!
     if ((alarm['state'] == AlarmState.Active) and (diffrence > valueChange)):
-        print "!Alarm! "+str(alarm['name'])+" price "+str(price)+" "\
-              "(ref. "+str(alarm['reference'])+" +/-"+str(valueChange)+")!"
+        print("!Alarm! "+str(alarm['name'])+" price "+str(price)+" "\
+              "(ref. "+str(alarm['reference'])+" +/-"+str(valueChange)+")!")
         alarms[i]['state'] = AlarmState.Inactive
         return True
     # Check if alarm should be reseted!
     elif ((alarm['state'] == AlarmState.Inactive) and (diffrence <= valueChangeReset)):
-        print "Alarm reseted!"
+        print("Alarm reseted!")
         alarms[i]['state'] = AlarmState.Active
         return True
     return False
@@ -93,17 +93,17 @@ args = parser.parse_args()
 
 #Assert
 if (not args.addAlarm and not args.checkAlarms and not args.deleteAlarm and not args.printAlarms):
-    print "Missing event"
+    print("Missing event")
     sys.exit(1)
 
 if (args.addAlarm):
     if (not args.stockCode or not args.referencePrice or not args.type or not args.value):
-        print "Missing arguments for adding."
+        print("Missing arguments for adding.")
         sys.exit(1)
 
 if (args.deleteAlarm):
     if (not args.stockCode or not args.referencePrice or not args.type or not args.value):
-        print "Missing arguments for removal."
+        print("Missing arguments for removal.")
         sys.exit(1)
 
 ## End date
@@ -146,7 +146,7 @@ for i in range(len(alarms)):
             if (alarmCheck(price,alarm) == True):
                 alarmsIsChanged=True
         else:
-            print "No Stooq data for entry!"
+            print("No Stooq data for entry!")
 
 
 # 4. Write alarms if were changed
