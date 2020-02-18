@@ -1,4 +1,4 @@
 #!/bin/bash
 
-stock-manager -e
+stock-manager -e weekly
 
