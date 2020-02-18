@@ -45,8 +45,8 @@ class Bollinger:
 
             # Plot shaded 21 Day Bollinger Band for Facebook
             plt.fill_between(x_axis, self.upperBand, self.lowerBand, color='#BBBBBB')
-            plt.plot(self.upperBand.index, self.upperBand, '--', linewidth=1.0, color = '#333333', label="Bol.Upper")
-            plt.plot(self.lowerBand.index, self.lowerBand, '--', linewidth=1.0, color = '#333333', label="Bol.Lower")
+            plt.plot(self.upperBand.index, self.upperBand, '--', linewidth=1.0, color = '#940006', label="Sell band")
+            plt.plot(self.lowerBand.index, self.lowerBand, '--', linewidth=1.0, color = '#169400', label="Buy band")
             plt.plot(self.mavg.index, self.mavg, '--', linewidth=1.0, color = '#0000FF',label=("MA %s days" % self.n))
             
             # Signals plottting
