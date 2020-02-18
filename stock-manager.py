@@ -7,6 +7,7 @@ import os
 from lib.jsonModule import *
 from lib.htmlModule import *
 
+executionIntervals = [ "weekly", "daily"]
 configFile="config/viewer.json"
 recipientsFile="config/recipients.json"
 reportFile="plots/report.md"
@@ -50,8 +51,8 @@ def entryRemove(arguments, url, element, classes):
 def entryPrint(entry):
     print(entry)
 
-def entryExecute(entry):
-    if (os.system("stock-viewer "+entry["arguments"]+" -g -r") != 0):
+def entryExecute(entry, interval):
+    if (os.system("stock-viewer "+entry["arguments"]+" -g -r -ri "+interval) != 0):
         print("Command failed!")
 
     # Use HTML fetcher to fetch additional data
@@ -77,10 +78,12 @@ def ReportsClean(filepath):
 
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
-    os.system("make -C plots/ html")
-    # Replace images with embedded imaces code
-    os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
+    if (os.path.getsize(filepath) != 0):
+        os.system("make -C plots/ html")
+        # Replace images with embedded imaces code
+        os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
 
+# mail all reports
 def ReportsMail(recipient, reportFile):
     if os.path.isfile(reportFile):
         print("Mail to %s." % (recipient))
@@ -94,7 +97,7 @@ def ReportsMail(recipient, reportFile):
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--add",    action='store_true', required=False, help="Adds given")
 parser.add_argument("-d", "--delete", action='store_true', required=False, help="Remove")
-parser.add_argument("-e", "--execute", action='store_true', required=False, help="Execute")
+parser.add_argument("-e", "--execute", type=str, required=False, help="Execute")
 parser.add_argument("-s", "--show", action='store_true', required=False, help="Print")
 parser.add_argument("-ar", "--addRecipient", type=str, required=False, help="Add email recipient")
 parser.add_argument("-an", "--arguments", type=str, required=False, help="Arguments")
@@ -110,6 +113,11 @@ if (not args.add and
     print("Missing event")
     sys.exit(1)
 
+# Assert of execution parameter
+if (args.execute is None) or (args.execute not in executionIntervals):
+    print("Wrong or missing execution interval.")
+    sys.exit(1)
+    
 ReportsClean(reportFile)
 entries = jsonRead(configFile)
 recipients = jsonRead(recipientsFile)
@@ -139,8 +147,8 @@ for i in range(len(entries)):
     if (args.show):
         entryPrint(entry)
 
-    if (args.execute):
-        entryExecute(entry)
+    if (args.execute is not None):
+        entryExecute(entry, args.execute)
 
 
 # 4. Write entries if were changed
@@ -152,7 +160,7 @@ if (recipientsIsChanged == True):
     jsonWrite(recipientsFile, recipients)
 
 # 5. Finish execution
-if (args.execute):
+if (args.execute is not None):
     ReportsToHTML(reportFile)
     # Send emails to all recipients
     for i in range(len(recipients)):
