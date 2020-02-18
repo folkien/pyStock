@@ -72,11 +72,14 @@ def ReportsAppend(filepath, data):
 def ReportsClean(filepath):
     os.system("rm -rf plots/report.md*")
     os.system("rm -rf plots/*.png")
-    # Create file for reports 
-    if os.path.isfile(filepath):
-        with open(filepath, 'w') as f:
-            f.write("")
-            f.close()
+    
+    # Create file for reports with header 
+    with open(filepath, 'w') as f:
+        f.write("Report from %s - file '%s'.\n" % 
+                (datetime.datetime.now().strftime("%d/%m/%Y %H:%M"), configFile))
+        f.write("------------------\n")
+        f.write("\n")
+        f.close()
 
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
