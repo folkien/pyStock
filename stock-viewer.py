@@ -7,6 +7,7 @@ import numpy
 import copy
 from pandas_datareader import data
 from numpy import NaN
+from matplotlib import gridspec
 from lib.CountryInfo import CountryInfo
 from lib.DataOperations import *
 from lib.Stock import *
@@ -256,7 +257,8 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
-plot9=plt.subplot(211)
+gs = gridspec.GridSpec(3, 1) 
+plot9=plt.subplot(gs[0:2,:])
 stockData.PlotCandle(plot9)
 bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
@@ -266,7 +268,7 @@ plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
-plot10=plt.subplot(212)
+plot10=plt.subplot(gs[2])
 bollinger.PlotAbsDeviation()
 plt.legend(loc='upper left')
 plt.minorticks_on()
