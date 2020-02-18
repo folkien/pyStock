@@ -56,7 +56,7 @@ def entryExecute(entry, interval):
         print("Command failed!")
 
     # Use HTML fetcher to fetch additional data
-    if (entry["url"] != ""):
+    if (entry["url"] != "") and (interval == "weekly"):
         fetcher = htmlFetcher(entry["url"],entry["htmlElement"],entry["htmlClasses"])
         ReportsAppend(reportFile, fetcher.Process()+"\n")
     return False
@@ -70,7 +70,9 @@ def ReportsAppend(filepath, data):
 
 # Save reports to file. Append text.
 def ReportsClean(filepath):
+    os.system("rm -rf plots/report.md*")
     os.system("rm -rf plots/*.png")
+    # Create file for reports 
     if os.path.isfile(filepath):
         with open(filepath, 'w') as f:
             f.write("")
@@ -78,21 +80,21 @@ def ReportsClean(filepath):
 
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
-    if (os.path.getsize(filepath) != 0):
+    if (os.path.isfile(reportFile)) and (os.path.getsize(reportFile) != 0):
         os.system("make -C plots/ html")
         # Replace images with embedded imaces code
         os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
 
 # mail all reports
 def ReportsMail(recipient, reportFile):
-    if os.path.isfile(reportFile):
+    if (os.path.isfile(reportFile)) and (os.path.getsize(reportFile) != 0):
         print("Mail to %s." % (recipient))
         currentDate = datetime.date.today()
         # Send email with attamchents through mutt smtp
         os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" %
                   (currentDate.strftime("%d/%m/%Y"), recipient, reportFile))
     else:
-        print("File to send via mail not exists!")
+        print("File to send not exists or empty!")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--add",    action='store_true', required=False, help="Adds given")
