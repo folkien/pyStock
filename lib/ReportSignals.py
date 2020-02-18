@@ -24,6 +24,7 @@ class ReportSignals():
     def __init__(self):
         self.signals = []
         self.stockCode = ""
+        self.reportedAnything = False
         self.beginTimestamp = datetime.datetime.now()  - datetime.timedelta(days=1)
         
     # set begin timestamp
@@ -67,5 +68,6 @@ class ReportSignals():
                         signal.Report(f)
                     f.write("\n")
                     f.close()
+                    self.reportedAnything=True
 
         

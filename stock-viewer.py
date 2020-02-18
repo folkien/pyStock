@@ -14,6 +14,7 @@ from lib.Stock import *
 from lib.ReportSignals import * 
 from lib.TimeInterval import *
 
+# Create plot figures file
 def PlotSave(fig):
     global graphsCreated
     filePath=outputFilepath+str(fig.number)+outputExtension
@@ -21,6 +22,12 @@ def PlotSave(fig):
     plt.savefig(filePath)
     graphsCreated.append(filePath)
     print(filePath) 
+
+# remove all created plots
+def PlotsRemove():
+    global graphsCreated
+    for filepath in graphsCreated:
+        os.system("rm -rf %s" % (filepath))
 
 # Save reports to file. Append text.
 def ReportBaseSave(filepath):
@@ -306,12 +313,15 @@ if (args.plotToFile):
 
 # Create reports
 if (args.reports):
-    # Base report make only weekly
-    if (executionInterval=="weekly"):
+    if (executionInterval=="daily"):
+        reportSignals.Report(reportFile)
+        # remove plots if nothing reported
+        if (reportSignals.reportedAnything == False):
+            PlotsRemove()
+    else:
         ReportBaseSave(reportFile)
-    # Signals report make always
-    reportSignals.Report(reportFile)
-    
+        reportSignals.Report(reportFile)
+
 # Show all plots
 if (not args.plotToFile):
     plt.show()
