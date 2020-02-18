@@ -38,10 +38,11 @@ class Bollinger:
             upperBand = mavg + (std * 2)
             lowerBand = mavg - (std * 2)
             return mavg, upperBand, lowerBand
+
         # Export indicator signals to report
         def ExportSignals(self, reportSignals):
-            reportSignals.AddDataframeSignals(self.buy,"MACD","buy")
-            reportSignals.AddDataframeSignals(self.sell,"MACD","sell")
+            reportSignals.AddDataframeSignals(self.buy,"Bollinger","buy")
+            reportSignals.AddDataframeSignals(self.sell,"Bollinger","sell")
         
         # Plot method
         def Plot(self):
