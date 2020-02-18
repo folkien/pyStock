@@ -10,7 +10,8 @@ class SignalEntry():
         
     # report to file 
     def Report(self,fileObject):
-        fileObject.write("* **%s** %-20s - <span style='color:blue'>%s</span>\n" % (self.timestamp.strftime("%d %b"),
+        fileObject.write("* **%s** %-20s - <span style='color:blue'>%s</span>\n" % 
+                            (self.timestamp.strftime("%d.%m"),
                                             self.parentName,
                                             self.signalName))
         
