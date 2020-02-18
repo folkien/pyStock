@@ -21,7 +21,7 @@ def PlotSave(fig):
     print(filePath) 
 
 # Save reports to file. Append text.
-def ReportSave(filepath):
+def ReportBaseSave(filepath):
     global outputFilename
     global args
     global closePrice
@@ -60,25 +60,33 @@ def ReportSave(filepath):
         # Close file
         f.close()
 
+# Save extra signals report
+def ReportSignalsSave(filepath):
+    return
+
 # Const objects
 # #####################################################
+executionIntervals = [ "weekly", "daily"]
 reportFile="plots/report.md"
 currency="zl"
 plotsPath="plots/"
 outputExtension=".png"
+
+# Varaables
+# #####################################################
 
 # Arguments and config
 # #####################################################
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock name code")
 parser.add_argument("-d", "--beginDate", type=str, required=False, help="Begin date")
-parser.add_argument("-a", "--averageDays", type=int, required=False, help="Day to calc mean")
 parser.add_argument("-Y", "--lastYear", action='store_true', required=False, help="Last Year")
 parser.add_argument("-6M", "--last6Months", action='store_true', required=False, help="Last 6 Months")
 parser.add_argument("-M", "--lastMonth", action='store_true', required=False, help="Last Month")
 parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
 parser.add_argument("-g", "--plotToFile", action='store_true', required=False, help="Plot to file")
 parser.add_argument("-r", "--reports", action='store_true', required=False, help="Generate extra reports")
+parser.add_argument("-ri", "--reportsInterval", type=str, required=False, help="Interval of extra reports")
 args = parser.parse_args()
 
 #Assert
@@ -86,11 +94,16 @@ if (not args.stockCode):
     print("No stockCode!")
     sys.exit(1)
 
+# Assert
+if (args.reportsInterval is not None):
+    if (args.reportsInterval not in executionIntervals):
+        print("Wrong execution interval!")
+        sys.exit(1)
+
 # Create Country Info
 info = CountryInfo(args.stockCode)
 
-if (not args.averageDays):
-    args.averageDays=30
+        
 
 # Use non-interactive backend when plot to file used
 if (args.plotToFile):
@@ -136,6 +149,13 @@ if (args.lastWeek):
 outputFilename=args.stockCode+"_"+end_date+"_"
 outputFilepath=plotsPath+outputFilename
 graphsCreated=[]
+executionInterval="weekly"
+
+# Update - execution Interval
+if (args.reportsInterval is not None):
+    executionInterval = args.reportsInterval
+
+# reportSignalsSinceDate=
 
 # 1. Get DATA from URL
 # #####################################################
@@ -283,7 +303,11 @@ if (args.plotToFile):
 
 # Create reports
 if (args.reports):
-    ReportSave(reportFile)
+    # Base report make only weekly
+    if (executionInterval=="weekly"):
+        ReportBaseSave(reportFile)
+    # Signals report make always
+    ReportSignalsSave(reportFile)
     
 # Show all plots
 if (not args.plotToFile):
