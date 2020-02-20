@@ -163,10 +163,13 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
-- EveryDay checking of states and sending errata with diffrences,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
 - Add trend lines for max/mins peaks,
+* Algorytm wyszukiwania maximów oraz minimów
+* Wykrycie ogólnych trendów na bazie maximów oraz minmów, kolorowanie tła pod wykresem.
+* Rysowani lini trendu w zakresach trendu z poprzedniego punktu za pomocą algorytmu z 
+    https://stackoverflow.com/questions/43769906/how-to-calculate-the-trendline-for-stock-price
 - ADD trend power factor,
 - Read assets and show on plot,
 TESTS :
