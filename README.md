@@ -181,13 +181,11 @@ TESTS :
 - Add strategy 10%,
 
 ## TODO Manager
-- add argument to ex4cute weekly, daily, monthly, etc
 - config .json z aktywami,
-- added everyday option with call checks,
 
 ## TODO Alarmy : 
- -- aktywny i nieaktywne alarmy,
- -- pokazywanie alarmów,
+- aktywny i nieaktywne alarmy,
+- pokazywanie alarmów,
 - Wysyłanie emaili,
 - Sprawdzanie najnowszych raportów dla inwestorów,
 - Monitorowanie trendów oraz alarmy z trendów,
