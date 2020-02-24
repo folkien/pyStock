@@ -17,10 +17,12 @@ class CCI:
         def __init__(self, high, low, close, n=14):
             self.n     = n
             self.factor = 0.015
-            self.overBoughtLvl = 70
-            self.overSellLvl   = 30
             self.cci  = self.InitCCI(high, low, close)
-            self.fromBottom50,self.fromTop50=FindIntersections(self.cci,50)
+            # Signals
+            fromBottom,fromTop=FindIntersections(self.cci,100)
+            self.buySignal = fromBottom
+            fromBottom,fromTop=FindIntersections(self.cci,-100)
+            self.sellSignal = fromTop
 
         # Set CCI indicator
         def InitCCI(self,high, low, close):
@@ -44,13 +46,14 @@ class CCI:
             overSold = CreateDataLine(self.cci.index, -100, -100)
             plt.plot(overSold.index, overSold, '--', color = '#AAAAAA')
 
-            # Buy
-            if (self.notSellSignal.size):
-                plt.plot(self.notSellSignal.index, self.notSellSignal, 'x', label='NotSell', color = '#00FF00')
-            # Sell
-            if (self.notBuySignal.size):
-                plt.plot(self.notBuySignal.index, self.notBuySignal, '*', label='NotBuy', color = '#FF0000')
+            # Signals plottting
+            if (self.buy is not None and self.buy.size):
+                plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
+                plt.plot(self.buy.index, self.buy, 'o', label='Horiz. Buy', color = '#00FF00')
+            if (self.sell is not None and self.sell.size):
+                plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
+                plt.plot(self.sell.index, self.sell, 'o', label='Horiz. Sell', color = '#FF0000')
 
             # Limits of plot
-            plt.ylim(top=100,bottom=-100)
+            #plt.ylim(top=100,bottom=-100)
 
