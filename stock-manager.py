@@ -10,7 +10,10 @@ from lib.htmlModule import *
 executionIntervals = [ "weekly", "daily"]
 configFile="config/viewer.json"
 recipientsFile="config/recipients.json"
+# report file path
 reportFile="plots/report.md"
+# Size of report file with no data or header data
+reportFileEmptySize=0
 entries=[]
 recipients=[]
 dataIsChanged=False
@@ -70,16 +73,19 @@ def ReportsAppend(filepath, data):
 
 # Save reports to file. Append text.
 def ReportsClean(filepath):
+    global reportFileEmptySize
     os.system("rm -rf plots/report.md*")
     os.system("rm -rf plots/*.png")
-    
-    # Create file for reports with header 
+
+    # Create file for reports with header
     with open(filepath, 'w') as f:
         f.write("Report from <span style='color:blue'>%s</span> - file '%s'.\n" % 
                 (datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), configFile))
         f.write("------------------\n")
         f.write("\n")
         f.close()
+    # update empty file size after creation and header write
+    reportFileEmptySize = os.path.getsize(reportFile)
 
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
@@ -90,7 +96,7 @@ def ReportsToHTML(filepath):
 
 # mail all reports
 def ReportsMail(recipient, reportFile):
-    if (os.path.isfile(reportFile)) and (os.path.getsize(reportFile) != 0):
+    if (os.path.isfile(reportFile)) and (os.path.getsize(reportFile) != reportFileEmptySize):
         print("Mail to %s." % (recipient))
         currentDate = datetime.date.today()
         # Send email with attamchents through mutt smtp
@@ -122,7 +128,7 @@ if (not args.add and
 if (args.execute is None) or (args.execute not in executionIntervals):
     print("Wrong or missing execution interval.")
     sys.exit(1)
-    
+
 ReportsClean(reportFile)
 entries = jsonRead(configFile)
 recipients = jsonRead(recipientsFile)
