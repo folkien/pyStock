@@ -57,8 +57,10 @@ class Bollinger:
             
             # Signals plottting
             if (self.buy is not None and self.buy.size):
+                plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
                 plt.plot(self.buy.index, self.buy, 'o', label='Horiz. Buy', color = '#00FF00')
             if (self.sell is not None and self.sell.size):
+                plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
                 plt.plot(self.sell.index, self.sell, 'o', label='Horiz. Sell', color = '#FF0000')
                 
         # Plot method
