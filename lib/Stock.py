@@ -3,6 +3,7 @@ from pandas_datareader import data
 import matplotlib.pyplot as plt
 import copy
 from lib.rsi import *
+from lib.cci import *
 from lib.macd import *
 from lib.bollinger import *
 from lib.WilliamsAlligator import *
@@ -24,8 +25,8 @@ def GetData(code,begin,end):
 def SetVolumeWithTrend(price,volumeTotal):
     # Assert condition
     if (price.size != volumeTotal.size):
-        return 
-    
+        return
+
     lastPrice=price.values[-1]
     # We start from end because data from Stooq is reversed
     for i in reversed(range(1,len(price.values))):
