@@ -163,6 +163,9 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
+- Add colors background bollinger,
+- Add CCI,
+- Add levels of wsparcia based on STD consolidations,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
 - Add trend lines for max/mins peaks,
