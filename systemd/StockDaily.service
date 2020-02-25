@@ -4,3 +4,5 @@ Description="Stock daily service"
 [Service]
 ExecStart=/usr/bin/asuser-run /usr/bin/StockDaily.sh
 EnvironmentFile=/etc/scripts.env
+Restart=on-failure
+RestartSec=5min
