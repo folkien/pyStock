@@ -5,6 +5,7 @@ import sys, os, argparse
 import datetime
 import numpy
 import copy
+from filelock import Timeout, FileLock
 from pandas_datareader import data
 from numpy import NaN
 from matplotlib import gridspec
@@ -50,6 +51,8 @@ def ReportBaseSave(filepath):
     volumeSubset    = GetSubsetByDates(volume, last2Weeks, today)
     volumeAvgChange = volumeSubset.median()
 
+    lock             = FileLock(filepath+".lock", timeout=lockTimeout)
+    lock.acquire()
     with open(filepath, 'a+') as f:
         # Write statistics
         f.write("# Report for %s.\n" % (args.stockCode))
@@ -68,9 +71,11 @@ def ReportBaseSave(filepath):
         f.write("\n")
         # Close file
         f.close()
+    lock.release()
 
 # Const objects
 # #####################################################
+lockTimeout = 5*60
 executionIntervals = [ "monthly", "weekly", "daily"]
 reportFile="plots/report.md"
 currency="zl"

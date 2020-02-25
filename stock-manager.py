@@ -83,10 +83,13 @@ def entryExecute(entry, interval):
 
 # Appends data to reports file
 def ReportsAppend(filepath, data):
+    lock = FileLock(filepath+".lock", timeout=lockTimeout)
+    lock.acquire()
     if os.path.isfile(filepath):
         with open(filepath, 'a+') as f:
             f.write(data)
             f.close()
+    lock.release()
 
 # Save reports to file. Append text.
 def ReportsClean(filepath):
@@ -94,6 +97,8 @@ def ReportsClean(filepath):
     os.system("rm -rf plots/report.md*")
     os.system("rm -rf plots/*.png")
 
+    lock = FileLock(filepath+".lock", timeout=lockTimeout)
+    lock.acquire()
     # Create file for reports with header
     with open(filepath, 'w') as f:
         f.write("%s report from <span style='color:blue'>%s</span> - file '%s'.\n" %
@@ -103,6 +108,7 @@ def ReportsClean(filepath):
         f.close()
     # update empty file size after creation and header write
     reportFileEmptySize = os.path.getsize(reportFile)
+    lock.release()
 
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
