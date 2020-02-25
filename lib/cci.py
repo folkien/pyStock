@@ -15,9 +15,10 @@ def CreateCCI(high,low,close,n = 14):
 class CCI:
 
         def __init__(self, high, low, close, n=14):
-            self.n     = n
+            self.n      = n
             self.factor = 0.015
-            self.cci  = self.InitCCI(high, low, close)
+            self.cci        = self.InitCCI(high, low, close)
+            self.cciSignal  = CreateMovingAverage(self.cci, self.n*1.5)
 
             # Signals
             fromBottom,fromTop=FindIntersections(self.cci,100)
@@ -42,7 +43,11 @@ class CCI:
         def Plot(self):
             # CCI
             plt.plot(self.cci.index, self.cci, label='CCI' + str(self.n), linewidth=1.0, color = '#000000')
+            plt.plot(self.cciSignal.index, self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
 
+            # Historic average
+            hAverage = CreateDataLine(self.cci.index, 0, 0)
+            plt.plot(hAverage.index, hAverage, '--', label='H.Average', linewidth=1.0, color = '#333333')
             #OverBought
             overBought = CreateDataLine(self.cci.index, 100, 100)
             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
@@ -53,10 +58,10 @@ class CCI:
             # Signals plottting
             if (self.buy is not None and self.buy.size):
                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
-                plt.plot(self.buy.index, self.buy, 'o', label='Horiz. Buy', color = '#00FF00')
+                plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
             if (self.sell is not None and self.sell.size):
                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
-                plt.plot(self.sell.index, self.sell, 'o', label='Horiz. Sell', color = '#FF0000')
+                plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
 
             # Limits of plot
             #plt.ylim(top=100,bottom=-100)

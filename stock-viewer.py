@@ -306,7 +306,7 @@ plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
-plot10=plt.subplot(gs[3])
+plot10=plt.subplot(gs[3],sharex=plot9)
 cci.Plot()
 #bollinger.PlotAbsDeviation()
 plt.legend(loc='upper left')
