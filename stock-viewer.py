@@ -248,34 +248,34 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
-plot5=plt.subplot(411)
-#stockData.Plot()
+Rows=6
+gs = gridspec.GridSpec(Rows, 1)
+plot5=plt.subplot(gs[0:3])
 stockData.PlotCandle(plot5)
 stockData.PlotAsBackground()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title("Price and oscillators - period")
 plt.legend(loc='upper left')
-plt.grid()
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
 # MACD
-plot6=plt.subplot(412, sharex=plot5)
+plot6=plt.subplot(gs[Rows-3], sharex=plot5)
 macd.Plot()
 plt.ylabel('Value')
 plt.grid()
 plt.legend(loc='upper left')
 
 # MACD hist
-plot7=plt.subplot(413, sharex=plot5)
+plot7=plt.subplot(gs[Rows-2], sharex=plot5)
 macd.Histogram()
 plt.ylabel('Value')
 plt.grid()
 plt.legend(loc='upper left')
 
 # RSI
-plot8=plt.subplot(414, sharex=plot5)
+plot8=plt.subplot(gs[Rows-1], sharex=plot5)
 PlotRSI(rsi)
 plt.ylabel('RSI')
 plt.grid()
@@ -289,8 +289,8 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
-gs = gridspec.GridSpec(3, 1) 
-plot9=plt.subplot(gs[0:2,:])
+gs = gridspec.GridSpec(4, 1)
+plot9=plt.subplot(gs[0:3])
 stockData.PlotCandle(plot9)
 bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
@@ -300,7 +300,7 @@ plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
-plot10=plt.subplot(gs[2])
+plot10=plt.subplot(gs[3])
 bollinger.PlotAbsDeviation()
 plt.legend(loc='upper left')
 plt.minorticks_on()
