@@ -63,13 +63,14 @@ def entryPrint(entry):
 
 def entryExecute(entry, interval):
     if (os.system("stock-viewer "+entry["arguments"]+" -g -r -ri "+interval) != 0):
-        print("Command failed!")
+        print("Entry %s execution failed!\n" % (entry["arguments"]))
+        return False
 
     # Use HTML fetcher to fetch additional data
     if (entry["url"] != "") and (interval == "weekly"):
         fetcher = htmlFetcher(entry["url"],entry["htmlElement"],entry["htmlClasses"])
         ReportsAppend(reportFile, fetcher.Process()+"\n")
-    return False
+    return True
 
 # Appends data to reports file
 def ReportsAppend(filepath, data):
@@ -170,7 +171,9 @@ for i in range(len(entries)):
         entryPrint(entry)
 
     if (args.execute is not None):
-        entryExecute(entry, args.execute)
+        if (entryExecute(entry, args.execute) != True):
+            print("(Stock-Manager) Execution failed!")
+            sys.exit(1)
 
 
 # 4. Write entries if were changed
