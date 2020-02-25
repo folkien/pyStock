@@ -4,9 +4,12 @@ import sys, argparse
 import datetime
 import json
 import os
+from filelock import Timeout, FileLock
 from lib.jsonModule import *
 from lib.htmlModule import *
 
+# Lock timeout is 5 minutes
+lockTimeout = 5*60
 executionIntervals = [ "weekly", "daily"]
 configFile="config/viewer.json"
 recipientsFile="config/recipients.json"
@@ -22,6 +25,10 @@ recipientsIsChanged=False
 # Html fetcher default data - configured for bankier.pl
 defaultHtmlElement="div"
 defaultHtmlElementClasses="box300 boxGrey border3 right"
+
+# Locks creation
+lockConfig      = FileLock(configFile+".lock", timeout=lockTimeout)
+lockRecipents   = FileLock(recipientsFile+".lock", timeout=lockTimeout)
 
 # Entry handling
 def recipientsAdd(address):
@@ -129,6 +136,10 @@ if (args.execute is None) or (args.execute not in executionIntervals):
     print("Wrong or missing execution interval.")
     sys.exit(1)
 
+# Assert - get locks
+lockConfig.acquire()
+lockRecipents.acquire()
+
 ReportsClean(reportFile)
 entries = jsonRead(configFile)
 recipients = jsonRead(recipientsFile)
@@ -177,3 +188,5 @@ if (args.execute is not None):
     for i in range(len(recipients)):
         ReportsMail(recipients[i]['address'], reportFile+".html")
 
+lockRecipents.release()
+lockConfig.release()
