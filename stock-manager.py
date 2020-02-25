@@ -86,8 +86,8 @@ def ReportsClean(filepath):
 
     # Create file for reports with header
     with open(filepath, 'w') as f:
-        f.write("Report from <span style='color:blue'>%s</span> - file '%s'.\n" % 
-                (datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), configFile))
+        f.write("%s report from <span style='color:blue'>%s</span> - file '%s'.\n" %
+                (args.execute, datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), configFile))
         f.write("------------------\n")
         f.write("\n")
         f.close()
