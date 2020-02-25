@@ -47,10 +47,16 @@ class MACD:
             
             # Plot
             plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
-            plt.plot(self.macd.index, self.macd, label='AMD MACD', color = '#FF0000')
-            plt.plot(self.signal.index, self.signal, label='Signal Line', color='#008800')
-            plt.plot(self.buy.index, self.buy, 'go', label='Buy')
-            plt.plot(self.sell.index, self.sell, 'ro', label='Sell')
+            plt.plot(self.macd.index, self.macd, label='AMD MACD',linewidth=1.0,  color = '#FF0000')
+            plt.plot(self.signal.index, self.signal, label='Signal Line',linewidth=1.0,  color='#008800')
+
+            # Signals plottting
+            if (self.buy is not None and self.buy.size):
+                plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
+                plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
+            if (self.sell is not None and self.sell.size):
+                plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
+                plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
             
         # Plot Histogram
         def Histogram(self):
