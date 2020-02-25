@@ -7,7 +7,7 @@ from lib.DataOperations import *
 from lib.ReportSignals import *
 
 # Creates CCI object
-def CreateCCI(high,low,close,n = 14):
+def CreateCCI(high,low,close,n = 20):
     return CCI(high,low,close,n)
 
 
