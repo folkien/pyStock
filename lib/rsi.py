@@ -66,16 +66,16 @@ class RSI:
         # Plot method
         def Plot(self):
             # Base 50% line
-            overBought = CreateDataLine(self.rsi.index, 50, 50)
-            plt.plot(overBought.index, overBought, '-.', linewidth=1.0, color = '#333333')
+            line50 = CreateDataLine(self.rsi.index, 50, 50)
+            plt.plot(line50.index, line50, '-.', linewidth=1.0, color = '#333333')
             # RSI
-            plt.plot(self.rsi.index, self.rsi, label='RSI', color = '#000000')
+            plt.plot(self.rsi.index, self.rsi, label='RSI'+str(self.n), linewidth=1.0, color = '#000000')
             #OverBought
             overBought = CreateDataLine(self.rsi.index, 70, 70)
-            plt.plot(overBought.index, overBought, '--', label='Overbought', color = '#AAAAAA')
+            plt.plot(overBought.index, overBought, '--', label='Overbought', color = '#940006')
             #OverSold
             overSold = CreateDataLine(self.rsi.index, 30, 30)
-            plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#AAAAAA')
+            plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#169400')
             # Buy
             if (self.notSellSignal.size):
                 plt.plot(self.notSellSignal.index, self.notSellSignal, 'x', label='NotSell', color = '#00FF00')

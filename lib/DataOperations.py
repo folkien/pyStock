@@ -24,6 +24,13 @@ def CreateMovingAverage(data, window, shiftPeriods = 0):
 
     return average
 
+# Creation of moving std with specific window and shift
+def CreateMovingStd(data, window, shiftPeriods = 0):
+    average = data.rolling(window=int(window),min_periods=1).std()
+    average.shift(periods=shiftPeriods)
+
+    return average
+
 # Create data subset by value
 def CreateSubsetByValues(inputData,valueMin,valueMax):
     subset=pd.DataFrame()

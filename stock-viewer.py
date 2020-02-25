@@ -179,6 +179,7 @@ closePrice       = stockData.GetData('Close')
 alligator        = CreateWilliamsAlligator(closePrice)
 macd             = CreateMACD(closePrice)
 rsi              = CreateRSI(closePrice)
+cci              = CreateCCI(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 bollinger        = CreateBollinger(closePrice)
 
 # Export all signals to report
@@ -306,11 +307,13 @@ plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
 plot10=plt.subplot(gs[3])
-bollinger.PlotAbsDeviation()
+cci.Plot()
+#bollinger.PlotAbsDeviation()
 plt.legend(loc='upper left')
-plt.minorticks_on()
-plt.grid(b=True, which='major', axis='both',color='k')
-plt.grid(b=True, which='minor', axis='both')
+plt.grid()
+# plt.minorticks_on()
+# plt.grid(b=True, which='major', axis='both',color='k')
+# plt.grid(b=True, which='minor', axis='both')
 
 # Plot to file or show
 if (args.plotToFile):
