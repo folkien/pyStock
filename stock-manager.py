@@ -30,6 +30,15 @@ defaultHtmlElementClasses="box300 boxGrey border3 right"
 lockConfig      = FileLock(configFile+".lock", timeout=lockTimeout)
 lockRecipents   = FileLock(recipientsFile+".lock", timeout=lockTimeout)
 
+# Emergency ForceExit
+def ForceExit(message, ErrorCode=1):
+    global lockRecipents
+    global lockConfig
+    print("(Stock-manager) %s\n" % (message))
+    lockRecipents.release()
+    lockConfig.release()
+    sys.exit(ErrorCode)
+
 # Entry handling
 def recipientsAdd(address):
     global recipients
@@ -172,8 +181,7 @@ for i in range(len(entries)):
 
     if (args.execute is not None):
         if (entryExecute(entry, args.execute) != True):
-            print("(Stock-Manager) Execution failed!")
-            sys.exit(1)
+            ForceExit("Execution failed!")
 
 
 # 4. Write entries if were changed
