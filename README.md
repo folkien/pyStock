@@ -65,6 +65,7 @@ Last year of google with markdown reports into report.md
 ```
 ![image](doc/GOOG.US_2020-02-01_1.png)
 ![image](doc/GOOG.US_2020-02-01_2.png)
+![image](doc/GOOG.US_2020-02-01_3.png)
 
 Markdown report
 ```markdown
@@ -92,6 +93,7 @@ Plot Apple last 6M to file
 
 ![image](doc/AAPL.US_2020-02-01_1.png)
 ![image](doc/AAPL.US_2020-02-01_2.png)
+![image](doc/AAPL.US_2020-02-01_3.png)
 
 Example CD Projekt Red plot
 ```bash
@@ -100,6 +102,7 @@ Example CD Projekt Red plot
 
 ![CDPR image](doc/CDR_2020-02-01_1.png)
 ![CDPR image](doc/CDR_2020-02-01_2.png)
+![CDPR image](doc/CDR_2020-02-01_3.png)
 
 
 ## Stock manager
