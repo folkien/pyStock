@@ -30,9 +30,11 @@ Features :
     * Close price
     * Volume
 * Oscillators
-    * MACD
+    * MACD & MACD Histogram
     * RSI
-    * Williams inidicator
+    * CCI
+    * Williams alligator
+    * Bollinger
 * Save plots to files \*.png
 * Generates/Appends report.md with some usefull informations,
 
@@ -164,7 +166,6 @@ or USA google alphabet
 
 ## TODO Viewer
 - Add colors background bollinger,
-- Add CCI,
 - Add levels of wsparcia based on STD consolidations,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
