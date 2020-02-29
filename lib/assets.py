@@ -51,6 +51,14 @@ class Asset(object):
         # percent chage
         self.change        = (self.income*100)/self.originalValue
         self.isInitialized = True
+        
+    # 
+    def GetOriginalValue(self):
+        return self.originalValue
+
+    # Returns current value 
+    def GetCurrentValue(self):
+        return self.currentValue
 
     # Return percent change
     def GetIncome(self):
@@ -146,18 +154,33 @@ class StockAssets(object):
     
     # Report
     def Report(self, file, currencySymbol):
-        totalChange = 0
-        totalIncome = 0
+        totalInvested = 0 
+        totalValue    = 0
         self.CreateAssetObjects()
+
         if (len(self.assets)>0):
             file.write("## Assets\n\n")
             for entry in self.assets:
                 entry.Report(file, currencySymbol)
-                totalIncome += entry.GetIncome()
-                totalChange += entry.GetChange()
-            file.write("\n")
-            file.write("Total income : %d%s\n" % (totalIncome,currencySymbol))
-            file.write("Total change : %d%%\n" % (totalChange))
+                totalInvested += entry.GetOriginalValue() 
+                totalValue    += entry.GetCurrentValue() 
+            
+            income = totalValue - totalInvested
+            change = (income*100)/totalInvested
+
+            file.write("\n**Total income** : ")
+
+            # Income in percents
+            if (income>=0):
+                file.write("<span style='color:green'>+%2.2f%%</span>" % (change)) 
+            else:
+                file.write("<span style='color:red'>%2.2f%%</span>" % (change)) 
+            
+            # Income in currency
+            if (income>=0):
+                file.write("<span style='color:green'>+%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol)) 
+            else:
+                file.write("<span style='color:red'>%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol)) 
             file.write("\n")
         
         

@@ -206,7 +206,7 @@ for i in range(len(entries)):
 
 # Report also assets 
 if (args.execute is not None):
-    if (interval == "weekly"):
+    if (args.execute == "weekly"):
         ReportAssets(reportFile)
 
 
