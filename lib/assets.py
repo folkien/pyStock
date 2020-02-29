@@ -79,13 +79,13 @@ class Asset(object):
         file.write("* %s *\"%s\"* - " % (self.data["code"],self.data["name"]))
         # Income 
         if (self.change >= 0):
-            file.write("<span style='color:green'>+%2.2f%% +%d%s</span> " % (self.change, self.income, currencySymbol)) 
+            file.write("<span style='color:green'>+%2.2f%% +%2.2f%s</span> " % (self.change, self.income, currencySymbol)) 
         else:
-            file.write("<span style='color:red'>%2.2f%% %d%s</span> " % (self.change, self.income, currencySymbol)) 
+            file.write("<span style='color:red'>%2.2f%% %2.2f%s</span> " % (self.change, self.income, currencySymbol)) 
         # Current value
-        file.write("**%d%s** (%dj*%d%s) " % (self.currentValue, currencySymbol, self.data['number'], self.currentPrice, currencySymbol)) 
+        file.write("**%d%s** (%dj*%2.2f%s) " % (self.currentValue, currencySymbol, self.data['number'], self.currentPrice, currencySymbol)) 
         # Original value
-        file.write("from **%d%s** (%dj*%d%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol)) 
+        file.write("from **%d%s** (%dj*%2.2f%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol)) 
 
 
 # Stock Assets class 
@@ -180,19 +180,16 @@ class StockAssets(object):
             income = totalValue - totalInvested
             change = (income*100)/totalInvested
 
-            file.write("\n**Total income** : ")
+            file.write("\n**Total income** ")
 
             # Income in percents
             if (income>=0):
-                file.write("<span style='color:green'>+%2.2f%%</span>" % (change))
+                file.write("<span style='color:green'>+%2.2f%% %2.2f%s</span> " % (change,income,currencySymbol))
             else:
-                file.write("<span style='color:red'>%2.2f%%</span>" % (change))
+                file.write("<span style='color:red'>%2.2f%% %2.2f%s</span> " % (change,income,currencySymbol))
 
             # Income in currency
-            if (income>=0):
-                file.write("<span style='color:green'>+%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol))
-            else:
-                file.write("<span style='color:red'>%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol))
+            file.write("**%d%s** from **%d%s**.\n" % (totalValue,currencySymbol,totalInvested,currencySymbol))
             file.write("\n")
 
     # Report
