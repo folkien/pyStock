@@ -7,6 +7,7 @@ import os
 import datetime
 from filelock import Timeout, FileLock
 from lib.jsonModule import *
+from lib.StockData import *
 import filelock
 import random
 
@@ -31,6 +32,39 @@ def ReportAsset(file,asset,currentClosePrice,currencySymbol):
     else:
         file.write("<span style='color:red'>**%d%s** %2.2f%% %d%s </span> " % (currentValue, currencySymbol, change, valueDelta, currencySymbol)) 
     file.write(" from **%d%s** (%dj*%d%s) \n" % (originalValue, currencySymbol, asset['number'], asset['price'], currencySymbol)) 
+    
+# Class with single asset
+class Asset(object):
+    
+    def __init__(self, jsonData):
+        self.data = jsonData
+
+    def Init(self):
+        stock = StockData(self.data['code'])
+        self.currentPrice = stock.GetCurrentPrice()
+        self.originalValue = self.data['price']*self.data['number']
+        self.currentValue  = self.currentPrice*self.data['number']
+        # money change
+        self.income        = self.currentValue - self.originalValue
+        # percent chage
+        self.change        = (self.income*100)/self.originalValue
+
+    # Return percent change
+    def GetIncome(self):
+        return self.income
+        
+    # Return percent change
+    def GetChange(self):
+        return self.change
+
+    def Report(self,file,currencySymbol):
+        file.write("* %s *\"%s\"* - " % (self.data["code"],self.data["name"]))
+        if (self.change >= 0):
+            file.write("<span style='color:green'>%d%s +%2.2f%% +%d%s </span> " % (self.currentValue, currencySymbol, self.change, self.income, self.currencySymbol)) 
+        else:
+            file.write("<span style='color:red'>**%d%s** %2.2f%% %d%s </span> " % (self.currentValue, currencySymbol, self.change, self.income, currencySymbol)) 
+        file.write(" from **%d%s** (%dj*%d%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol)) 
+
 
 # Stock Assets class 
 class StockAssets(object):

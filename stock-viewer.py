@@ -65,6 +65,7 @@ def ReportBaseSave(filepath):
         f.write("    * History - **%2.2f%s - %2.2f%s**\n" % (minPrice,info.GetCurrency(),maxPrice,info.GetCurrency()))
         f.write("    * Volume chng. (2 weeks) - med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n" % 
                 (volumeSubset.median(), volumeSubset.max(),volumeSubset.min()))
+        f.write("\n")
         
         # Assets
         stockData.ReportAssets(f)
