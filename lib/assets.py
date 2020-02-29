@@ -19,10 +19,18 @@ def PlotAsset(ax,asset):
         ax.plot_date(dt,asset["price"],"^",color="k",ms=8)
         ax.plot_date(dt,asset["price"],"^",color="r",label='Asset')
         
-def ReportAsset(asset,currentClosePrice):
-    text = "* %s %s - %d$ (%dj * %d) " % (asset["name"],asset["code"],
-                                    asset["number"]*asset["price"],asset["number"],asset["price"])
-    return text
+def ReportAsset(file,asset,currentClosePrice,currencySymbol):
+    originalValue = asset['price']*asset['number']
+    currentValue  = currentClosePrice*asset['number']
+    valueDelta    = currentValue - originalValue
+    change        = (valueDelta*100)/originalValue
+
+    file.write("* %s *\"%s\"* - " % (asset["code"],asset["name"]))
+    if (change >= 0):
+        file.write("<span style='color:green'>%d%s +%2.2f%% +%d%s </span> " % (currentValue, currencySymbol, change, valueDelta, currencySymbol)) 
+    else:
+        file.write("<span style='color:red'>**%d%s** %2.2f%% %d%s </span> " % (currentValue, currencySymbol, change, valueDelta, currencySymbol)) 
+    file.write(" from **%d%s** (%dj*%d%s) \n" % (originalValue, currencySymbol, asset['number'], asset['price'], currencySymbol)) 
 
 # Stock Assets class 
 class StockAssets(object):
@@ -68,11 +76,7 @@ class StockAssets(object):
                     entry["id"] = self.GetRandomHash()
                     self.isModified = True
             # if missing "opened" field then generate it
-            if ("opened" in entry):
-                if (len(entry["opened"]) == 0):
-                    entry["opened"] = True
-                    self.isModified = True
-            else:
+            if ("opened" not in entry):
                     entry["opened"] = True
                     self.isModified = True
         # TODO Find sells

@@ -17,16 +17,22 @@ from lib.assets import *
 class StockData:
 
         def __init__(self, stockCode, beginDate, endDate):
-            self.assets     = []
-            self.data       = self.FetchData(stockCode,beginDate,endDate)
-            self.dataSubset = SetReindex(self.data,beginDate,endDate)
-            self.stockCode  = stockCode
-            self.beginDate  = datetime.datetime.strptime(beginDate, "%Y-%M-%d")
-            self.endDate    = datetime.datetime.strptime(endDate, "%Y-%M-%d")
+            self.assets      = []
+            self.symbol      = "zł"
+            self.data        = self.FetchData(stockCode,beginDate,endDate)
+            self.dataSubset  = SetReindex(self.data,beginDate,endDate)
+            self.stockCode   = stockCode
+            self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%M-%d")
+            self.endDate     = datetime.datetime.strptime(endDate, "%Y-%M-%d")
+            self.currentPrice= self.data['Close'][0]
         
         # Set assets 
         def SetAssets(self,stockAssets):
             self.assets =  stockAssets.GetAssetsForStockCode(self.stockCode)
+
+        # SEt currency symbol
+        def SetCurrencySymbol(self,symbol):
+            self.symbol = symbol
 
         # Get DATA from URL
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
@@ -38,6 +44,19 @@ class StockData:
                 sys.exit(1)
 
             return receivedData
+        
+        def Report(self,file):
+            return 0
+        
+        # Report current assets
+        def ReportAssets(self,file):
+            assets = self.GetAssets()
+            if (len(assets)>0):
+                file.write("## Assets\n\n")
+                for asset in assets:
+                    ReportAsset(file, asset, self.currentPrice, self.symbol)
+                    
+            return 0
 
         # Get named data
         def GetAllData(self,name):
@@ -52,6 +71,19 @@ class StockData:
                 return self.dataSubset[name]
             else:
                 return CreateEmptyDataFrame()
+        
+        #Get all assets
+        def GetAllAssets(self):
+            return self.assets
+
+        # Get subset assets
+        def GetAssets(self):
+            assets = []
+            for asset in self.assets:
+                dt = datetime.datetime.strptime(asset["date"], "%d-%M-%Y")
+                if ((dt>=self.beginDate) and (dt<=self.endDate)):
+                    assets.append(asset)
+            return assets
         
         # True if volume exists
         def hasVolume(self):

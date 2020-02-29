@@ -60,18 +60,22 @@ def ReportBaseSave(filepath):
         f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
                  growth chance <span style='color:green'>+%u%%</span>, \
                  lost chance <span style='color:red'>-%u%%</span>)\n" % 
-                (lastPrice,currency,lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
-        f.write("    * Current - **%2.2f%s - %2.2f%s**\n" % (minWindowPrice,currency,maxWindowPrice,currency))
-        f.write("    * History - **%2.2f%s - %2.2f%s**\n" % (minPrice,currency,maxPrice,currency))
+                (lastPrice,info.GetCurrency(),lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
+        f.write("    * Current - **%2.2f%s - %2.2f%s**\n" % (minWindowPrice,info.GetCurrency(),maxWindowPrice,info.GetCurrency()))
+        f.write("    * History - **%2.2f%s - %2.2f%s**\n" % (minPrice,info.GetCurrency(),maxPrice,info.GetCurrency()))
         f.write("    * Volume chng. (2 weeks) - med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n" % 
                 (volumeSubset.median(), volumeSubset.max(),volumeSubset.min()))
-        # Insert all created graphs
+        
+        # Assets
+        stockData.ReportAssets(f)
         f.write("\n")
+        
+        # Insert all created graphs
+        f.write("## Graphs")
         for path in graphsCreated:
             f.write("![Graph](%s)\n\n" % (os.path.basename(path)))
         f.write("\n")
-        # Close file
-        f.close()
+
     lock.release()
 
 # Const objects
@@ -79,7 +83,6 @@ def ReportBaseSave(filepath):
 lockTimeout = 5*60
 executionIntervals = [ "monthly", "weekly", "daily"]
 reportFile="plots/report.md"
-currency="zl"
 plotsPath="plots/"
 outputExtension=".png"
 
@@ -174,6 +177,7 @@ reportSignals.SetStockCode(args.stockCode)
 stockAssets = StockAssets()
 stockData   = StockData(args.stockCode, start_date, end_date)
 stockData.SetAssets(stockAssets)
+stockData.SetCurrencySymbol(info.GetCurrency())
 
 # Get Close price and average
 closePriceTotal  = stockData.GetAllData('Close')
