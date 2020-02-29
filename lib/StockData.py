@@ -16,7 +16,7 @@ from lib.assets import *
 # StockData object which creates StockData data
 class StockData:
 
-        def __init__(self, stockCode, beginDate="1990-01-01", endDate=datetime.datetime.now().strftime("%Y-%M-%d")):
+        def __init__(self, stockCode, beginDate="1990-01-01", endDate=datetime.datetime.now().strftime("%Y-%m-%d")):
             self.assets      = []
             self.symbol      = "zł"
             self.data        = self.FetchData(stockCode,beginDate,endDate)

@@ -10,6 +10,7 @@ from lib.jsonModule import *
 from lib.StockData import *
 import filelock
 import random
+from locale import currency
 
 def PlotAsset(ax,asset):
     dt = datetime.datetime.strptime(asset["date"], "%d-%m-%Y")
@@ -38,6 +39,7 @@ class Asset(object):
     
     def __init__(self, jsonData):
         self.data = jsonData
+        self.isInitialized = False
 
     def Init(self):
         stock = StockData(self.data['code'])
@@ -48,6 +50,7 @@ class Asset(object):
         self.income        = self.currentValue - self.originalValue
         # percent chage
         self.change        = (self.income*100)/self.originalValue
+        self.isInitialized = True
 
     # Return percent change
     def GetIncome(self):
@@ -70,6 +73,7 @@ class Asset(object):
 class StockAssets(object):
 
     def __init__(self, filepath = "config/assets.json", extraReportFile = "plots/assets.md"):
+        self.assets = []
         self.lockTimeout = 5*60
         self.isModified = False
         self.filepath = filepath 
@@ -131,5 +135,30 @@ class StockAssets(object):
             self.data.remove({"id":entry["id"]})
         except ValueError:
             pass
+    
+    # Create asset objects from json
+    def CreateAssetObjects(self):    
+        if (len(self.assets) == 0):
+            for entry in self.data:
+                assetObject = Asset(entry)
+                assetObject.Init()
+                self.assets.append(assetObject)
+    
+    # Report
+    def Report(self, file, currencySymbol):
+        totalChange = 0
+        totalIncome = 0
+        self.CreateAssetObjects()
+        if (len(self.assets)>0):
+            file.write("## Assets\n\n")
+            for entry in self.assets:
+                entry.Report(file, currencySymbol)
+                totalIncome += entry.GetIncome()
+                totalChange += entry.GetChange()
+            file.write("\n")
+            file.write("Total income : %d%s\n" % (totalIncome,currencySymbol))
+            file.write("Total change : %d%%\n" % (totalChange))
+            file.write("\n")
+        
         
         

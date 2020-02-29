@@ -72,6 +72,7 @@ def entryPrint(entry):
     print(entry)
 
 def entryExecute(entry, interval):
+    
     # Execute stock-viewer
     if (os.system("stock-viewer "+entry["arguments"]+" -g -r -ri "+interval) != 0):
         print("Entry %s execution failed!\n" % (entry["arguments"]))
@@ -83,6 +84,16 @@ def entryExecute(entry, interval):
         ReportsAppend(reportFile, fetcher.Process()+"\n")
 
     return True
+
+# Appends data to reports file
+def ReportAssets(filepath):
+    lock = FileLock(filepath+".lock", timeout=lockTimeout)
+    lock.acquire()
+    if os.path.isfile(filepath):
+        with open(filepath, 'a+') as f:
+            stockAssets.Report(f,"zl")
+            f.close()
+    lock.release()
 
 # Appends data to reports file
 def ReportsAppend(filepath, data):
@@ -192,6 +203,11 @@ for i in range(len(entries)):
     if (args.execute is not None):
         if (entryExecute(entry, args.execute) != True):
             ForceExit("Execution failed!")
+
+# Report also assets 
+if (args.execute is not None):
+    if (interval == "weekly"):
+        ReportAssets(reportFile)
 
 
 # 4. Write entries if were changed
