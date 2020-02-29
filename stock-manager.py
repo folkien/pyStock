@@ -7,6 +7,7 @@ import os
 from filelock import Timeout, FileLock
 from lib.jsonModule import *
 from lib.htmlModule import *
+from lib.assets import *
 
 # Lock timeout is 5 minutes
 lockTimeout = 5*60
@@ -156,6 +157,7 @@ if (args.execute is None) or (args.execute not in executionIntervals):
 lockConfig.acquire()
 lockRecipents.acquire()
 
+stockAssets = StockAssets()
 ReportsClean(reportFile)
 entries = jsonRead(configFile)
 recipients = jsonRead(recipientsFile)
