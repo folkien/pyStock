@@ -13,11 +13,11 @@ import random
 def PlotAsset(ax,asset):
     dt = datetime.datetime.strptime(asset["date"], "%d-%m-%Y")
     if (asset['operation'] == "buy"):
-        ax.plot_date(dt,asset["price"],"s",color="k",ms=8)
-        ax.plot_date(dt,asset["price"],"s",color="g",label='Asset')
+        ax.plot_date(dt,asset["price"],"v",color="k",ms=8)
+        ax.plot_date(dt,asset["price"],"v",color="g",label='Asset')
     else:
-        ax.plot_date(dt,asset["price"],"s",color="k",ms=8)
-        ax.plot_date(dt,asset["price"],"s",color="r",label='Asset')
+        ax.plot_date(dt,asset["price"],"^",color="k",ms=8)
+        ax.plot_date(dt,asset["price"],"^",color="r",label='Asset')
         
 def ReportAsset(asset,currentClosePrice):
     text = "* %s %s - %d$ (%dj * %d) " % (asset["name"],asset["code"],
