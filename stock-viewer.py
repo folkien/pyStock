@@ -73,7 +73,7 @@ def ReportBaseSave(filepath):
         f.write("\n")
         
         # Insert all created graphs
-        f.write("## Graphs")
+        f.write("## Graphs\n\n")
         for path in graphsCreated:
             f.write("![Graph](%s)\n\n" % (os.path.basename(path)))
         f.write("\n")

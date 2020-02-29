@@ -77,11 +77,15 @@ class Asset(object):
 
     def Report(self,file,currencySymbol):
         file.write("* %s *\"%s\"* - " % (self.data["code"],self.data["name"]))
+        # Income 
         if (self.change >= 0):
-            file.write("<span style='color:green'>%d%s +%2.2f%% +%d%s </span> " % (self.currentValue, currencySymbol, self.change, self.income, self.currencySymbol)) 
+            file.write("<span style='color:green'>+%2.2f%% +%d%s</span> " % (self.change, self.income, currencySymbol)) 
         else:
-            file.write("<span style='color:red'>**%d%s** %2.2f%% %d%s </span> " % (self.currentValue, currencySymbol, self.change, self.income, currencySymbol)) 
-        file.write(" from **%d%s** (%dj*%d%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol)) 
+            file.write("<span style='color:red'>%2.2f%% %d%s</span> " % (self.change, self.income, currencySymbol)) 
+        # Current value
+        file.write("**%d%s** (%dj*%d%s) " % (self.currentValue, currencySymbol, self.data['number'], self.currentPrice, currencySymbol)) 
+        # Original value
+        file.write("from **%d%s** (%dj*%d%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol)) 
 
 
 # Stock Assets class 
