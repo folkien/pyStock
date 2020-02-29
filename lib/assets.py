@@ -53,6 +53,9 @@ class StockAssets(object):
         hash_str = "%032x" % hash
         return hash_str
         
+    # TODO : 
+    # - position is openede/closed
+    # - get only opened positions
     def Init(self):
         # Loop all data and check if valid elements
         for entry in self.data:
@@ -64,6 +67,15 @@ class StockAssets(object):
             else:
                     entry["id"] = self.GetRandomHash()
                     self.isModified = True
+            # if missing "opened" field then generate it
+            if ("opened" in entry):
+                if (len(entry["opened"]) == 0):
+                    entry["opened"] = True
+                    self.isModified = True
+            else:
+                    entry["opened"] = True
+                    self.isModified = True
+        # TODO Find sells
 
         # Save changes
         if (self.isModified == True):
