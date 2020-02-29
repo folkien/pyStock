@@ -21,7 +21,7 @@ def PlotAsset(ax,asset):
         ax.plot_date(dt,asset["price"],"s",color="k",ms=10)
         ax.plot_date(dt,asset["price"],"s",color="w",ms=8)
         ax.plot_date(dt,asset["price"],"^",color="r",label='Asset out')
-        
+
 def ReportAsset(file,asset,currentClosePrice,currencySymbol):
     originalValue = asset['price']*asset['number']
     currentValue  = currentClosePrice*asset['number']
@@ -83,9 +83,9 @@ class Asset(object):
         else:
             file.write("<span style='color:red'>%2.2f%% %2.2f%s</span> " % (self.change, self.income, currencySymbol)) 
         # Current value
-        file.write("**%d%s** (%dj*%2.2f%s) " % (self.currentValue, currencySymbol, self.data['number'], self.currentPrice, currencySymbol)) 
+        file.write("**%d%s** (%dj x %2.2f%s) " % (self.currentValue, currencySymbol, self.data['number'], self.currentPrice, currencySymbol))
         # Original value
-        file.write("from **%d%s** (%dj*%2.2f%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol)) 
+        file.write("from **%d%s** (%dj x %2.2f%s) \n" % (self.originalValue, currencySymbol, self.data['number'], self.data['price'], currencySymbol))
 
 
 # Stock Assets class 
