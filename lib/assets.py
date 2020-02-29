@@ -32,7 +32,7 @@ def ReportAsset(file,asset,currentClosePrice,currencySymbol):
         file.write("<span style='color:green'>%d%s +%2.2f%% +%d%s </span> " % (currentValue, currencySymbol, change, valueDelta, currencySymbol)) 
     else:
         file.write("<span style='color:red'>**%d%s** %2.2f%% %d%s </span> " % (currentValue, currencySymbol, change, valueDelta, currencySymbol)) 
-    file.write(" from **%d%s** (%dj*%d%s) \n" % (originalValue, currencySymbol, asset['number'], asset['price'], currencySymbol)) 
+    file.write(" from **%d%s** (%dj x %d%s) \n" % (originalValue, currencySymbol, asset['number'], asset['price'], currencySymbol)) 
     
 # Class with single asset
 class Asset(object):
