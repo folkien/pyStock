@@ -11,22 +11,27 @@ import sys
 from mpl_finance import candlestick2_ohlc
 from mpl_finance import candlestick_ohlc
 from lib.DataOperations import *
+from lib.assets import *
 
 # StockData object which creates StockData data
 class StockData:
 
         def __init__(self, stockCode, beginDate, endDate):
-            self.data = self.FetchData(stockCode,beginDate,endDate)
-            self.dataSubset = SetReindex(self.data,self.beginDate,self.endDate)
+            self.assets     = []
+            self.data       = self.FetchData(stockCode,beginDate,endDate)
+            self.dataSubset = SetReindex(self.data,beginDate,endDate)
+            self.stockCode  = stockCode
+            self.beginDate  = datetime.datetime.strptime(beginDate, "%Y-%M-%d")
+            self.endDate    = datetime.datetime.strptime(endDate, "%Y-%M-%d")
+        
+        # Set assets 
+        def SetAssets(self,stockAssets):
+            self.assets =  stockAssets.GetAssetsForStockCode(self.stockCode)
 
         # Get DATA from URL
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
         def FetchData(self,stockCode,beginDate,endDate):
-            self.stockCode = stockCode
-            self.beginDate = beginDate
-            self.endDate   = endDate
-
-            receivedData = data.DataReader(self.stockCode, 'stooq', self.beginDate, self.endDate)
+            receivedData = data.DataReader(stockCode, 'stooq', beginDate, endDate)
 
             if len(receivedData) == 0:
                 print("No Stooq data for entry %s!" % (stockCode))
@@ -64,6 +69,18 @@ class StockData:
         def Plot(self):
             plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'], "#000000", label=self.stockCode)
             return 0
+
+        # Plot assets 
+        def PlotAllAssets(self):
+            for asset in self.assets:
+                PlotAsset(plt, asset)
+        
+        # Plot assets 
+        def PlotAssets(self):
+            for asset in self.assets:
+                dt = datetime.datetime.strptime(asset["date"], "%d-%M-%Y")
+                if ((dt>=self.beginDate) and (dt<=self.endDate)):
+                    PlotAsset(plt, asset)
 
         # Plot stock data
         def PlotAsBackground(self):

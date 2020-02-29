@@ -14,6 +14,7 @@ from lib.DataOperations import *
 from lib.Stock import *
 from lib.ReportSignals import * 
 from lib.TimeInterval import *
+from lib.assets import *
 
 # Create plot figures file
 def PlotSave(fig):
@@ -113,7 +114,6 @@ if (args.reportsInterval is not None):
 # Create Country Info
 info = CountryInfo(args.stockCode)
         
-
 # Use non-interactive backend when plot to file used
 if (args.plotToFile):
     import matplotlib
@@ -171,7 +171,9 @@ reportSignals.SetStockCode(args.stockCode)
 
 # 1. Get DATA from URL
 # #####################################################
+stockAssets = StockAssets()
 stockData   = StockData(args.stockCode, start_date, end_date)
+stockData.SetAssets(stockAssets)
 
 # Get Close price and average
 closePriceTotal  = stockData.GetAllData('Close')
@@ -211,6 +213,7 @@ fig = plt.figure(figsize=(16.0, 9.0))
 plot1=plt.subplot(221)
 alligator.Plot()
 plt.plot(closePrice.index, closePrice, "#000000", label=args.stockCode)
+stockData.PlotAssets()
 # plt.plot(maxs.index,maxs,'go', label="Maxs")
 # plt.plot(mins.index,mins,'ro', label="Mins")
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
@@ -222,6 +225,7 @@ plt.legend(loc='upper left')
 plot2=plt.subplot(222)
 plt.plot(closePriceTotal.index, closePriceTotal, "#000000", label=args.stockCode)
 plt.plot(closePrice.index, closePrice, 'r', label="")
+stockData.PlotAllAssets()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price and Volume - alltime")

@@ -13,9 +13,9 @@ import random
 def PlotAsset(ax,asset):
     dt = datetime.datetime.strptime(asset["date"], "%d-%M-%Y")
     if (asset['operation'] == "buy"):
-        ax.plot(dt,asset["price"],"go")
+        ax.plot_date(dt,asset["price"],"go")
     else:
-        ax.plot(dt,asset["price"],"ro")
+        ax.plot_date(dt,asset["price"],"ro")
         
 def ReportAsset(asset,currentClosePrice):
     text = "* %s %s - %d$ (%dj * %d) " % (asset["name"],asset["code"],
@@ -25,10 +25,11 @@ def ReportAsset(asset,currentClosePrice):
 # Stock Assets class 
 class StockAssets(object):
 
-    def __init__(self, filepath = "config/assets.json"):
+    def __init__(self, filepath = "config/assets.json", extraReportFile = "plots/assets.md"):
         self.lockTimeout = 5*60
         self.isModified = False
         self.filepath = filepath 
+        self.extraReportFile = extraReportFile
         self.ReadAssets()
         self.Init()
 
@@ -61,7 +62,6 @@ class StockAssets(object):
             else:
                     entry["id"] = self.GetRandomHash()
                     self.isModified = True
-            print(entry)
 
         # Save changes
         if (self.isModified == True):
@@ -70,7 +70,7 @@ class StockAssets(object):
     def GetAssetsForStockCode(self,stockCode):
         findAssets = []
         for entry in self.data:
-            if (entry["stockCode"] == stockCode):
+            if (entry["code"] == stockCode):
                 findAssets.append(entry)
         return findAssets
     
