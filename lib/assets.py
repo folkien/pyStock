@@ -5,11 +5,10 @@ Created on 29 lut 2020
 import json
 import os
 import datetime
+import random
 from filelock import Timeout, FileLock
 from lib.jsonModule import *
 from lib.StockData import *
-import filelock
-import random
 from locale import currency
 
 def PlotAsset(ax,asset):
@@ -53,8 +52,14 @@ class Asset(object):
         # percent chage
         self.change        = (self.income*100)/self.originalValue
         self.isInitialized = True
-        
-    # 
+
+    #
+    def IsReportable(self):
+        if (self.data['opened'] == False) and (self.data['operation'] == "buy"):
+            return False
+        return True
+
+    #
     def GetOriginalValue(self):
         return self.originalValue
 
@@ -132,41 +137,42 @@ class StockAssets(object):
         # Save changes
         if (self.isModified == True):
             self.WriteAssets()
-    
+
     def GetAssetsForStockCode(self,stockCode):
         findAssets = []
         for entry in self.data:
             if (entry["code"] == stockCode):
                 findAssets.append(entry)
         return findAssets
-    
+
     def RemoveAsset(self,entry):
         try:
             self.data.remove({"id":entry["id"]})
         except ValueError:
             pass
-    
+
     # Create asset objects from json
-    def CreateAssetObjects(self):    
+    def CreateAssetObjects(self):
         if (len(self.assets) == 0):
             for entry in self.data:
                 assetObject = Asset(entry)
                 assetObject.Init()
                 self.assets.append(assetObject)
-    
+
     # Report
     def Report(self, file, currencySymbol):
-        totalInvested = 0 
+        totalInvested = 0
         totalValue    = 0
         self.CreateAssetObjects()
 
         if (len(self.assets)>0):
             file.write("## Assets\n\n")
             for entry in self.assets:
-                entry.Report(file, currencySymbol)
-                totalInvested += entry.GetOriginalValue() 
-                totalValue    += entry.GetCurrentValue() 
-            
+                if (entry.IsReportable()):
+                    entry.Report(file, currencySymbol)
+                    totalInvested += entry.GetOriginalValue()
+                    totalValue    += entry.GetCurrentValue()
+
             income = totalValue - totalInvested
             change = (income*100)/totalInvested
 
@@ -174,16 +180,48 @@ class StockAssets(object):
 
             # Income in percents
             if (income>=0):
-                file.write("<span style='color:green'>+%2.2f%%</span>" % (change)) 
+                file.write("<span style='color:green'>+%2.2f%%</span>" % (change))
             else:
-                file.write("<span style='color:red'>%2.2f%%</span>" % (change)) 
-            
+                file.write("<span style='color:red'>%2.2f%%</span>" % (change))
+
             # Income in currency
             if (income>=0):
-                file.write("<span style='color:green'>+%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol)) 
+                file.write("<span style='color:green'>+%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol))
             else:
-                file.write("<span style='color:red'>%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol)) 
+                file.write("<span style='color:red'>%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol))
             file.write("\n")
-        
-        
-        
+
+    # Report
+    def ReportForCode(self, stockCode, file, currencySymbol):
+        totalInvested = 0
+        totalValue    = 0
+        self.CreateAssetObjects()
+
+        if (len(self.assets)>0):
+            file.write("## Assets\n\n")
+            for entry in self.assets:
+                if (entry.data['code'] == stockCode) and (entry.IsReportable()):
+                    entry.Report(file, currencySymbol)
+                    totalInvested += entry.GetOriginalValue()
+                    totalValue    += entry.GetCurrentValue()
+
+            income = totalValue - totalInvested
+            change = (income*100)/totalInvested
+
+            file.write("\n**Total income** : ")
+
+            # Income in percents
+            if (income>=0):
+                file.write("<span style='color:green'>+%2.2f%%</span>" % (change))
+            else:
+                file.write("<span style='color:red'>%2.2f%%</span>" % (change))
+
+            # Income in currency
+            if (income>=0):
+                file.write("<span style='color:green'>+%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol))
+            else:
+                file.write("<span style='color:red'>%d%s %d%s</span> from %d%s.\n" % (income,currencySymbol,totalValue,currencySymbol,totalInvested,currencySymbol))
+            file.write("\n")
+
+
+

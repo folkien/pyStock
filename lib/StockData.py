@@ -25,12 +25,16 @@ class StockData:
             self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%M-%d")
             self.endDate     = datetime.datetime.strptime(endDate, "%Y-%M-%d")
             self.currentPrice= self.data['Close'][0]
-        
+
         # Returns current close price
         def GetCurrentPrice(self):
             return self.currentPrice
-        
-        # Set assets 
+
+        # Returns current close price
+        def GetStockCode(self):
+            return self.stockCode
+
+        # Set assets
         def SetAssets(self,stockAssets):
             self.assets =  stockAssets.GetAssetsForStockCode(self.stockCode)
 

@@ -12,7 +12,8 @@ from matplotlib import gridspec
 from lib.CountryInfo import CountryInfo
 from lib.DataOperations import *
 from lib.Stock import *
-from lib.ReportSignals import * 
+from lib.StockData import *
+from lib.ReportSignals import *
 from lib.TimeInterval import *
 from lib.assets import *
 
