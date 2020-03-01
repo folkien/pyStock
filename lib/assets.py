@@ -101,17 +101,13 @@ class StockAssets(object):
         self.Init()
 
     def ReadAssets(self):
-        lock = FileLock(self.filepath+".lock",timeout=self.lockTimeout)
-        lock.acquire()
-        self.data = jsonRead(self.filepath)
-        lock.release()
+        with FileLock(self.filepath+".lock",timeout=self.lockTimeout):
+            self.data = jsonRead(self.filepath)
 
     def WriteAssets(self):
-        lock = FileLock(self.filepath+".lock",timeout=self.lockTimeout)
-        lock.acquire()
-        jsonWrite(self.filepath,self.data)
-        self.isModified = False
-        lock.release()
+        with FileLock(self.filepath+".lock",timeout=self.lockTimeout):
+            jsonWrite(self.filepath,self.data)
+            self.isModified = False
         
     def GetRandomHash(self):
         hash = random.getrandbits(128)
