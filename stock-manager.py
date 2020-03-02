@@ -87,60 +87,54 @@ def entryExecute(entry, interval):
 
 # Appends data to reports file
 def ReportAssets(filepath):
-    lock = FileLock(filepath+".lock", timeout=lockTimeout)
-    lock.acquire()
-    if os.path.isfile(filepath):
-        with open(filepath, 'a+') as f:
-            stockAssets.Report(f,"zl")
-            f.close()
-    lock.release()
+    with FileLock(filepath+".lock",timeout=lockTimeout):
+        if os.path.isfile(filepath):
+            with open(filepath, 'a+') as f:
+                stockAssets.Report(f,"zl")
 
 # Appends data to reports file
 def ReportsAppend(filepath, data):
-    lock = FileLock(filepath+".lock", timeout=lockTimeout)
-    lock.acquire()
-    if os.path.isfile(filepath):
-        with open(filepath, 'a+') as f:
-            f.write(data)
-            f.close()
-    lock.release()
+    with FileLock(filepath+".lock",timeout=lockTimeout):
+        if os.path.isfile(filepath):
+            with open(filepath, 'a+') as f:
+                f.write(data)
 
 # Save reports to file. Append text.
 def ReportsClean(filepath):
     global reportFileEmptySize
-    os.system("rm -rf plots/report.md*")
-    os.system("rm -rf plots/*.png")
+    with FileLock(filepath+".lock",timeout=lockTimeout):
+        os.system("rm -rf plots/report.md*")
+        os.system("rm -rf plots/*.png")
 
-    lock = FileLock(filepath+".lock", timeout=lockTimeout)
-    lock.acquire()
-    # Create file for reports with header
-    with open(filepath, 'w') as f:
-        f.write("%s report from <span style='color:blue'>%s</span> - file '%s'.\n" %
-                (args.execute, datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), configFile))
-        f.write("------------------\n")
-        f.write("\n")
-        f.close()
-    # update empty file size after creation and header write
-    reportFileEmptySize = os.path.getsize(reportFile)
-    lock.release()
+        # Create file for reports with header
+        with open(filepath, 'w') as f:
+            f.write("%s report from <span style='color:blue'>%s</span> - file '%s'.\n" %
+                    (args.execute, datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), configFile))
+            f.write("------------------\n")
+            f.write("\n")
+            f.close()
+        # update empty file size after creation and header write
+        reportFileEmptySize = os.path.getsize(reportFile)
+
+# Save reports to file. Append text.
+def ReportsIsAnyting(filepath):
+    if (os.path.isfile(filepath)) and (os.path.getsize(filepath) > reportFileEmptySize):
+        return True
+    return False
 
 # Save reports to file. Append text.
 def ReportsToHTML(filepath):
-    if (os.path.isfile(reportFile)) and (os.path.getsize(reportFile) != 0):
-        os.system("make -C plots/ html")
-        # Replace images with embedded imaces code
-        os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
+    os.system("make -C plots/ html")
+    # Replace images with embedded imaces code
+    os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
 
 # mail all reports
-def ReportsMail(recipient, reportFile):
-    if (os.path.isfile(reportFile)) and (os.path.getsize(reportFile) != reportFileEmptySize):
-        print("Mail to %s." % (recipient))
-        currentDate = datetime.date.today()
-        # Send email with attamchents through mutt smtp
-        os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report for %s' -a plots/*.png -- %s < %s" %
-                  (currentDate.strftime("%d/%m/%Y"), recipient, reportFile))
-    else:
-        print("File to send not exists or empty!")
+def ReportsMail(recipient, filepath):
+    print("Mail %s to %s." % (filepath,recipient))
+    currentDate = datetime.date.today()
+    # Send email with attamchents through mutt smtp
+    os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report %s for %s' -a plots/*.png -- %s < %s" %
+                (args.execute, currentDate.strftime("%d/%m/%Y"), recipient, filepath))
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--add",    action='store_true', required=False, help="Adds given")
@@ -204,12 +198,6 @@ for i in range(len(entries)):
         if (entryExecute(entry, args.execute) != True):
             ForceExit("Execution failed!")
 
-# Report also assets 
-if (args.execute is not None):
-    if (args.execute == "weekly"):
-        ReportAssets(reportFile)
-
-
 # 4. Write entries if were changed
 # #####################################################33
 if (dataIsChanged == True):
@@ -220,10 +208,15 @@ if (recipientsIsChanged == True):
 
 # 5. Finish execution
 if (args.execute is not None):
-    ReportsToHTML(reportFile)
-    # Send emails to all recipients
-    for i in range(len(recipients)):
-        ReportsMail(recipients[i]['address'], reportFile+".html")
+    # If report has something
+    if (ReportsIsAnyting(reportFile)):
+        # Report also assets
+        ReportAssets(reportFile)
+        # Generate HTML
+        ReportsToHTML(reportFile)
+        # Send emails to all recipients
+        for i in range(len(recipients)):
+            ReportsMail(recipients[i]['address'], reportFile+".html")
 
 lockRecipents.release()
 lockConfig.release()
