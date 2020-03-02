@@ -21,9 +21,9 @@ class CCI:
             self.cciSignal  = CreateMovingAverage(self.cci, self.n*1.5)
 
             # Signals
-            fromBottom,fromTop=FindIntersections(self.cci,100)
-            self.buy  = fromBottom
             fromBottom,fromTop=FindIntersections(self.cci,-100)
+            self.buy  = fromBottom
+            fromBottom,fromTop=FindIntersections(self.cci,100)
             self.sell = fromTop
 
         # Set CCI indicator
