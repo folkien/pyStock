@@ -57,14 +57,13 @@ class MACD:
             if (self.sell is not None and self.sell.size):
                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
-            
+
         # Plot Histogram
         def Histogram(self):
             #Create ZeroLine
             zeroLine = CreateDataLine(self.macd.index, 0, 0)
-
             plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
-        #     hminus.plot.bar()
-            plt.stem(self.hplus.index,self.hplus,linefmt='green',markerfmt='go', label="Trend +rise power")
-            plt.stem(self.hminus.index,self.hminus,linefmt='red',markerfmt='ro', label="Trend -fall power")
+
+            plt.bar(self.hplus.index, self.hplus['value'],  color="green",label="Trend+")
+            plt.bar(self.hminus.index, self.hminus['value'],color="red",label="Trend-")
 
