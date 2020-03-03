@@ -22,8 +22,8 @@ class StockData:
             self.data        = self.FetchData(stockCode,beginDate,endDate)
             self.dataSubset  = SetReindex(self.data,beginDate,endDate)
             self.stockCode   = stockCode
-            self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%M-%d")
-            self.endDate     = datetime.datetime.strptime(endDate, "%Y-%M-%d")
+            self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%m-%d")
+            self.endDate     = datetime.datetime.strptime(endDate, "%Y-%m-%d")
             self.currentPrice= self.data['Close'][0]
 
         # Returns current close price
