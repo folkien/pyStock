@@ -271,9 +271,8 @@ fig = plt.figure(figsize=(16.0, 9.0))
 # Total close price
 Rows=6
 gs = gridspec.GridSpec(Rows, 1)
-plot5=plt.subplot(gs[0:3])
+plot5=plt.subplot(gs[0:4])
 stockData.PlotCandle(plot5)
-stockData.PlotAsBackground()
 stockData.PlotAssets()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title("Price and oscillators - period")
@@ -283,14 +282,8 @@ plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
 # MACD
-plot6=plt.subplot(gs[Rows-3], sharex=plot5)
+plot6=plt.subplot(gs[Rows-2], sharex=plot5)
 macd.Plot()
-plt.ylabel('Value')
-plt.grid()
-plt.legend(loc='upper left')
-
-# MACD hist
-plot7=plt.subplot(gs[Rows-2], sharex=plot5)
 macd.Histogram()
 plt.ylabel('Value')
 plt.grid()
