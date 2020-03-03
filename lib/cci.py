@@ -36,8 +36,8 @@ class CCI:
 
         # Export indicator signals to report
         def ExportSignals(self, reportSignals):
-            a=1
-
+            reportSignals.AddDataframeSignals(self.buy,"CCI","buy")
+            reportSignals.AddDataframeSignals(self.sell,"CCI","sell")
 
         # Plot method
         def Plot(self):
