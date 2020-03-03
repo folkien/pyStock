@@ -98,6 +98,7 @@ parser.add_argument("-n", "--stockCode", type=str, required=True, help="Stock na
 parser.add_argument("-d", "--beginDate", type=str, required=False, help="Begin date")
 parser.add_argument("-Y", "--lastYear", action='store_true', required=False, help="Last Year")
 parser.add_argument("-6M", "--last6Months", action='store_true', required=False, help="Last 6 Months")
+parser.add_argument("-3M", "--last3Months", action='store_true', required=False, help="Last 3 Months")
 parser.add_argument("-M", "--lastMonth", action='store_true', required=False, help="Last Month")
 parser.add_argument("-W", "--lastWeek", action='store_true', required=False, help="Last Week")
 parser.add_argument("-g", "--plotToFile", action='store_true', required=False, help="Plot to file")
@@ -144,9 +145,13 @@ else:
 if (args.lastYear):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=365)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
-# Check last month
+# Check last 6 month
 if (args.last6Months):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=30*6)
+    start_date  =  tmpDate.strftime("%Y-%m-%d")
+# Check last 3 month
+if (args.last3Months):
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30*3)
     start_date  =  tmpDate.strftime("%Y-%m-%d")
 # Check last month
 if (args.lastMonth):
