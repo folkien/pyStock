@@ -331,14 +331,19 @@ if (args.plotToFile):
 
 # Create reports
 if (args.reports):
+    reportAllSignalTypes=False
+    # If there are opened assets then report all signals
+    if (len(stockAssets.GetAssetsForStockCode(args.stockCode,onlyOpened=True)) != 0):
+        reportAllSignalTypes=True
+
     if (executionInterval=="daily"):
-        reportSignals.Report(reportFile)
+        reportSignals.Report(reportFile,reportAllSignalTypes)
         # remove plots if nothing reported
         if (reportSignals.reportedAnything == False):
             PlotsRemove()
     else:
         ReportBaseSave(reportFile)
-        reportSignals.Report(reportFile)
+        reportSignals.Report(reportFile,reportAllSignalTypes)
 
 # Show all plots
 if (not args.plotToFile):

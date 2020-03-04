@@ -138,10 +138,13 @@ class StockAssets(object):
         if (self.isModified == True):
             self.WriteAssets()
 
-    def GetAssetsForStockCode(self,stockCode):
+    def GetAssetsForStockCode(self,stockCode,onlyOpened=False,onlyBuy=False,onlySell=False):
         findAssets = []
         for entry in self.data:
-            if (entry["code"] == stockCode):
+            if ( (entry["code"] == stockCode) and
+                ((onlyOpened == False) or (onlyOpened==True) and (entry["opened"] == True)) and
+                ((onlyBuy == False) or (onlyBuy==True) and (entry["operation"] == "buy")) and
+                ((onlySell == False) or (onlySell==True) and (entry["operation"] == "sell")) ):
                 findAssets.append(entry)
         return findAssets
 

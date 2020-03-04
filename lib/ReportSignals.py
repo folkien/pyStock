@@ -47,16 +47,31 @@ class ReportSignals():
             for i in range(len(data.values)):
                 self.AddSignal(data.index[i],parentName,signalName)
         
+    # Returns Allowed signals for no assets stock
+    def GetAllSignalTypes(self):
+        return [ "buy", "NotSell", "MayBuy", "NotBuy", "sell"]
+    
+    # Returns Allowed signals for no assets stock
+    def GetBuySignalTypes(self):
+        return [ "buy", "NotSell", "MayBuy"]
+        
     # Report to file
-    def Report(self,filepath):
+    def Report(self,filepath,allSignalTypes = True):
+        # Get allowed signals  
+        if (allSignalTypes == True):
+            signalTypes = self.GetAllSignalTypes()
+        else:
+            signalTypes = self.GetBuySignalTypes()
+        
+        # If any signals exists
         if (len(self.signals)>0):
             # Sort
             sortedSignals = sorted(self.signals,key=lambda x: x.timestamp, reverse=True)
             
-            # Filter data
+            # Filter data by datetime & signalType
             filteredSignals = []
             for signal in sortedSignals:
-                if (signal.timestamp > self.beginTimestamp):
+                if (signal.timestamp > self.beginTimestamp) and (signal.signalName in signalTypes):
                     filteredSignals.append(signal)
                 else:
                     break
