@@ -49,3 +49,21 @@ def SetOBV(volumeTotal):
         obvTotal.values[i] = lastOBV
 
     return obvTotal
+
+"""
+Typical Price
+Source: https://en.wikipedia.org/wiki/Typical_price
+Params: 
+    data: pandas DataFrame
+    high_col: the name of the HIGH values column
+    low_col: the name of the LOW values column
+    close_col: the name of the CLOSE values column
+    
+Returns:
+    copy of 'data' DataFrame with 'typical_price' column added
+"""
+def typical_price(data, high_col = 'High', low_col = 'Low', close_col = 'Close'):
+    
+    data['typical_price'] = (data[high_col] + data[low_col] + data[close_col]) / 3
+
+    return data
