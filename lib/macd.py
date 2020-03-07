@@ -44,6 +44,13 @@ class MACD:
         def Plot(self):
             #Create ZeroLine
             zeroLine = CreateDataLine(self.macd.index, 0, 0)
+
+            # Plot backgrounds
+            x_axis = self.signal.index.get_level_values(0)
+            plt.fill_between(x_axis, self.signal, self.macd, 
+                             where=self.signal<self.macd,color='#b3ffb3')
+            plt.fill_between(x_axis, self.signal, self.macd, 
+                             where=self.signal>=self.macd,color='#ffb3b3')
             
             # Plot
             plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
