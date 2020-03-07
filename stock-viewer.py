@@ -194,6 +194,7 @@ macd             = CreateMACD(closePrice)
 rsi              = CreateRSI(closePrice)
 cci              = CreateCCI(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 bollinger        = CreateBollinger(closePrice)
+atr              = CreateATR(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 
 # Export all signals to report
 alligator.ExportSignals(reportSignals)
@@ -303,9 +304,10 @@ if (args.plotToFile):
 ### FIG 3
 fig = plt.figure(figsize=(16.0, 9.0))
 
-# Total close price
-gs = gridspec.GridSpec(4, 1)
-plot9=plt.subplot(gs[0:3])
+# Bollinger with candleplot
+Rows=6
+gs = gridspec.GridSpec(Rows, 1)
+plot9=plt.subplot(gs[0:4])
 stockData.PlotCandle(plot9)
 stockData.PlotAssets()
 bollinger.Plot()
@@ -316,11 +318,18 @@ plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
 
-plot10=plt.subplot(gs[3],sharex=plot9)
-cci.Plot()
-#bollinger.PlotAbsDeviation()
+# ATR
+plot10=plt.subplot(gs[Rows-2],sharex=plot9)
+atr.Plot()
 plt.legend(loc='upper left')
 plt.grid()
+
+# CCI
+plot11=plt.subplot(gs[Rows-1],sharex=plot9)
+cci.Plot()
+plt.legend(loc='upper left')
+plt.grid()
+#bollinger.PlotAbsDeviation()
 # plt.minorticks_on()
 # plt.grid(b=True, which='major', axis='both',color='k')
 # plt.grid(b=True, which='minor', axis='both')

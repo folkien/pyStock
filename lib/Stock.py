@@ -5,6 +5,8 @@ import copy
 from lib.rsi import *
 from lib.cci import *
 from lib.macd import *
+from lib.atr import *
+from lib.dmi import *
 from lib.bollinger import *
 from lib.WilliamsAlligator import *
 from lib.StockData import *
