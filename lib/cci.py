@@ -44,16 +44,21 @@ class CCI:
             # CCI
             plt.plot(self.cci.index, self.cci, label='CCI' + str(self.n), linewidth=1.0, color = '#000000')
             plt.plot(self.cciSignal.index, self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
+            x_axis = self.cci.index.get_level_values(0)
 
             # Historic average
             hAverage = CreateDataLine(self.cci.index, 0, 0)
             plt.plot(hAverage.index, hAverage, '--', label='H.Average', linewidth=1.0, color = '#333333')
             #OverBought
-            overBought = CreateDataLine(self.cci.index, 100, 100)
+            overBought = CreateDataLine(self.cci.index, 100, 100,True)
             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
+            plt.fill_between(x_axis, self.cci, overBought['value'], 
+                             where=self.cci>overBought['value'],color='#ffb3b3')
             #OverSold
-            overSold = CreateDataLine(self.cci.index, -100, -100)
+            overSold = CreateDataLine(self.cci.index, -100, -100,True)
             plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
+            plt.fill_between(x_axis, self.cci, overSold['value'], 
+                             where=self.cci<overSold['value'],color='#b3ffb3')
 
             # Signals plottting
             if (self.buy is not None and self.buy.size):

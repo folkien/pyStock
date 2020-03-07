@@ -55,7 +55,7 @@ class RSI:
                 rs = up/down
                 rsi[i] = 100. - 100./(1.+rs)
 
-            return pd.DataFrame(data=rsi,index=prices.index)
+            return pd.Series(data=rsi,index=prices.index)
         
         # Export indicator signals to report
         def ExportSignals(self, reportSignals):
@@ -70,12 +70,17 @@ class RSI:
             plt.plot(line50.index, line50, '-.', linewidth=1.0, color = '#333333')
             # RSI
             plt.plot(self.rsi.index, self.rsi, label='RSI'+str(self.n), linewidth=1.0, color = '#000000')
+            x_axis = self.rsi.index.get_level_values(0)
             #OverBought
-            overBought = CreateDataLine(self.rsi.index, 70, 70)
+            overBought = CreateDataLine(self.rsi.index, 70, 70,True)
             plt.plot(overBought.index, overBought, '--', label='Overbought', color = '#940006')
+            plt.fill_between(x_axis, self.rsi, overBought['value'], 
+                             where=self.rsi>=overBought['value'],color='#ffb3b3')
             #OverSold
-            overSold = CreateDataLine(self.rsi.index, 30, 30)
+            overSold = CreateDataLine(self.rsi.index, 30, 30,True)
             plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#169400')
+            plt.fill_between(x_axis, self.rsi, overSold['value'], 
+                             where=self.rsi<=overSold['value'],color='#b3ffb3')
             # Buy
             if (self.notSellSignal.size):
                 plt.plot(self.notSellSignal.index, self.notSellSignal, 'x', label='NotSell', color = '#00FF00')
