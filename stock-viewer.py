@@ -282,6 +282,7 @@ plt.legend(loc='upper left')
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
+plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
 # MACD
 plot6=plt.subplot(gs[Rows-2], sharex=plot5)
@@ -290,6 +291,7 @@ macd.Histogram()
 plt.ylabel('Value')
 plt.grid()
 plt.legend(loc='upper left')
+plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
 # RSI
 plot8=plt.subplot(gs[Rows-1], sharex=plot5)
@@ -297,6 +299,9 @@ PlotRSI(rsi)
 plt.ylabel('RSI')
 plt.grid()
 plt.legend(loc='upper left')
+plt.xticks(rotation=90)
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+plt.gca().xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
 
 # Plot to file or show
 if (args.plotToFile):
@@ -318,6 +323,7 @@ plt.legend(loc='upper left')
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both',color='k')
 plt.grid(b=True, which='minor', axis='both')
+plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
 # ATR
 plot10=plt.subplot(gs[Rows-2],sharex=plot9)
@@ -325,12 +331,16 @@ plot10=plt.subplot(gs[Rows-2],sharex=plot9)
 dmi.Plot()
 plt.legend(loc='upper left')
 plt.grid()
+plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
 # CCI
 plot11=plt.subplot(gs[Rows-1],sharex=plot9)
 cci.Plot()
 plt.legend(loc='upper left')
 plt.grid()
+plt.xticks(rotation=90)
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+plt.gca().xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
 #bollinger.PlotAbsDeviation()
 # plt.minorticks_on()
 # plt.grid(b=True, which='major', axis='both',color='k')
