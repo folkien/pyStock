@@ -329,14 +329,14 @@ plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=Fal
 plot10=plt.subplot(gs[Rows-2],sharex=plot9)
 # atr.Plot()
 dmi.Plot()
-plt.legend(loc='upper left')
+plt.legend(loc='best')
 plt.grid()
 plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
 # CCI
 plot11=plt.subplot(gs[Rows-1],sharex=plot9)
 cci.Plot()
-plt.legend(loc='upper left')
+plt.legend(loc='best')
 plt.grid()
 plt.xticks(rotation=90)
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
