@@ -11,10 +11,20 @@ def CreateEmptyDataFrame():
     return pd.DataFrame()
 
 # Creates DataFrame line
-def CreateDataLine(indexes,startValue,endValue):
+def CreateDataLine(indexes,startValue,endValue,allIndexes=False):
     data=pd.DataFrame()
-    data = data.append(pd.DataFrame({'value':startValue},index=[indexes[0]]))
-    data = data.append(pd.DataFrame({'value':endValue},index=[indexes[-1]]))
+    # Only start and begin
+    if (allIndexes == False):
+        data = data.append(pd.DataFrame({'value':startValue},index=[indexes[0]]))
+        data = data.append(pd.DataFrame({'value':endValue},index=[indexes[-1]]))
+    # All data
+    else:
+        N = len(indexes)
+        alpha = (endValue-startValue)/N
+        for i in range(len(indexes)):
+            data = data.append(pd.DataFrame(
+                {'value':alpha*i+startValue},
+                index=[indexes[i]]))
     return data
 
 # Creation of moving average with specific window and shift

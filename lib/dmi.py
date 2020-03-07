@@ -18,11 +18,10 @@ class DMI:
             self.n      = n
             self.dip, self.din, self.adx = self.InitDMI(high, low, atr)
 
-#             # Signals
-#             fromBottom,fromTop=FindIntersections(self.dmi,-100)
-#             self.buy  = fromBottom
-#             fromBottom,fromTop=FindIntersections(self.dmi,100)
-#             self.sell = fromTop
+            # Signals
+            fromBottom,fromTop=FindIntersections(self.dip,self.din)
+            self.buy  = fromBottom
+            self.sell = fromTop
 
         # Set DMI indicator
         def InitDMI(self,high, low, atr):
@@ -60,6 +59,20 @@ class DMI:
 
         # Plot method
         def Plot(self):
+            # Strong trend line ADX > 20
+            line20 = CreateDataLine(self.adx.index, 25, 25, True)
+            plt.plot(line20.index, line20, '--', label='ADX>20', 
+                     linewidth=1.0, color = '#333333')
+
+            # Plot backgrounds
+            x_axis = self.dip.index.get_level_values(0)
+            plt.fill_between(x_axis, self.adx['value'], line20['value'], 
+                             where=self.adx['value']>line20['value'],color='#b3b3ff')
+            plt.fill_between(x_axis, self.dip['value'], self.din['value'], 
+                             where=self.dip['value']>self.din['value'],color='#b3ffb3')
+            plt.fill_between(x_axis, self.dip['value'], self.din['value'], 
+                             where=self.dip['value']<=self.din['value'],color='#ffb3b3')
+            
             # DI+ DI- and ADX
             plt.plot(self.dip.index, self.dip, 
                      label='DI+' + str(self.n), 
@@ -70,25 +83,16 @@ class DMI:
             plt.plot(self.adx.index, self.adx, 
                      label='ADX' + str(self.n), 
                      linewidth=1.0, color = 'blue')
-# 
-#             # Historic average
-#             hAverage = CreateDataLine(self.dmi.index, 0, 0)
-#             plt.plot(hAverage.index, hAverage, '--', label='H.Average', linewidth=1.0, color = '#333333')
-#             #OverBought
-#             overBought = CreateDataLine(self.dmi.index, 100, 100)
-#             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
-#             #OverSold
-#             overSold = CreateDataLine(self.dmi.index, -100, -100)
-#             plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
-# 
-#             # Signals plottting
-#             if (self.buy is not None and self.buy.size):
-#                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
-#             if (self.sell is not None and self.sell.size):
-#                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
-# 
-#             # Limits of plot
-#             #plt.ylim(top=100,bottom=-100)
+
+ 
+            # Signals plottting
+            if (self.buy is not None and self.buy.size):
+                plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
+                plt.plot(self.buy.index, self.buy, 'o', label='Buy/Uptrend', color = '#00FF00')
+            if (self.sell is not None and self.sell.size):
+                plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
+                plt.plot(self.sell.index, self.sell, 'o', label='Sell/Downtrend', color = '#FF0000')
+ 
+            # Limits of plot
+            plt.ylim(top=100,bottom=0)
 
