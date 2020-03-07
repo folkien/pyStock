@@ -195,6 +195,7 @@ rsi              = CreateRSI(closePrice)
 cci              = CreateCCI(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 bollinger        = CreateBollinger(closePrice)
 atr              = CreateATR(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
+dmi              = CreateDMI(stockData.GetData('High'),stockData.GetData('Low'),atr.GetAtr())
 
 # Export all signals to report
 alligator.ExportSignals(reportSignals)
@@ -320,7 +321,8 @@ plt.grid(b=True, which='minor', axis='both')
 
 # ATR
 plot10=plt.subplot(gs[Rows-2],sharex=plot9)
-atr.Plot()
+# atr.Plot()
+dmi.Plot()
 plt.legend(loc='upper left')
 plt.grid()
 
