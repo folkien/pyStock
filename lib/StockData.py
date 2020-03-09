@@ -20,11 +20,40 @@ class StockData:
             self.assets      = []
             self.symbol      = "zł"
             self.data        = self.FetchData(stockCode,beginDate,endDate)
+            self.volumeP, self.volumeN = self.InitVolume(self.data['Close'], self.data['Volume'])
             self.dataSubset  = SetReindex(self.data,beginDate,endDate)
+            self.volumeSubsetP = SetReindex(self.volumeP,beginDate,endDate) 
+            self.volumeSubsetN = SetReindex(self.volumeN,beginDate,endDate) 
             self.stockCode   = stockCode
             self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%m-%d")
             self.endDate     = datetime.datetime.strptime(endDate, "%Y-%m-%d")
             self.currentPrice= self.data['Close'][0]
+
+        # Change volumeTotal to neg/pos value
+        def InitVolume(self, price, volume):
+            # Assert condition
+            if (price.size != volume.size):
+                return
+
+            # Create volume objects
+            volumePositive=pd.Series()
+            volumeNegative=pd.Series()
+
+            lastPrice=price.values[-1]
+            # We start from end because data from Stooq is reversed
+            for i in reversed(range(1,len(price.values))):
+                # If price drop then volume wih minus value
+                if (lastPrice > price.values[i]):
+                    volumeNegative = volumeNegative.append(
+                        pd.DataFrame({'value':volume.values[i]},index=[volume.index[i]]))
+                    volume.values[i]=-volume.values[i]
+                else:
+                    volumePositive = volumePositive.append(
+                        pd.DataFrame({'value':volume.values[i]},index=[volume.index[i]]))
+
+                lastPrice=price.values[i]
+            
+            return volumePositive, volumeNegative
 
         # Returns current close price
         def GetCurrentPrice(self):
@@ -127,6 +156,16 @@ class StockData:
             plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'],"--", color="#777777", 
                      label=self.stockCode, linewidth=0.5)
             return 0
+        
+        # Plot volume as bars
+        def PlotVolume(self, scale = 1):
+            plt.bar(self.volumeSubsetP.index, self.volumeSubsetP['value']*scale,color="green",label="")
+            plt.bar(self.volumeSubsetN.index, self.volumeSubsetN['value']*scale,color="red",label="")
+        
+        # Plot volume as bars
+        def PlotVolumeAll(self, scale = 1):
+            plt.bar(self.volumeP.index, self.volumeP['value']*scale,color="green",label="")
+            plt.bar(self.volumeN.index, self.volumeN['value']*scale,color="red",label="")
 
         # Plot all stock data
         def PlotCandleAll(self):

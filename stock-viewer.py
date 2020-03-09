@@ -259,6 +259,7 @@ if (stockData.hasVolume()):
     plot4=plt.subplot(224, sharex=plot2)
     plt.plot(obvTotal.index, obvTotal, label="OBV total")
     plt.plot(obv.index, obv, 'r', label="")
+    stockData.PlotVolumeAll(10)
     plt.ylabel('OBV total')
     plt.grid()
     plt.legend(loc='upper left')
