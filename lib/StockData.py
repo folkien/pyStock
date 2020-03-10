@@ -22,8 +22,8 @@ class StockData:
             self.data        = self.FetchData(stockCode,beginDate,endDate)
             self.volumeP, self.volumeN = self.InitVolume(self.data['Close'], self.data['Volume'])
             self.dataSubset  = SetReindex(self.data,beginDate,endDate)
-            self.volumeSubsetP = SetReindex(self.volumeP,beginDate,endDate) 
-            self.volumeSubsetN = SetReindex(self.volumeN,beginDate,endDate) 
+            self.volumeSubsetP = SetReindex(self.volumeP,beginDate,endDate,False) 
+            self.volumeSubsetN = SetReindex(self.volumeN,beginDate,endDate,False) 
             self.stockCode   = stockCode
             self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%m-%d")
             self.endDate     = datetime.datetime.strptime(endDate, "%Y-%m-%d")
@@ -45,11 +45,11 @@ class StockData:
                 # If price drop then volume wih minus value
                 if (lastPrice > price.values[i]):
                     volumeNegative = volumeNegative.append(
-                        pd.DataFrame({'value':volume.values[i]},index=[volume.index[i]]))
+                        pd.Series(volume.values[i],index=[volume.index[i]]))
                     volume.values[i]=-volume.values[i]
                 else:
                     volumePositive = volumePositive.append(
-                        pd.DataFrame({'value':volume.values[i]},index=[volume.index[i]]))
+                        pd.Series(volume.values[i],index=[volume.index[i]]))
 
                 lastPrice=price.values[i]
             
@@ -158,14 +158,18 @@ class StockData:
             return 0
         
         # Plot volume as bars
-        def PlotVolume(self, scale = 1):
-            plt.bar(self.volumeSubsetP.index, self.volumeSubsetP['value']*scale,color="green",label="")
-            plt.bar(self.volumeSubsetN.index, self.volumeSubsetN['value']*scale,color="red",label="")
+        def PlotVolume(self, ax):
+            ax2 = ax.twinx()
+            ax2.bar(self.volumeSubsetP.index, self.volumeSubsetP, color="green",label="")
+            ax2.bar(self.volumeSubsetN.index, self.volumeSubsetN,color="red",label="")
+            ax2.tick_params(axis='y', labelcolor='tab:red')
         
         # Plot volume as bars
-        def PlotVolumeAll(self, scale = 1):
-            plt.bar(self.volumeP.index, self.volumeP['value']*scale,color="green",label="")
-            plt.bar(self.volumeN.index, self.volumeN['value']*scale,color="red",label="")
+        def PlotVolumeAll(self, ax):
+            ax2 = ax.twinx()
+            ax2.bar(self.volumeP.index, self.volumeP, color="green",label="")
+            ax2.bar(self.volumeN.index, self.volumeN, color="red",label="")
+            ax2.tick_params(axis='y', labelcolor='tab:red')
 
         # Plot all stock data
         def PlotCandleAll(self):
