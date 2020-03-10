@@ -254,6 +254,7 @@ if (stockData.hasVolume()):
     plt.title("OBV")
     plt.legend(loc='upper left')
     stockData.PlotVolume(plot3)
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
 
     # OBV total
     # #####################################################
