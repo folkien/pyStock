@@ -209,7 +209,6 @@ print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
 mins, maxs       = FindPeaks(closePrice, PriceRange/10)
 
 # Volume
-SetVolumeWithTrend(stockData.GetAllData('Close'), stockData.GetAllData('Volume'))
 obvTotal    = SetOBV(stockData.GetAllData('Volume'))
 volumeTotal = stockData.GetAllData('Volume')
 volume      = stockData.GetData('Volume')
