@@ -168,6 +168,7 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
+- MoneyFlow as separated plot with MF index and TRIX,
 - Add colors background bollinger,
 - Add levels of wsparcia based on STD consolidations,
 - Add MACD Convergence-Divergence add,
