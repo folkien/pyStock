@@ -23,6 +23,7 @@ class MoneyFlow:
             self.moneyMarket = self.moneyFlow.cumsum() 
 
             # Signals
+            # TODO: change to 90 and 10
             fromBottom,fromTop=FindIntersections(self.mfi,20)
             self.buy  = fromBottom
             fromBottom,fromTop=FindIntersections(self.mfi,80)
