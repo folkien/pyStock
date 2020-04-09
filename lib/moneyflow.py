@@ -18,7 +18,7 @@ class MoneyFlow:
         def __init__(self, high, low, close, volume, n=14):
             self.n              = n
             self.typicalPrice   = (high+low+close )/3
-            self.MoneyFlow    = self.InitMoneyFlow(self.typicalPrice, volume, n)
+            self.moneyFlow, self.posFlow, self.negFlow, self.mfi    = self.InitMoneyFlow(self.typicalPrice, volume, n)
 
             # Signals
 #             fromBottom,fromTop=FindIntersections(self.MoneyFlow,-100)
@@ -33,12 +33,23 @@ class MoneyFlow:
         # Set MoneyFlow indicator
         def InitMoneyFlow(self, tp, volume, n):
             moneyFlow = tp * volume
-            posFlow = [moneyFlow[idx] if moneyFlow[idx] else 0 for idx in range(0, len(moneyFlow))]
-            negFlow = [moneyFlow[idx] if not moneyFlow[idx] else 0 for idx in range(0, len(moneyFlow))]
-            # TODO add rolling over pos and neg flow
-            moneyRatio = 0
-            moneyFlowIndex = 100 - (100/(1+moneyRatio))
-            return moneyFlow
+
+            posFlow = pd.Series()
+            negFlow = pd.Series()
+
+            for i in range(1,len(moneyFlow)):
+                if (moneyFlow[i]>=0):
+                    posFlow = posFlow.append(pd.Series(moneyFlow.values[i],index=[moneyFlow.index[i]]))
+                    negFlow = negFlow.append(pd.Series(0,index=[moneyFlow.index[i]]))
+                else:
+                    posFlow = posFlow.append(pd.Series(0,index=[moneyFlow.index[i]]))
+                    negFlow = negFlow.append(pd.Series(abs(moneyFlow.values[i]),index=[moneyFlow.index[i]]))
+            
+            posFlowAvg = CreateMovingAverage(posFlow, n)
+            negFlowAvg = CreateMovingAverage(negFlow, n)
+            moneyRatio = posFlowAvg/negFlowAvg
+            moneyFlowIndex = (100*posFlowAvg)/(posFlowAvg+negFlowAvg)
+            return moneyFlow, posFlow, negFlow, moneyFlowIndex
 
         # Export indicator signals to report
         def ExportSignals(self, reportSignals):
@@ -47,15 +58,29 @@ class MoneyFlow:
 #             reportSignals.AddDataframeSignals(self.sell,"MoneyFlow","sell")
 
         # Plot method
+        def PlotMoneyFlow(self,ax):
+            ax2 = ax.twinx()
+            ax2.plot(self.moneyFlow.index, self.moneyFlow, label='MoneyFlow' + str(self.n), linewidth=1.0, color = 'green')
+
+        # Plot method
+        def PlotPosNegFlow(self):
+#             plt.bar(self.posFlow.index, self.posFlow, color="green",label="")
+#             plt.bar(self.negFlow.index, abs(self.negFlow),color="red",label="")
+            # MoneyFlow
+            plt.plot(self.posFlow.index, self.posFlow, label='PosFlow' + str(self.n), linewidth=1.0, color = 'green')
+            plt.plot(self.negFlow.index, self.negFlow, label='NegFlow' + str(self.n), linewidth=1.0, color = 'red')
+
+
+        # Plot method
         def Plot(self):
             # MoneyFlow
-            plt.plot(self.MoneyFlow.index, self.MoneyFlow, label='MoneyFlow' + str(self.n), linewidth=1.0, color = '#000000')
+            plt.plot(self.mfi.index, self.mfi, label='MFI' + str(self.n), linewidth=1.0, color = '#000000')
 
             #OverBought
-            overBought = CreateDataLine(self.MoneyFlow.index, 80, 80)
+            overBought = CreateDataLine(self.mfi.index, 80, 80)
             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
             #OverSold
-            overSold = CreateDataLine(self.MoneyFlow.index, 20, 20)
+            overSold = CreateDataLine(self.mfi.index, 20, 20)
             plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
 
 #             # Signals plottting

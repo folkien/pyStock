@@ -354,6 +354,43 @@ plt.gca().xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
 if (args.plotToFile):
     PlotSave(fig)
 
+if (stockData.hasVolume()):
+    ### FIG 4
+    fig = plt.figure(figsize=(16.0, 9.0))
+
+    # Bollinger with candleplot
+    Rows=6
+    gs = gridspec.GridSpec(Rows, 1)
+    plot9=plt.subplot(gs[0:4])
+    stockData.PlotCandle(plot9)
+    stockData.PlotAssets()
+    bollinger.Plot()
+    plt.ylabel('Price (%s)' % (info.GetCurrency()))
+    plt.title("Price candlestick")
+    plt.legend(loc='upper left')
+    plt.minorticks_on()
+    plt.grid(b=True, which='major', axis='both',color='k')
+    plt.grid(b=True, which='minor', axis='both')
+    plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
+    moneyflow.PlotMoneyFlow(plot9)
+
+    # Money Flow
+    plot10=plt.subplot(gs[Rows-2],sharex=plot9)
+    moneyflow.PlotPosNegFlow()
+    plt.legend(loc='best')
+    plt.grid()
+    plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
+
+    # MFI
+    plot11=plt.subplot(gs[Rows-1],sharex=plot9)
+    moneyflow.Plot()
+    plt.legend(loc='best')
+    plt.grid()
+
+# Plot to file or show
+if (args.plotToFile):
+    PlotSave(fig)
+
 # Create reports
 if (args.reports):
     reportAllSignalTypes=False
