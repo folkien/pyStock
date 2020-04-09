@@ -19,12 +19,14 @@ class MoneyFlow:
             self.n              = n
             self.typicalPrice   = (high+low+close )/3
             self.moneyFlow, self.posFlow, self.negFlow, self.mfi    = self.InitMoneyFlow(self.typicalPrice, volume, n)
+            # money on the market plot
+            self.moneyMarket = self.moneyFlow.cumsum() 
 
             # Signals
-#             fromBottom,fromTop=FindIntersections(self.MoneyFlow,-100)
-#             self.buy  = fromBottom
-#             fromBottom,fromTop=FindIntersections(self.MoneyFlow,100)
-#             self.sell = fromTop
+            fromBottom,fromTop=FindIntersections(self.mfi,20)
+            self.buy  = fromBottom
+            fromBottom,fromTop=FindIntersections(self.mfi,80)
+            self.sell = fromTop
 
         # returns AverageTrueRange
         def GetMoneyFlow(self):
@@ -60,36 +62,41 @@ class MoneyFlow:
         # Plot method
         def PlotMoneyFlow(self,ax):
             ax2 = ax.twinx()
-            ax2.plot(self.moneyFlow.index, self.moneyFlow, label='MoneyFlow' + str(self.n), linewidth=1.0, color = 'green')
+            ax2.plot(self.moneyMarket.index, self.moneyMarket, '-.', label='Money on market' + str(self.n), linewidth=1.2, color = '#FF0000')
 
         # Plot method
         def PlotPosNegFlow(self):
-#             plt.bar(self.posFlow.index, self.posFlow, color="green",label="")
-#             plt.bar(self.negFlow.index, abs(self.negFlow),color="red",label="")
+            plt.bar(self.negFlow.index, self.negFlow, color="red",label="")
+            plt.bar(self.posFlow.index, self.posFlow, color="green",label="")
             # MoneyFlow
-            plt.plot(self.posFlow.index, self.posFlow, label='PosFlow' + str(self.n), linewidth=1.0, color = 'green')
-            plt.plot(self.negFlow.index, self.negFlow, label='NegFlow' + str(self.n), linewidth=1.0, color = 'red')
+#             plt.plot(self.posFlow.index, self.posFlow, label='PosFlow' + str(self.n), linewidth=1.0, color = 'green')
+#             plt.plot(self.negFlow.index, self.negFlow, label='NegFlow' + str(self.n), linewidth=1.0, color = 'red')
 
 
         # Plot method
         def Plot(self):
             # MoneyFlow
             plt.plot(self.mfi.index, self.mfi, label='MFI' + str(self.n), linewidth=1.0, color = '#000000')
+            x_axis = self.mfi.index.get_level_values(0)
 
             #OverBought
-            overBought = CreateDataLine(self.mfi.index, 80, 80)
+            overBought = CreateDataLine(self.mfi.index, 80, 80, True)
             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
+#             plt.fill_between(x_axis, self.mfi, overBought['value'], 
+#                              where=self.mfi>overBought.values,color='#ffb3b3')
             #OverSold
-            overSold = CreateDataLine(self.mfi.index, 20, 20)
+            overSold = CreateDataLine(self.mfi.index, 20, 20, True)
             plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
+#             plt.fill_between(x_axis, self.mfi, overSold['value'], 
+#                              where=self.mfi<overSold.values,color='#b3ffb3')
 
 #             # Signals plottting
-#             if (self.buy is not None and self.buy.size):
-#                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
-#             if (self.sell is not None and self.sell.size):
-#                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
+            if (self.buy is not None and self.buy.size):
+                plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
+                plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
+            if (self.sell is not None and self.sell.size):
+                plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
+                plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
 
             # Limits of plot
             plt.ylim(top=100,bottom=0)
