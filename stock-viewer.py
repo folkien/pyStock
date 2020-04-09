@@ -196,6 +196,8 @@ cci              = CreateCCI(stockData.GetData('High'),stockData.GetData('Low'),
 bollinger        = CreateBollinger(closePrice)
 atr              = CreateATR(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 dmi              = CreateDMI(stockData.GetData('High'),stockData.GetData('Low'),atr.GetAtr())
+if (stockData.hasVolume()):
+    moneyflow        = CreateMoneyFlow(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'))
 
 # Export all signals to report
 alligator.ExportSignals(reportSignals)

@@ -81,10 +81,43 @@ class StockData:
                 sys.exit(1)
 
             return receivedData
-        
-        def Report(self,file):
-            return 0
-        
+
+        def Report(self,f,interval):
+            if (interval=="weekly"):
+                # Get last range date
+                lastRangeDate  = self.endDate - datetime.timedelta(days=7)
+                lastRangeDate  = lastRangeDate.strftime("%Y-%m-%d")
+                # Get price, volume, subsets
+                priceRange   = SetReindex(self.dataSubset,lastRangeDate,endDate)
+                volumeRange  = SetReindex(self.dataSubset,lastRangeDate,endDate)
+                # Calculate informations
+                totalMaxPrice   = self.Data['High'].max()
+                totalMinPrice   = self.Data['Low'].max()
+                rangeMaxPrice   = priceRange.max()
+                rangeMinPrice   = priceRange.max()
+
+                currentPriceRelativeToMaxPrice = (self.currentPrice*100)/totalMaxPrice
+                growthChance    = (totalMaxPrice*100)/self.currentPrice - 100
+                lostChance      = 100-(totalMinPrice*100)/self.currentPrice
+
+                # Write statistics
+                f.write("# Report for %s.\n" % (self.stockCode))
+                # weekly changes
+                f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
+                        growth chance <span style='color:green'>+%u%%</span>, \
+                        lost chance <span style='color:red'>-%u%%</span>)\n" %
+                        (lastPrice,info.GetCurrency(),lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
+                # relative to historical changes
+                f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
+                        growth chance <span style='color:green'>+%u%%</span>, \
+                        lost chance <span style='color:red'>-%u%%</span>)\n" %
+                        (lastPrice,info.GetCurrency(),lastPriceAsPercentOfMaxPrice,growthChance,lostChance))
+                f.write("    * Current - **%2.2f%s - %2.2f%s**\n" % (minWindowPrice,info.GetCurrency(),maxWindowPrice,info.GetCurrency()))
+                f.write("    * History - **%2.2f%s - %2.2f%s**\n" % (minPrice,info.GetCurrency(),maxPrice,info.GetCurrency()))
+                f.write("    * Volume chng. med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n" %
+                        (volumeSubset.median(), volumeSubset.max(),volumeSubset.min()))
+                f.write("\n")
+
         # Report current assets
         def ReportAssets(self,file):
             assets = self.GetAssets()
