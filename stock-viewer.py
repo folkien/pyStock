@@ -232,8 +232,26 @@ stockData.PlotAssets()
 # plt.plot(mins.index,mins,'ro', label="Mins")
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
-plt.title("Price and OBV")
+plt.title("Price, OBV, MoneyOnMarket")
 plt.legend(loc='upper left')
+
+# OBV
+# #####################################################
+if (stockData.hasVolume()):
+    plot1A = plot1.twinx()
+    plot1A.plot(obv.index, obv, "-.", linewidth=1.2, label="OBV", color="blue")
+    plot1A.legend(loc='upper left')
+    plot1A.tick_params(axis='y', labelcolor='tab:blue')
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
+
+# Money on market
+# #####################################################
+if (stockData.hasVolume()):
+    plot1B = plot1.twinx()
+    moneyflow.PlotMoneyOnMarket(plot1B)
+    plot1B.tick_params(axis='y', labelcolor='tab:red')
+    plt.legend(loc='upper left')
+
 
 # Total close price
 plot2=plt.subplot(222)
@@ -242,30 +260,17 @@ plt.plot(closePrice.index, closePrice, 'r', label="")
 stockData.PlotAllAssets()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
-plt.title("Price and Volume - alltime")
+plt.title("Price, OBV, MoneyOnMarket - alltime")
 plt.legend(loc='upper left')
 
+# OBV total
+# #####################################################
 if (stockData.hasVolume()):
-    # OBV
-    # #####################################################
-    plot3=plt.subplot(223, sharex=plot1)
-    plt.plot(obv.index, obv, label="OBV")
-    plt.ylabel('OBV')
-    plt.grid()
-    plt.title("OBV")
-    plt.legend(loc='upper left')
-    stockData.PlotVolume(plot3)
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
-
-    # OBV total
-    # #####################################################
-    plot4=plt.subplot(224, sharex=plot2)
-    plt.plot(obvTotal.index, obvTotal, label="OBV total")
-    plt.plot(obv.index, obv, 'r', label="")
-    plt.ylabel('OBV total')
-    plt.grid()
-    plt.legend(loc='upper left')
-    stockData.PlotVolumeAll(plot4)
+    plot2A = plot2.twinx()
+    plot2A.plot(obvTotal.index, obvTotal, label="OBV total")
+    plot2A.plot(obv.index, obv, 'r', label="")
+    plot2A.legend(loc='upper left')
+    plot2A.tick_params(axis='y', labelcolor='tab:red')
 
 # Plot to file
 if (args.plotToFile):
@@ -374,7 +379,9 @@ if (stockData.hasVolume()):
     plt.grid(b=True, which='minor', axis='both')
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
     plot9A = plot9.twinx()
-    moneyflow.PlotMoneyFlow(plot9A)
+    moneyflow.PlotMoneyOnMarket(plot9A)
+    plot9.tick_params(axis='y', labelcolor='tab:red')
+    plt.ylabel('Money on the market (%s)' % (info.GetCurrency()))
     plt.legend(loc='upper left')
 
     # Money Flow

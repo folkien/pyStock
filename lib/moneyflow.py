@@ -66,11 +66,9 @@ class MoneyFlow:
             reportSignals.AddDataframeSignals(self.sellStrong,"MFI","sellStrong")
 
         # Plot method
-        def PlotMoneyFlow(self,ax):
+        def PlotMoneyOnMarket(self,ax):
             ax.plot(self.moneyMarket.index, self.moneyMarket, '-.', 
                     label='Money on market' + str(self.n), linewidth=1.2, color = '#FF0000')
-            ax.tick_params(axis='y', labelcolor='tab:red')
-            plt.ylabel('Money on the market (%s)' % (self.info.GetCurrency()))
 
         # Plot method
         def PlotPosNegFlow(self):
