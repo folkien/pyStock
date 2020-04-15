@@ -257,7 +257,9 @@ if (stockData.hasVolume()):
 plot2=plt.subplot(222)
 stockData.PlotAll()
 stockData.PlotAllAssets()
-line = CreateVerticalLine(datetime.datetime.strptime(start_date, "%Y-%m-%d"), stockData.GetAllData('close').max(), stockData.GetAllData('close').min())
+line = CreateVerticalLine(datetime.datetime.strptime(start_date, "%Y-%m-%d"), 
+                          stockData.GetAllData('Close').max(), 
+                          stockData.GetAllData('Close').min())
 plt.plot(line.index, line, "--", linewidth=1.2, color="#FF0000")
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
