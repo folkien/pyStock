@@ -256,8 +256,9 @@ if (stockData.hasVolume()):
 # Total close price
 plot2=plt.subplot(222)
 stockData.PlotAll()
-plt.plot(closePrice.index, closePrice, 'r', label="")
 stockData.PlotAllAssets()
+line = CreateVerticalLine(datetime.datetime.strptime(start_date, "%Y-%m-%d"), stockData.GetAllData('close').max(), stockData.GetAllData('close').min())
+plt.plot(line.index, line, "--", linewidth=1.2, color="#FF0000")
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price, OBV, MoneyOnMarket - alltime")

@@ -27,6 +27,13 @@ def CreateHorizontalLine(indexes,startValue,endValue,allIndexes=False):
                 index=[indexes[i]]))
     return data
 
+# Creates DataFrame line
+def CreateVerticalLine(index,startValue,endValue):
+    data=pd.DataFrame()
+    data = data.append(pd.DataFrame({'value':startValue},index=[index]))
+    data = data.append(pd.DataFrame({'value':endValue},index=[index]))
+    return data
+
 # Creation of moving average with specific window and shift
 def CreateMovingAverage(data, window, shiftPeriods = 0):
     average = data.rolling(window=int(window),min_periods=1).mean()
