@@ -8,15 +8,16 @@ from lib.ReportSignals import *
 from lib.Stock import *
 
 # Creates MoneyFlow object
-def CreateMoneyFlow(high,low,close,volume,n = 14):
-    return MoneyFlow(high,low,close,volume,n)
+def CreateMoneyFlow(high,low,close,volume,info,n = 14):
+    return MoneyFlow(high,low,close,volume,info,n)
 
 
 # MoneyFlow object which creates MoneyFlow data
 class MoneyFlow:
 
-        def __init__(self, high, low, close, volume, n=14):
+        def __init__(self, high, low, close, volume, info, n=14):
             self.n              = n
+            self.info = info
             self.typicalPrice   = (high+low+close )/3
             self.moneyFlow, self.posFlow, self.negFlow, self.mfi    = self.InitMoneyFlow(self.typicalPrice, volume, n)
             # money on the market plot
@@ -66,8 +67,10 @@ class MoneyFlow:
 
         # Plot method
         def PlotMoneyFlow(self,ax):
-            ax2 = ax.twinx()
-            ax2.plot(self.moneyMarket.index, self.moneyMarket, '-.', label='Money on market' + str(self.n), linewidth=1.2, color = '#FF0000')
+            ax.plot(self.moneyMarket.index, self.moneyMarket, '-.', 
+                    label='Money on market' + str(self.n), linewidth=1.2, color = '#FF0000')
+            ax.tick_params(axis='y', labelcolor='tab:red')
+            plt.ylabel('Money on the market (%s)' % (self.info.GetCurrency()))
 
         # Plot method
         def PlotPosNegFlow(self):

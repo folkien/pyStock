@@ -197,7 +197,7 @@ bollinger        = CreateBollinger(closePrice)
 atr              = CreateATR(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 dmi              = CreateDMI(stockData.GetData('High'),stockData.GetData('Low'),atr.GetAtr())
 if (stockData.hasVolume()):
-    moneyflow        = CreateMoneyFlow(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'))
+    moneyflow        = CreateMoneyFlow(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'),info)
 
 # Export all signals to report
 alligator.ExportSignals(reportSignals)
@@ -358,10 +358,11 @@ if (stockData.hasVolume()):
     ### FIG 4
     fig = plt.figure(figsize=(16.0, 9.0))
 
-    # Bollinger with candleplot
+    # Create rows
     Rows=6
     gs = gridspec.GridSpec(Rows, 1)
     plot9=plt.subplot(gs[0:4])
+    # Bollinger with candleplot
     stockData.PlotCandle(plot9)
     stockData.PlotAssets()
     bollinger.Plot()
@@ -372,7 +373,9 @@ if (stockData.hasVolume()):
     plt.grid(b=True, which='major', axis='both',color='k')
     plt.grid(b=True, which='minor', axis='both')
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
-    moneyflow.PlotMoneyFlow(plot9)
+    plot9A = plot9.twinx()
+    moneyflow.PlotMoneyFlow(plot9A)
+    plt.legend(loc='upper left')
 
     # Money Flow
     plot10=plt.subplot(gs[Rows-2],sharex=plot9)
