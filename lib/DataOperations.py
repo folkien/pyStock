@@ -11,7 +11,7 @@ def CreateEmptyDataFrame():
     return pd.DataFrame()
 
 # Creates DataFrame line
-def CreateDataLine(indexes,startValue,endValue,allIndexes=False):
+def CreateHorizontalLine(indexes,startValue,endValue,allIndexes=False):
     data=pd.DataFrame()
     # Only start and begin
     if (allIndexes == False):

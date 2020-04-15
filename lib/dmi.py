@@ -60,7 +60,7 @@ class DMI:
         # Plot method
         def Plot(self):
             # Strong trend line ADX > 20
-            line20 = CreateDataLine(self.adx.index, 25, 25, True)
+            line20 = CreateHorizontalLine(self.adx.index, 25, 25, True)
             plt.plot(line20.index, line20, '--', label='ADX>20', 
                      linewidth=1.0, color = '#333333')
 

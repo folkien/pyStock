@@ -268,7 +268,6 @@ plt.legend(loc='upper left')
 if (stockData.hasVolume()):
     plot2A = plot2.twinx()
     plot2A.plot(obvTotal.index, obvTotal, label="OBV total")
-    plot2A.plot(obv.index, obv, 'r', label="")
     plot2A.legend(loc='upper left')
     plot2A.tick_params(axis='y', labelcolor='tab:red')
 

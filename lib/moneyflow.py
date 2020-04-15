@@ -86,21 +86,21 @@ class MoneyFlow:
             x_axis = self.mfi.index.get_level_values(0)
 
             #OverBought
-            overBought = CreateDataLine(self.mfi.index, 80, 80, True)
+            overBought = CreateHorizontalLine(self.mfi.index, 80, 80, True)
             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
 #             plt.fill_between(x_axis, self.mfi, overBought['value'], 
 #                              where=self.mfi>overBought.values,color='#ffb3b3')
             # OverBought - Gene Quong and Avrum Soudack
-            overBought = CreateDataLine(self.mfi.index, 90, 90)
+            overBought = CreateHorizontalLine(self.mfi.index, 90, 90)
             plt.plot(overBought.index, overBought, '--', linewidth=0.6, color = '#940006')
 
             #OverSold
-            overSold = CreateDataLine(self.mfi.index, 20, 20, True)
+            overSold = CreateHorizontalLine(self.mfi.index, 20, 20, True)
             plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
 #             plt.fill_between(x_axis, self.mfi, overSold['value'], 
 #                              where=self.mfi<overSold.values,color='#b3ffb3')
             # OverSold - Gene Quong and Avrum Soudack
-            overSold = CreateDataLine(self.mfi.index, 10, 10)
+            overSold = CreateHorizontalLine(self.mfi.index, 10, 10)
             plt.plot(overSold.index, overSold, '--', linewidth=0.6, color = '#169400')
 
 #             # Signals plottting

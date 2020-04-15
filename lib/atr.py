@@ -57,13 +57,13 @@ class ATR:
             plt.plot(self.atr.index, self.atr, label='ATR' + str(self.n), linewidth=1.0, color = '#000000')
 
             # Historic average
-#             hAverage = CreateDataLine(self.atr.index, 0, 0)
+#             hAverage = CreateHorizontalLine(self.atr.index, 0, 0)
 #             plt.plot(hAverage.index, hAverage, '--', label='H.Average', linewidth=1.0, color = '#333333')
 #             #OverBought
-#             overBought = CreateDataLine(self.atr.index, 100, 100)
+#             overBought = CreateHorizontalLine(self.atr.index, 100, 100)
 #             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
 #             #OverSold
-#             overSold = CreateDataLine(self.atr.index, -100, -100)
+#             overSold = CreateHorizontalLine(self.atr.index, -100, -100)
 #             plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
 # 
 #             # Signals plottting

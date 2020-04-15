@@ -66,18 +66,18 @@ class RSI:
         # Plot method
         def Plot(self):
             # Base 50% line
-            line50 = CreateDataLine(self.rsi.index, 50, 50)
+            line50 = CreateHorizontalLine(self.rsi.index, 50, 50)
             plt.plot(line50.index, line50, '-.', linewidth=1.0, color = '#333333')
             # RSI
             plt.plot(self.rsi.index, self.rsi, label='RSI'+str(self.n), linewidth=1.0, color = '#000000')
             x_axis = self.rsi.index.get_level_values(0)
             #OverBought
-            overBought = CreateDataLine(self.rsi.index, 70, 70,True)
+            overBought = CreateHorizontalLine(self.rsi.index, 70, 70,True)
             plt.plot(overBought.index, overBought, '--', label='Overbought', color = '#940006')
             plt.fill_between(x_axis, self.rsi, overBought['value'], 
                              where=self.rsi>=overBought['value'],color='#ffb3b3')
             #OverSold
-            overSold = CreateDataLine(self.rsi.index, 30, 30,True)
+            overSold = CreateHorizontalLine(self.rsi.index, 30, 30,True)
             plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#169400')
             plt.fill_between(x_axis, self.rsi, overSold['value'], 
                              where=self.rsi<=overSold['value'],color='#b3ffb3')

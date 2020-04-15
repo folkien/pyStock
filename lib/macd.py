@@ -43,7 +43,7 @@ class MACD:
         # Plot MACD
         def Plot(self):
             #Create ZeroLine
-            zeroLine = CreateDataLine(self.macd.index, 0, 0)
+            zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
 
             # Plot backgrounds
             x_axis = self.signal.index.get_level_values(0)
@@ -68,7 +68,7 @@ class MACD:
         # Plot Histogram
         def Histogram(self):
             #Create ZeroLine
-            zeroLine = CreateDataLine(self.macd.index, 0, 0)
+            zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
             plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
 
             plt.bar(self.hplus.index, self.hplus['value'],  color="green",label="Trend+")
