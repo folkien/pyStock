@@ -333,14 +333,14 @@ plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=Fal
 plot10=plt.subplot(gs[Rows-2],sharex=plot9)
 # atr.Plot()
 dmi.Plot()
-plt.legend(loc='best')
+plt.legend(loc='upper left')
 plt.grid()
 plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
 # CCI
 plot11=plt.subplot(gs[Rows-1],sharex=plot9)
 cci.Plot()
-plt.legend(loc='best')
+plt.legend(loc='upper left')
 plt.grid()
 plt.xticks(rotation=90)
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
@@ -380,14 +380,14 @@ if (stockData.hasVolume()):
     # Money Flow
     plot10=plt.subplot(gs[Rows-2],sharex=plot9)
     moneyflow.PlotPosNegFlow()
-    plt.legend(loc='best')
+    plt.legend(loc='upper left')
     plt.grid()
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
     # MFI
     plot11=plt.subplot(gs[Rows-1],sharex=plot9)
     moneyflow.Plot()
-    plt.legend(loc='best')
+    plt.legend(loc='upper left')
     plt.grid()
 
 # Plot to file or show
