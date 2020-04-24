@@ -83,7 +83,9 @@ class StockData:
             return receivedData
 
         def Report(self,f,interval):
-            if (interval=="weekly"):
+            if (interval=="daily"):
+                f.write("    * **%2.2f**%% return rate for last 7 days.\n" % (GetReturnRates(self.Data['Close'], 1)))
+            elif (interval=="weekly"):
                 # Get last range date
                 lastRangeDate  = self.endDate - datetime.timedelta(days=7)
                 lastRangeDate  = lastRangeDate.strftime("%Y-%m-%d")

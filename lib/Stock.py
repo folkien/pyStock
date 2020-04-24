@@ -52,6 +52,15 @@ def SetOBV(volumeTotal):
     return obvTotal
 
 """
+ Returns percent return rate for last N days.
+"""
+def GetReturnRates(price,days=1):
+    startPrice=price[-1-days]
+    endPrice  =price[-1]
+    return ((endPrice-startPrice)*100)/startPrice
+    
+
+"""
 Typical Price
 Source: https://en.wikipedia.org/wiki/Typical_price
 Params: 
