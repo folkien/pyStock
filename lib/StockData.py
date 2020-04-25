@@ -26,9 +26,7 @@ class StockData:
             # Typical price create
             self.data['Typical'] = (self.data['Close']+self.data['High']+self.data['Low'])/3
             # Volumen parse/create
-            self.volumeP, self.volumeN = self.InitVolume(self.data['Close'], self.data['Volume'])
-            self.volumeSubsetP = SetReindex(self.volumeP,beginDate,endDate,False) 
-            self.volumeSubsetN = SetReindex(self.volumeN,beginDate,endDate,False) 
+            self.data['VolumeP'], self.data['VolumeN'] = self.InitVolume(self.data['Close'], self.data['Volume'])
             # OBV create
             self.data['OBV'] = self.data.loc[::-1, 'Volume'].cumsum()[::-1]
             # Money on market create
@@ -211,15 +209,15 @@ class StockData:
         # Plot volume as bars
         def PlotVolume(self, ax):
             ax2 = ax.twinx()
-            ax2.bar(self.volumeSubsetP.index, self.volumeSubsetP, color="green",label="")
-            ax2.bar(self.volumeSubsetN.index, self.volumeSubsetN,color="red",label="")
+            ax2.bar(self.dataSubset['VolumeP'].index, self.dataSubset['VolumeP'], color="green",label="")
+            ax2.bar(self.dataSubset['VolumeN'].index, self.dataSubset['VolumeN'], color="red",label="")
             ax2.tick_params(axis='y', labelcolor='tab:red')
         
         # Plot volume as bars
         def PlotVolumeAll(self, ax):
             ax2 = ax.twinx()
-            ax2.bar(self.volumeP.index, self.volumeP, color="green",label="")
-            ax2.bar(self.volumeN.index, self.volumeN, color="red",label="")
+            ax2.bar(self.data['VolumeP'].index, self.data['VolumeP'], color="green",label="")
+            ax2.bar(self.data['VolumeN'].index, self.data['VolumeN'], color="red",label="")
             ax2.tick_params(axis='y', labelcolor='tab:red')
 
         # Plot money on the market
