@@ -19,15 +19,27 @@ class StockData:
         def __init__(self, stockCode, beginDate="1990-01-01", endDate=datetime.datetime.now().strftime("%Y-%m-%d")):
             self.assets      = []
             self.symbol      = "zł"
+            self.stockCode   = stockCode
+            # Data fetch/create
             self.data        = self.FetchData(stockCode,beginDate,endDate)
+            self.currentPrice= self.data['Close'][0]
+            # Typical price create
+            self.data['Typical'] = (self.data['Close']+self.data['High']+self.data['Low'])/3
+            # Volumen parse/create
             self.volumeP, self.volumeN = self.InitVolume(self.data['Close'], self.data['Volume'])
-            self.dataSubset  = SetReindex(self.data,beginDate,endDate)
             self.volumeSubsetP = SetReindex(self.volumeP,beginDate,endDate,False) 
             self.volumeSubsetN = SetReindex(self.volumeN,beginDate,endDate,False) 
-            self.stockCode   = stockCode
+            # OBV create
+            self.data['OBV'] = self.data.loc[::-1, 'Volume'].cumsum()[::-1]
+            # Money on market create
+            self.data['Money'] = self.data['Typical'] * self.data['Volume']
+            self.data['Money'] = self.data.loc[::-1, 'Money'].cumsum()[::-1]
+
+            # Create subset of data
+            self.dataSubset  = SetReindex(self.data,beginDate,endDate)
+            # Change dates 
             self.beginDate   = datetime.datetime.strptime(beginDate, "%Y-%m-%d")
             self.endDate     = datetime.datetime.strptime(endDate, "%Y-%m-%d")
-            self.currentPrice= self.data['Close'][0]
 
         # Change volumeTotal to neg/pos value
         def InitVolume(self, price, volume):
@@ -39,19 +51,19 @@ class StockData:
             volumePositive=pd.Series()
             volumeNegative=pd.Series()
 
-            lastPrice=price.values[-1]
-            # We start from end because data from Stooq is reversed
-            for i in reversed(range(1,len(price.values))):
-                # If price drop then volume wih minus value
-                if (lastPrice > price.values[i]):
+            # Data starts from oldest to youngest
+            for i in (range(0,len(price.values)-1)):
+                
+                # If price dropped, then volume - sign
+                if (price.values[i] < price.values[i+1]):
                     volumeNegative = volumeNegative.append(
                         pd.Series(volume.values[i],index=[volume.index[i]]))
                     volume.values[i]=-volume.values[i]
+                # If price rised, then volume + sign
                 else:
                     volumePositive = volumePositive.append(
                         pd.Series(volume.values[i],index=[volume.index[i]]))
 
-                lastPrice=price.values[i]
             
             return volumePositive, volumeNegative
 
@@ -209,6 +221,16 @@ class StockData:
             ax2.bar(self.volumeP.index, self.volumeP, color="green",label="")
             ax2.bar(self.volumeN.index, self.volumeN, color="red",label="")
             ax2.tick_params(axis='y', labelcolor='tab:red')
+
+        # Plot money on the market
+        def PlotMoneyOnMarket(self,ax):
+            ax.plot(self.dataSubset['Money'].index, self.dataSubset['Money'], '-.', 
+                    label='Money on market', linewidth=1.2, color = '#FF0000')
+
+        # Plot money on the market
+        def PlotMoneyOnMarketAll(self,ax):
+            ax.plot(self.data['Money'].index, self.data['Money'], '-.', 
+                    label='Money on market', linewidth=1.2, color = '#FF0000')
 
         # Plot all stock data
         def PlotCandleAll(self):

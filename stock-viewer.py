@@ -212,13 +212,13 @@ print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
 mins, maxs       = FindPeaks(closePrice, PriceRange/10)
 
 # Volume
-obvTotal    = SetOBV(stockData.GetAllData('Volume'))
+obvTotal    = stockData.GetAllData('OBV')
 volumeTotal = stockData.GetAllData('Volume')
 volume      = stockData.GetData('Volume')
-obv         = SetReindex(obvTotal,start_date,end_date)
+obv         = stockData.GetData('OBV')
 
 
-# 3. Plot data
+# PLOTS
 # #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
 
@@ -249,12 +249,13 @@ if (stockData.hasVolume()):
 # #####################################################
 if (stockData.hasVolume()):
     plot1B = plot1.twinx()
-    moneyflow.PlotMoneyOnMarket(plot1B)
+    stockData.PlotMoneyOnMarket(plot1B)
     plot1B.tick_params(axis='y', labelcolor='tab:red')
     plt.legend(loc='upper left')
 
 
-# Total close price
+# Price - ALL
+# #####################################################
 plot2=plt.subplot(222)
 stockData.PlotAll()
 stockData.PlotAllAssets()
@@ -268,13 +269,21 @@ plt.grid()
 plt.title("Price, OBV, MoneyOnMarket - alltime")
 plt.legend(loc='upper left')
 
-# OBV total
+# OBV - ALL
 # #####################################################
 if (stockData.hasVolume()):
     plot2A = plot2.twinx()
     plot2A.plot(obvTotal.index, obvTotal, label="OBV total")
     plot2A.legend(loc='upper left')
-    plot2A.tick_params(axis='y', labelcolor='tab:red')
+    plot2A.tick_params(axis='y', labelcolor='tab:blue')
+
+# Money on market - ALL
+# #####################################################
+if (stockData.hasVolume()):
+    plot2B = plot2.twinx()
+    stockData.PlotMoneyOnMarketAll(plot2B)
+    plot2B.tick_params(axis='y', labelcolor='tab:red')
+    plt.legend(loc='upper left')
 
 # Plot to file
 if (args.plotToFile):

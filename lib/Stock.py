@@ -40,17 +40,6 @@ def SetVolumeWithTrend(price,volumeTotal):
         lastPrice=price.values[i]
 
 
-# Calculate OBV index thanks to the volumeTotal
-def SetOBV(volumeTotal):
-    lastOBV=0
-    obvTotal=copy.deepcopy(volumeTotal)
-
-    for i in reversed(range(len(volumeTotal.values))):
-        lastOBV+=volumeTotal.values[i]
-        obvTotal.values[i] = lastOBV
-
-    return obvTotal
-
 """
  Returns percent return rate for last N days.
 """
@@ -73,7 +62,5 @@ Returns:
     copy of 'data' DataFrame with 'typical_price' column added
 """
 def typical_price(data, high_col = 'High', low_col = 'Low', close_col = 'Close'):
-    
     data['typical_price'] = (data[high_col] + data[low_col] + data[close_col]) / 3
-
     return data
