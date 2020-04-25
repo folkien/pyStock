@@ -198,7 +198,7 @@ bollinger        = CreateBollinger(closePrice)
 atr              = CreateATR(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'))
 dmi              = CreateDMI(stockData.GetData('High'),stockData.GetData('Low'),atr.GetAtr())
 if (stockData.hasVolume()):
-    moneyflow        = CreateMoneyFlow(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'),info)
+    mfi        = CreateMoneyFlowIndex(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'),info)
 
 # Export all signals to report
 alligator.ExportSignals(reportSignals)
@@ -392,21 +392,21 @@ if (stockData.hasVolume()):
     plt.grid(b=True, which='minor', axis='both')
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
     plot9A = plot9.twinx()
-    moneyflow.PlotMoneyOnMarket(plot9A)
+    stockData.PlotMoneyOnMarket(plot9A)
     plot9.tick_params(axis='y', labelcolor='tab:red')
     plt.ylabel('Money on the market (%s)' % (info.GetCurrency()))
     plt.legend(loc='upper left')
 
     # Money Flow
     plot10=plt.subplot(gs[Rows-2],sharex=plot9)
-    moneyflow.PlotPosNegFlow()
+    mfi.PlotPosNegFlow()
     plt.legend(loc='upper left')
     plt.grid()
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
 
     # MFI
     plot11=plt.subplot(gs[Rows-1],sharex=plot9)
-    moneyflow.Plot()
+    mfi.Plot()
     plt.legend(loc='upper left')
     plt.grid()
 

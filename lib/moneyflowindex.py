@@ -7,13 +7,13 @@ from lib.DataOperations import *
 from lib.ReportSignals import *
 from lib.Stock import *
 
-# Creates MoneyFlow object
-def CreateMoneyFlow(high,low,close,volume,info,n = 14):
-    return MoneyFlow(high,low,close,volume,info,n)
+# Creates MoneyFlowIndex object
+def CreateMoneyFlowIndex(high,low,close,volume,info,n = 14):
+    return MoneyFlowIndex(high,low,close,volume,info,n)
 
 
-# MoneyFlow object which creates MoneyFlow data
-class MoneyFlow:
+# MoneyFlowIndex object which creates MoneyFlowIndex data
+class MoneyFlowIndex:
 
         def __init__(self, high, low, close, volume, info, n=14):
             self.n              = n
@@ -38,7 +38,7 @@ class MoneyFlow:
         def GetMoneyFlow(self):
             return self.MoneyFlow
 
-        # Set MoneyFlow indicator
+        # Set MoneyFlowIndex indicator
         def InitMoneyFlow(self, tp, volume, n):
             moneyFlow = tp * volume
             posFlow = pd.Series()
@@ -66,22 +66,17 @@ class MoneyFlow:
             reportSignals.AddDataframeSignals(self.sellStrong,"MFI","sellStrong")
 
         # Plot method
-        def PlotMoneyOnMarket(self,ax):
-            ax.plot(self.moneyMarket.index, self.moneyMarket, '-.', 
-                    label='Money on market' + str(self.n), linewidth=1.2, color = '#FF0000')
-
-        # Plot method
         def PlotPosNegFlow(self):
             plt.bar(self.negFlow.index, self.negFlow, color="red",label="")
             plt.bar(self.posFlow.index, self.posFlow, color="green",label="")
-            # MoneyFlow
+            # MoneyFlowIndex
 #             plt.plot(self.posFlow.index, self.posFlow, label='PosFlow' + str(self.n), linewidth=1.0, color = 'green')
 #             plt.plot(self.negFlow.index, self.negFlow, label='NegFlow' + str(self.n), linewidth=1.0, color = 'red')
 
 
         # Plot method
         def Plot(self):
-            # MoneyFlow
+            # MoneyFlowIndex
             plt.plot(self.mfi.index, self.mfi, label='MFI' + str(self.n), linewidth=1.0, color = '#000000')
             x_axis = self.mfi.index.get_level_values(0)
 
