@@ -34,6 +34,16 @@ def CreateVerticalLine(index,startValue,endValue):
     data = data.append(pd.DataFrame({'value':endValue},index=[index]))
     return data
 
+# Creates DataFrame rect
+def CreateRect(index1,value1,index2,value2):
+    data=pd.DataFrame()
+    data = data.append(pd.DataFrame({'value':value1},index=[index1]))
+    data = data.append(pd.DataFrame({'value':value2},index=[index1]))
+    data = data.append(pd.DataFrame({'value':value2},index=[index2]))
+    data = data.append(pd.DataFrame({'value':value1},index=[index2]))
+    data = data.append(pd.DataFrame({'value':value1},index=[index1]))
+    return data
+
 # Creation of moving average with specific window and shift
 def CreateMovingAverage(data, window, shiftPeriods = 0):
     average = data.rolling(window=int(window),min_periods=1).mean()

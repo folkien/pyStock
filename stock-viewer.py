@@ -258,10 +258,11 @@ if (stockData.hasVolume()):
 plot2=plt.subplot(222)
 stockData.PlotAll()
 stockData.PlotAllAssets()
-line = CreateVerticalLine(datetime.datetime.strptime(start_date, "%Y-%m-%d"), 
+rect = CreateRect(datetime.datetime.strptime(start_date, "%Y-%m-%d"), 
                           stockData.GetAllData('Close').max(), 
+                          datetime.datetime.strptime(end_date, "%Y-%m-%d"),
                           stockData.GetAllData('Close').min())
-plt.plot(line.index, line, "--", linewidth=1.2, color="#FF0000")
+plt.plot(rect.index, rect, "--", linewidth=1.2, color="#FF0000")
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title("Price, OBV, MoneyOnMarket - alltime")
@@ -279,7 +280,7 @@ if (stockData.hasVolume()):
 if (args.plotToFile):
     PlotSave(fig)
 
-### Show Standard deviatio
+### 
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Total close price
