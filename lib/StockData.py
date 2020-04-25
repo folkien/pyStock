@@ -58,7 +58,11 @@ class StockData:
         # Returns current close price
         def GetCurrentPrice(self):
             return self.currentPrice
-
+    
+        # Returns current close price
+        def GetReturnRates(self,days):
+            return GetReturnRates(self.Data['Close'],days)
+    
         # Returns current close price
         def GetStockCode(self):
             return self.stockCode
@@ -84,7 +88,7 @@ class StockData:
 
         def Report(self,f,interval):
             if (interval=="daily"):
-                f.write("    * **%2.2f**%% return rate for last 7 days.\n" % (GetReturnRates(self.Data['Close'], 1)))
+                f.write("    * **%2.2f**%% daily change.\n" % (GetReturnRates(self.Data['Close'], 1)))
             elif (interval=="weekly"):
                 # Get last range date
                 lastRangeDate  = self.endDate - datetime.timedelta(days=7)
