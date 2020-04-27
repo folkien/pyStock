@@ -3,6 +3,7 @@
 # -
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
+from scipy import signal
 import numpy
 from numpy import NaN
 
@@ -138,23 +139,15 @@ def FindIntersections(x,y):
 
     return fromBottom, fromTop
 
-def FindMaxPeaks(data):
-    from scipy import signal
-    import numpy as np
+def FindMaxPeaks(data, n=7):
+#     maxs = data.iloc[argrelextrema(data.data.values, np.greater_equal, order=n)[0]]['data']
+    maxs = data.iloc[signal.argrelextrema(data.values, numpy.greater_equal, order=n)[0]]
+    return maxs
 
-    # Find peaks(max).
-    peak_indexes = signal.argrelextrema(data_y, np.greater)
-    peak_indexes = peak_indexes[0]
-    return peak_indexes
-
-def FindMinPeaks(data):
-    from scipy import signal
-    import numpy as np
-
-    # Find peaks(max).
-    peak_indexes = signal.argrelextrema(data_y, np.less)
-    peak_indexes = peak_indexes[0]
-    return peak_indexes
+def FindMinPeaks(data,n=7):
+#     mins = data.iloc[argrelextrema(data.data.values, np.less_equal, order=n)[0]]['data']
+    mins = data.iloc[signal.argrelextrema(data.values, numpy.less_equal, order=n)[0]]
+    return mins
 
 def FindPeaks(data, delta):
     maxs=pd.DataFrame()
