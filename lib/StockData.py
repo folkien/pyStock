@@ -89,29 +89,32 @@ class StockData:
 
         # Get data from URL/database
         def FetchData(self,stockCode,beginDate,endDate):
-            receivedData = ""
+            data = ""
 
             # Read from database if exists today file
-            if (len(receivedData)==0) and (self.cache.IsOfToday(stockCode) == True):
+            if (len(data)==0) and (self.cache.IsOfToday(stockCode) == True):
                 print("Restoring today cache...")
-                receivedData = self.cache.Load(stockCode)
+                data = self.cache.Load(stockCode)
 
             # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-            if (len(receivedData)==0):
+            if (len(data)==0):
                 print("Fetching `%s` from stooq." % (stockCode))
-                receivedData = data.DataReader(stockCode, 'stooq', beginDate, endDate)
+                data = data.DataReader(stockCode, 'stooq', beginDate, endDate)
 
             # Use old data if exists
-            if (len(receivedData)==0) and (self.cache.IsExists(stockCode) == True):
+            if (len(data)==0) and (self.cache.IsExists(stockCode) == True):
                     print("Restoring old data...")
-                    receivedData = self.cache.Load(stockCode)
+                    data = self.cache.Load(stockCode)
 
             # No data at all
-            if (len(receivedData)==0):
+            if (len(data)==0):
                 print("'No Stooq'/'Empty Database' data for entry %s!" % (stockCode))
                 sys.exit(1)
+                
+            # If data is fetched well then store it inside database
+            self.cache.Save(stockCode,data)
 
-            return receivedData
+            return data
 
         def Report(self,f,interval):
             if (interval=="daily"):
