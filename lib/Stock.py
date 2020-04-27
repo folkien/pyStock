@@ -8,6 +8,7 @@ from lib.macd import *
 from lib.atr import *
 from lib.dmi import *
 from lib.moneyflowindex import *
+from lib.cmf import *
 from lib.bollinger import *
 from lib.WilliamsAlligator import *
 from lib.StockData import *
