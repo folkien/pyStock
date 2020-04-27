@@ -20,20 +20,16 @@ class ChaikinMoneyFlow:
             self.info = info
             self.cmf, self.cosc = self.Init(high, low, close, volume, n)
 
-            # Signals
-            fromBottom,fromTop=FindIntersections(self.mfi,20)
-            self.buy  = fromBottom
-            fromBottom,fromTop=FindIntersections(self.mfi,80)
-            self.sell = fromTop
-            # TrenToFall / TrendToRise
-            fromBottom,fromTop=FindIntersections(self.mfi,10)
-            self.buyStrong  = fromBottom
-            fromBottom,fromTop=FindIntersections(self.mfi,90)
-            self.sellStrong = fromTop
-
-        # returns AverageTrueRange
-        def GetMoneyFlow(self):
-            return self.MoneyFlow
+#             # Signals
+#             fromBottom,fromTop=FindIntersections(self.mfi,20)
+#             self.buy  = fromBottom
+#             fromBottom,fromTop=FindIntersections(self.mfi,80)
+#             self.sell = fromTop
+#             # TrenToFall / TrendToRise
+#             fromBottom,fromTop=FindIntersections(self.mfi,10)
+#             self.buyStrong  = fromBottom
+#             fromBottom,fromTop=FindIntersections(self.mfi,90)
+#             self.sellStrong = fromTop
 
         # Set Chaikin MoneyFlow and Chaikin oscillator
         def Init(self, high, low, close, volume, n):
@@ -53,50 +49,72 @@ class ChaikinMoneyFlow:
             return cmf, cosc 
 
         # Export indicator signals to report
-        def ExportSignals(self, reportSignals):
-            reportSignals.AddDataframeSignals(self.buy, "MFI","buy")
-            reportSignals.AddDataframeSignals(self.sell,"MFI","sell")
-            reportSignals.AddDataframeSignals(self.buyStrong, "MFI","buyStrong")
-            reportSignals.AddDataframeSignals(self.sellStrong,"MFI","sellStrong")
+#         def ExportSignals(self, reportSignals):
+#             reportSignals.AddDataframeSignals(self.buy, "MFI","buy")
+#             reportSignals.AddDataframeSignals(self.sell,"MFI","sell")
+#             reportSignals.AddDataframeSignals(self.buyStrong, "MFI","buyStrong")
+#             reportSignals.AddDataframeSignals(self.sellStrong,"MFI","sellStrong")
 
-        # Plot method
-        def Plot(self):
-            # MoneyFlowIndex
-            plt.plot(self.mfi.index, self.mfi, label='MFI' + str(self.n), linewidth=1.0, color = '#000000')
-            x_axis = self.mfi.index.get_level_values(0)
+        # Plot Chaikin money flow 
+        def PlotChaikinMoneyFlow(self):
+            plt.plot(self.cmf.index, self.cmf, label='CMF' + str(self.n), linewidth=1.0, color = '#000000')
+            x_axis = self.cmf.index.get_level_values(0)
 
-            #OverBought
-            overBought = CreateHorizontalLine(self.mfi.index, 80, 80, True)
-            plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')
-#             plt.fill_between(x_axis, self.mfi, overBought['value'], 
-#                              where=self.mfi>overBought.values,color='#ffb3b3')
-            # OverBought - Gene Quong and Avrum Soudack
-            overBought = CreateHorizontalLine(self.mfi.index, 90, 90)
-            plt.plot(overBought.index, overBought, '--', linewidth=0.6, color = '#940006')
+            # over > 0 is rising/bullish
+            lineZero = CreateHorizontalLine(self.cmf.index, 0, 0, True)
+            plt.fill_between(x_axis, self.cmf, lineZero['value'], 
+                             where=self.cmf>0,color='#b3ffb3')
+            # over > 0 is falling/bearish
+            plt.fill_between(x_axis, self.cmf, lineZero['value'], 
+                             where=self.cmf<0,color='#ffb3b3')
 
-            #OverSold
-            overSold = CreateHorizontalLine(self.mfi.index, 20, 20, True)
-            plt.plot(overSold.index, overSold, '--', label='Oversold', linewidth=1.0, color = '#169400')
-#             plt.fill_between(x_axis, self.mfi, overSold['value'], 
-#                              where=self.mfi<overSold.values,color='#b3ffb3')
-            # OverSold - Gene Quong and Avrum Soudack
-            overSold = CreateHorizontalLine(self.mfi.index, 10, 10)
-            plt.plot(overSold.index, overSold, '--', linewidth=0.6, color = '#169400')
 
-#             # Signals plottting
-            if (self.buy is not None and self.buy.size):
-                plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
-                plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
-            if (self.buyStrong is not None and self.buyStrong.size):
-                plt.plot(self.buyStrong.index, self.buyStrong, 's', color = '#000000', ms=8)
-                plt.plot(self.buyStrong.index, self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
-            if (self.sell is not None and self.sell.size):
-                plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
-                plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
-            if (self.sellStrong is not None and self.sellStrong.size):
-                plt.plot(self.sellStrong.index, self.sellStrong, 's', color = '#000000', ms=8)
-                plt.plot(self.sellStrong.index, self.sellStrong, 's', label='SellStrong', color = '#FF0000')
+# #             # Signals plottting
+#             if (self.buy is not None and self.buy.size):
+#                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
+#             if (self.buyStrong is not None and self.buyStrong.size):
+#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
+#             if (self.sell is not None and self.sell.size):
+#                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
+#             if (self.sellStrong is not None and self.sellStrong.size):
+#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', label='SellStrong', color = '#FF0000')
 
             # Limits of plot
-            plt.ylim(top=100,bottom=0)
+            plt.ylim(top=1,bottom=-1)
+
+        # Plot chaikin oscillator
+        def PlotChaikinOscillator(self):
+            # 
+            plt.plot(self.cosc.index, self.cosc, label='CHAIKIN' + str(self.n), linewidth=1.0, color = '#000000')
+            x_axis = self.cosc.index.get_level_values(0)
+
+            # over > 0 is rising/bullish
+            lineZero = CreateHorizontalLine(self.cosc.index, 0, 0, True)
+            plt.fill_between(x_axis, self.cosc, lineZero['value'], 
+                             where=self.cosc>0,color='#b3ffb3')
+            # over > 0 is falling/bearish
+            plt.fill_between(x_axis, self.cosc, lineZero['value'], 
+                             where=self.cosc<0,color='#ffb3b3')
+
+
+#             # Signals plottting
+#             if (self.buy is not None and self.buy.size):
+#                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
+#             if (self.buyStrong is not None and self.buyStrong.size):
+#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
+#             if (self.sell is not None and self.sell.size):
+#                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
+#             if (self.sellStrong is not None and self.sellStrong.size):
+#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', label='SellStrong', color = '#FF0000')
+
+            # Limits of plot
+#             plt.ylim(top=100,bottom=0)
 

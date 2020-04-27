@@ -199,6 +199,7 @@ atr              = CreateATR(stockData.GetData('High'),stockData.GetData('Low'),
 dmi              = CreateDMI(stockData.GetData('High'),stockData.GetData('Low'),atr.GetAtr())
 if (stockData.hasVolume()):
     mfi        = CreateMoneyFlowIndex(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'),info)
+    cmf        = CreateChaikinMoneyFlow(stockData.GetData('High'),stockData.GetData('Low'),stockData.GetData('Close'),stockData.GetData('Volume'),info)
 
 # Export all signals to report
 alligator.ExportSignals(reportSignals)
@@ -397,9 +398,10 @@ if (stockData.hasVolume()):
     plt.ylabel('Money on the market (%s)' % (info.GetCurrency()))
     plt.legend(loc='upper left')
 
-    # Money Flow
+    # CMF
     plot10=plt.subplot(gs[Rows-2],sharex=plot9)
-    mfi.PlotPosNegFlow()
+    cmf.PlotChaikinMoneyFlow()
+#     cmf.PlotChaikinOscillator()    
     plt.legend(loc='upper left')
     plt.grid()
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
