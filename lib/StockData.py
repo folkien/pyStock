@@ -12,6 +12,7 @@ from mpl_finance import candlestick2_ohlc
 from mpl_finance import candlestick_ohlc
 from lib.DataOperations import *
 from lib.assets import *
+from lib.database import *
 
 # StockData object which creates StockData data
 class StockData:
@@ -21,6 +22,7 @@ class StockData:
             self.symbol      = "zł"
             self.stockCode   = stockCode
             # Data fetch/create
+            self.cache       = StockDatabase()
             self.data        = self.FetchData(stockCode,beginDate,endDate)
             self.currentPrice= self.data['Close'][0]
             # Typical price create
@@ -85,13 +87,20 @@ class StockData:
         def SetCurrencySymbol(self,symbol):
             self.symbol = symbol
 
-        # Get DATA from URL
-        # User pandas_reader.data.DataReader to load the desired data. As simple as that.
+        # Get data from URL/database
         def FetchData(self,stockCode,beginDate,endDate):
+            # User pandas_reader.data.DataReader to load the desired data. As simple as that.
             receivedData = data.DataReader(stockCode, 'stooq', beginDate, endDate)
 
-            if len(receivedData) == 0:
-                print("No Stooq data for entry %s!" % (stockCode))
+            # Data from URL
+            if len(receivedData) != 0:
+                print("Fetched %s from stooq." % (stockCode))
+            # Data from Database
+            elif (self.cache.IsExists(stockCode) == True):
+                receivedData = self.cache.Load(stockCode)
+            # Missing data
+            else:
+                print("No Stooq/Database data for entry %s!" % (stockCode))
                 sys.exit(1)
 
             return receivedData
