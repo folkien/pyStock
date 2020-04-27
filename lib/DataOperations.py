@@ -199,8 +199,18 @@ def FindPeaks(data, delta):
 
     return mins, maxs
 
-def FindUptrend(data):
+# Uptrend calculation is based on mins
+def FindUptrends(data):
+    uptrends=[]
+    mins = FindMinPeaks(data)
+
+    # Find rising series. Start from end
+#     for i in range(len(data.values)):
+    # Calculate regression line most fitting.
+    # If some point is far away from line then drop it.
+    # Add to data.
     return 0
 
-def FindDowntrend(data):
+# Downtrend calculation is based on maxs
+def FindDowntrends(data):
     return 0
