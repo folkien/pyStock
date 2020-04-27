@@ -138,6 +138,23 @@ def FindIntersections(x,y):
 
     return fromBottom, fromTop
 
+def FindMaxPeaks(data):
+    from scipy import signal
+    import numpy as np
+
+    # Find peaks(max).
+    peak_indexes = signal.argrelextrema(data_y, np.greater)
+    peak_indexes = peak_indexes[0]
+    return peak_indexes
+
+def FindMinPeaks(data):
+    from scipy import signal
+    import numpy as np
+
+    # Find peaks(max).
+    peak_indexes = signal.argrelextrema(data_y, np.less)
+    peak_indexes = peak_indexes[0]
+    return peak_indexes
 
 def FindPeaks(data, delta):
     maxs=pd.DataFrame()
@@ -188,3 +205,9 @@ def FindPeaks(data, delta):
         loopIteration+=1
 
     return mins, maxs
+
+def FindUptrend(data):
+    return 0
+
+def FindDowntrend(data):
+    return 0
