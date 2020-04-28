@@ -400,8 +400,8 @@ if (stockData.hasVolume()):
 
     # CMF
     plot10=plt.subplot(gs[Rows-2],sharex=plot9)
-    cmf.PlotChaikinMoneyFlow()
-#     cmf.PlotChaikinOscillator()    
+#     cmf.PlotChaikinMoneyFlow()
+    cmf.PlotChaikinOscillator()    
     plt.legend(loc='upper left')
     plt.grid()
     plt.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False) 
