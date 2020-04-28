@@ -15,10 +15,18 @@
 
 # https://www.investopedia.com/terms/c/chaikinoscillator.asp
 # Example of How to Use the Chaikin Oscillator
-# The purpose of the Chaikin oscillator is to identify underlying momentum during fluctuations in accumulation-distribution. Specifically, it applies the MACD indicator to accumulation-distribution rather than closing prices.
-# For example, a trader wants to determine whether a stock price is more likely to go up or to fall and MACD is trending higher. The Chaikin oscillator generates a bullish divergence when it crosses above a baseline. The baseline is called the accumulation-distribution line. A cross above that line indicates that traders are accumulating, which is typically bullish.
-# The Chaikin oscillator utilizes two primary buy and sell signals. First, a positive divergence is confirmed with a center-line crossover above the accumulation-distribution line. signaling a potential buying opportunity.. Second, a negative divergence is confirmed with a center-line crossover below the accumulation-distribution line., signaling a potential selling opportunity
-# A positive divergence signals a stock price is likely to rise, given the increase in accumulation. A negative divergence signals a stock price is likely to fall, given the increase in distribution.
+# The purpose of the Chaikin oscillator is to identify underlying momentum during fluctuations in accumulation-distribution. 
+# Specifically, it applies the MACD indicator to accumulation-distribution rather than closing prices.
+# For example, a trader wants to determine whether a stock price is more likely to go up or to fall and MACD is trending higher.
+# Bullish/Bearish
+# The Chaikin oscillator generates a bullish divergence when it crosses above a baseline. The baseline is called the 
+# accumulation-distribution line. A cross above that line indicates that traders are accumulating, which is typically bullish.
+# Buy/Sell
+# The Chaikin oscillator utilizes two primary buy and sell signals. First, a positive divergence is confirmed with a center-line 
+# crossover above the accumulation-distribution line. signaling a potential buying opportunity.. Second, a negative divergence 
+# is confirmed with a center-line crossover below the accumulation-distribution line., signaling a potential selling opportunity
+# A positive divergence signals a stock price is likely to rise, given the increase in accumulation. A negative divergence
+# signals a stock price is likely to fall, given the increase in distribution.
 
 # Add import from parent directory possible
 import sys
@@ -42,16 +50,8 @@ class ChaikinMoneyFlow:
             self.info = info
             self.cmf, self.cosc = self.Init(high, low, close, volume, n)
 
-#             # Signals
-#             fromBottom,fromTop=FindIntersections(self.mfi,20)
-#             self.buy  = fromBottom
-#             fromBottom,fromTop=FindIntersections(self.mfi,80)
-#             self.sell = fromTop
-#             # TrenToFall / TrendToRise
-#             fromBottom,fromTop=FindIntersections(self.mfi,10)
-#             self.buyStrong  = fromBottom
-#             fromBottom,fromTop=FindIntersections(self.mfi,90)
-#             self.sellStrong = fromTop
+            # Signals Chaikin Oscillator Bullish/Bearish. Crossings.
+            self.toRise, self.toFall = FindIntersections(self.cosc,0)
 
         # Set Chaikin MoneyFlow and Chaikin oscillator
         def Init(self, high, low, close, volume, n):
@@ -118,9 +118,18 @@ class ChaikinMoneyFlow:
             lineZero = CreateHorizontalLine(self.cosc.index, 0, 0, True)
             plt.fill_between(x_axis, self.cosc, lineZero['value'], 
                              where=self.cosc>0,color='#b3ffb3')
-            # over > 0 is falling/bearish
+            # Crossings trend change, to Rise
+            if (self.toRise.size):
+                plt.plot(self.toRise.index, self.toRise, 's', color = '#000000', ms=8)
+                plt.plot(self.toRise.index, self.toRise, 's', label='ToRise', color = '#b3ffb3')
+
+            # under < 0 is falling/bearish
             plt.fill_between(x_axis, self.cosc, lineZero['value'], 
                              where=self.cosc<0,color='#ffb3b3')
+            # Crossings trend change, to Fall
+            if (self.toFall.size):
+                plt.plot(self.toFall.index, self.toFall, 's', color = '#000000', ms=8)
+                plt.plot(self.toFall.index, self.toFall, 's', label='ToFall', color = '#ffb3b3')
 
 
 #             # Signals plottting
