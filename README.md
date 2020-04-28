@@ -112,6 +112,15 @@ Plot Apple last 6M to file
 ![image](doc/AAPL.US_2.png)
 ![image](doc/AAPL.US_3.png)
 
+Plot BTC/USD last 6M to file (no volume indicators)
+```bash
+./stock-viewer.py -n BTCUSD.pl -6M -g
+```
+
+![image](doc/BTCUSD.pl_1.png)
+![image](doc/BTCUSD.pl_2.png)
+![image](doc/BTCUSD.pl_3.png)
+
 Last year of google with markdown reports into report.md
 ```bash
 ./stock-viewer.py -n GOOG.US -Y -r
