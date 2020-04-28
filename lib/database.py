@@ -21,10 +21,9 @@ class StockDatabase(object):
     def Save(self,objectName,object):
         filepath=self.directory+objectName+".bin"
         with FileLock(filepath+".lock",timeout=lockTimeout):
-            if os.path.isfile(filepath):
-                with open(filepath, 'wb') as f:
-                    pickle.dump(object,f)
-                    print("Saved %s.bin." % (objectName))
+            with open(filepath, 'wb') as f:
+                pickle.dump(object,f)
+                print("Saved %s.bin." % (objectName))
 
     # Load object in database
     def Load(self,objectName):
