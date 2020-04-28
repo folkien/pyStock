@@ -71,6 +71,6 @@ class MACD:
             zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
             plt.plot(zeroLine.index,zeroLine,'--',color='#777777')
 
-            plt.bar(self.hplus.index, self.hplus['value'],  color="green",label="Trend+")
-            plt.bar(self.hminus.index, self.hminus['value'],color="red",label="Trend-")
+            plt.bar(self.hplus.index, self.hplus['value'],  color="green")
+            plt.bar(self.hminus.index, self.hminus['value'],color="red")
 

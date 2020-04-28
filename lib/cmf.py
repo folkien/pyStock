@@ -121,7 +121,7 @@ class ChaikinMoneyFlow:
             # Crossings trend change, to Rise
             if (self.toRise.size):
                 plt.plot(self.toRise.index, self.toRise, 's', color = '#000000', ms=8)
-                plt.plot(self.toRise.index, self.toRise, 's', label='ToRise', color = '#b3ffb3')
+                plt.plot(self.toRise.index, self.toRise, 's', label='ToRise', color = '#00ff00')
 
             # under < 0 is falling/bearish
             plt.fill_between(x_axis, self.cosc, lineZero['value'], 
@@ -129,7 +129,7 @@ class ChaikinMoneyFlow:
             # Crossings trend change, to Fall
             if (self.toFall.size):
                 plt.plot(self.toFall.index, self.toFall, 's', color = '#000000', ms=8)
-                plt.plot(self.toFall.index, self.toFall, 's', label='ToFall', color = '#ffb3b3')
+                plt.plot(self.toFall.index, self.toFall, 's', label='ToFall', color = '#ff0000')
 
 
 #             # Signals plottting

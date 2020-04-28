@@ -43,12 +43,12 @@ class CCI:
         def Plot(self):
             # CCI
             plt.plot(self.cci.index, self.cci, label='CCI' + str(self.n), linewidth=1.0, color = '#000000')
-            plt.plot(self.cciSignal.index, self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
+#             plt.plot(self.cciSignal.index, self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
             x_axis = self.cci.index.get_level_values(0)
 
             # Historic average
             hAverage = CreateHorizontalLine(self.cci.index, 0, 0)
-            plt.plot(hAverage.index, hAverage, '--', label='H.Average', linewidth=1.0, color = '#333333')
+            plt.plot(hAverage.index, hAverage, '--', linewidth=1.0, color = '#333333')
             #OverBought
             overBought = CreateHorizontalLine(self.cci.index, 100, 100,True)
             plt.plot(overBought.index, overBought, '--', label='Overbought', linewidth=1.0, color = '#940006')

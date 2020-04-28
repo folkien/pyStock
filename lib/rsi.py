@@ -81,12 +81,6 @@ class RSI:
             plt.plot(overSold.index, overSold, '--', label='Oversold', color = '#169400')
             plt.fill_between(x_axis, self.rsi, overSold['value'], 
                              where=self.rsi<=overSold['value'],color='#b3ffb3')
-            # Buy
-            if (self.notSellSignal.size):
-                plt.plot(self.notSellSignal.index, self.notSellSignal, 'x', label='NotSell', color = '#00FF00')
-            # Sell
-            if (self.notBuySignal.size):
-                plt.plot(self.notBuySignal.index, self.notBuySignal, '*', label='NotBuy', color = '#FF0000')
             # Trend to Fall
             if (self.trendToFall.size):
                 plt.plot(self.trendToFall.index, self.trendToFall, '*', label='ToFall', color = '#FFFF00')
@@ -96,6 +90,6 @@ class RSI:
             # May buy 50
             if (self.fromBottom50.size):
                 plt.plot(self.fromBottom50.index, self.fromBottom50, 'go', label='MayBuy')
-            # May sell 50
+
             plt.ylim(top=100,bottom=0)
 
