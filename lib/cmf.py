@@ -1,3 +1,25 @@
+# https://www.tradingview.com/wiki/Chaikin_Money_Flow_(CMF)
+# Chaikin money flow 
+# Chaikin believed that buying and selling pressures could be determined by where a period closes in relation to its high/low range. If the period closes in the upper half of the range, then buying pressure is higher and if the period closes in the lower half of the range, then selling pressure is higher. This is what the Money Flow Multiplier determines (step 1 in the calculation above). The Money Flow Multiplier is what determines The Money Flow Volume and therefore, ultimately Chaikin Money Flow (CMF).
+# Chaikin's Money Flow's value fluctuates between 1 and -1. The basic interpretation is:
+#     When CMF is closer to 1, buying pressure is higher.
+#     When CMF is closer to -1, selling pressure is higher.
+# Buying and Selling Pressure can be a good way to confirm an ongoing trend. This can give the trader an added level of confidence that the current trend is likely to continue.
+# During a Bullish Trend, continuous Buying Pressure (Chaikin Money Flow values above 0) can indicate that prices will continue to rise.
+# During a Bearish Trend, continuous Selling Pressure (Chaikin Money Flow values below 0) can indicate that prices will continue to fall. 
+# When Chaikin Money Flow crosses the Zero Line, this can be an indication that there is an impending trend reversal.
+# Bullish Crosses occur when Chaikin Money Flow crosses from below the Zero Line to above the Zero Line. Price then rises. 
+# Bearish Crosses occur when Chaikin Money Flow crosses from above the Zero Line to below the Zero Line. Price then falls.
+# It should be noted that brief crosses can occur resulting in false signals. The best way to avoid these false signals is by examining past performance for the particular security that is being analyzed and even adjusting the thresholds accordingly. For example, instead of a Zero Line Cross, a technical analyst may use two separate lines such as .05 and -.05.
+# Chaikin Money Flow does have a shortfall in its calculation. The shortfall is that the Money Flow Multiplier, which plays into determining Money Flow Volume and therefore Chaikin Money Flow values, does not take into account the change in trading range between periods. This means that if there is any type of gap in price, it won’t be picked up on and therefore Chaikin Money Flow and price will become out of synch. 
+
+# https://www.investopedia.com/terms/c/chaikinoscillator.asp
+# Example of How to Use the Chaikin Oscillator
+# The purpose of the Chaikin oscillator is to identify underlying momentum during fluctuations in accumulation-distribution. Specifically, it applies the MACD indicator to accumulation-distribution rather than closing prices.
+# For example, a trader wants to determine whether a stock price is more likely to go up or to fall and MACD is trending higher. The Chaikin oscillator generates a bullish divergence when it crosses above a baseline. The baseline is called the accumulation-distribution line. A cross above that line indicates that traders are accumulating, which is typically bullish.
+# The Chaikin oscillator utilizes two primary buy and sell signals. First, a positive divergence is confirmed with a center-line crossover above the accumulation-distribution line. signaling a potential buying opportunity.. Second, a negative divergence is confirmed with a center-line crossover below the accumulation-distribution line., signaling a potential selling opportunity
+# A positive divergence signals a stock price is likely to rise, given the increase in accumulation. A negative divergence signals a stock price is likely to fall, given the increase in distribution.
+
 # Add import from parent directory possible
 import sys
 import pandas as pd
