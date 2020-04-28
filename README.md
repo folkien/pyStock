@@ -15,29 +15,73 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 
 (Other OS) No installation tool provided.
 
-## Emails sending
+# Configuration
 
-Emails from stock-manager are send through linux command `mutt`. Please install this command and configure it with your local 
-email server or with your email mailbox. You can use install & configuration script from here 
-[Link to .sh script from github](https://github.com/folkien/scripts/blob/master/packages/ubuntu-packages/ssmtp-gmail.sh)
+All stock tools are configured through .json files inside config/ directory. 
+
+* config/alarms.json - all set followe alarams,
+* config/assets.json - wallet of currently bought/sold assets,
+* config/recipients.json - email addresses of recipents,
+* config/viewer.json - list of followed stocks, stock-viewer commands executed 
+by stock manager 
 
 # Usage
 
+## Systemd services
+
+There are two services with timers.  
+
+* daily reports,
+
+```shell
+StockDaily.service
+StockDaily.sh
+StockDaily.timer
+```
+
+* weekly reports
+
+```shell
+StockWeekly.service
+StockWeekly.sh
+StockWeekly.timer
+```
+
+Services execute stock-manager.
+
+## Emails sending
+
+Stock-manager can send emails :
+
+* **daily email** - with buy signals for followed stocks and with all signals for
+stocks that exists in assets jsons.
+* **weekly email** - with plots, signals for all followed stocks.
+
+**Emails from stock-manager are send through linux command `mutt`.** Please install this command and configure it with your local 
+email server or with your email mailbox. You can use install & configuration script from here 
+[Link to .sh script from github](https://github.com/folkien/scripts/blob/master/packages/ubuntu-packages/ssmtp-gmail.sh)
+
+
 ## Stock viewer.
 
-Features :
-* Generates plots,
-    * Close price
-    * Volume
-* Oscillators
-    * MACD & MACD Histogram
-    * RSI
-    * CCI
-    * Williams alligator
-    * Bollinger
+Viewer/Plotter tool. Features : 
+* Plots/Oscillators,
+    * Close price - linear,
+    * Close price - candlestick OHLC,
+    * Volume,
+    * OBV,
+    * MoneyFlow,
+    * Chaikin money flow,
+    * Chaikin Oscillator,
+    * MACD & MACD Histogram,
+    * RSI,
+    * CCI,
+    * ATR,
+    * ADX,
+    * Williams alligator,
+    * Bollinger,
 * Save plots to files \*.png
-* Generates/Appends report.md with some usefull informations,
-
+* Generates daily/weekly report.md with some usefull informations,
 
 ```bash
 usage: stock-viewer.py [-h] -n STOCKCODE [-d BEGINDATE] [-a AVERAGEDAYS] [-Y]
@@ -168,13 +212,11 @@ or USA google alphabet
 # TODO - for developers
 
 ## TODO Viewer
-- MoneyFlow as separated plot with MF index and TRIX,
-- Add colors background bollinger,
+- TRIX,
 - Add levels of wsparcia based on STD consolidations,
 - Add MACD Convergence-Divergence add,
 - Add RSI Convergence-Divergence
 - Add trend lines for max/mins peaks,
-* Algorytm wyszukiwania maximów oraz minimów
 * Wykrycie ogólnych trendów na bazie maximów oraz minmów, kolorowanie tła pod wykresem.
     https://openwritings.net/pg/python/python-find-peaks-and-valleys-chart-using-scipysignalargrelextrema
 * Rysowani lini trendu w zakresach trendu z poprzedniego punktu za pomocą algorytmu z 
@@ -190,7 +232,6 @@ TESTS :
 - Add strategy 10%,
 
 ## TODO Manager
-- config .json z aktywami,
 
 ## TODO Alarmy : 
 - aktywny i nieaktywne alarmy,
