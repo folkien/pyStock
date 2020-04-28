@@ -59,13 +59,22 @@ optional arguments:
   -r, --reports         Generate extra reports
 ```
 
+Plot Apple last 6M to file
+```bash
+./stock-viewer.py -n AAPL.US -6M -g
+```
+
+![image](doc/AAPL.US_1.png)
+![image](doc/AAPL.US_2.png)
+![image](doc/AAPL.US_3.png)
+
 Last year of google with markdown reports into report.md
 ```bash
 ./stock-viewer.py -n GOOG.US -Y -r
 ```
-![image](doc/GOOG.US_2020-02-01_1.png)
-![image](doc/GOOG.US_2020-02-01_2.png)
-![image](doc/GOOG.US_2020-02-01_3.png)
+![image](doc/GOOG.US_1.png)
+![image](doc/GOOG.US_2.png)
+![image](doc/GOOG.US_3.png)
 
 Markdown report
 ```markdown
@@ -86,23 +95,14 @@ Markdown report
 ![Graph](GOOG.us_2020-02-01_2.png)
 ```
 
-Plot Apple last 6M to file
-```bash
-./stock-viewer.py -n AAPL.US -6M -g
-```
-
-![image](doc/AAPL.US_2020-02-01_1.png)
-![image](doc/AAPL.US_2020-02-01_2.png)
-![image](doc/AAPL.US_2020-02-01_3.png)
-
 Example CD Projekt Red plot
 ```bash
  ./stock-viewer.py -n CDR.pl -6M -g
 ```
 
-![CDPR image](doc/CDR_2020-02-01_1.png)
-![CDPR image](doc/CDR_2020-02-01_2.png)
-![CDPR image](doc/CDR_2020-02-01_3.png)
+![CDPR image](doc/CDR.pl_1.png)
+![CDPR image](doc/CDR.pl_2.png)
+![CDPR image](doc/CDR.pl_3.png)
 
 
 ## Stock manager
