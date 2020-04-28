@@ -27,13 +27,14 @@ class StockData:
             self.currentPrice= self.data['Close'][0]
             # Typical price create
             self.data['Typical'] = (self.data['Close']+self.data['High']+self.data['Low'])/3
-            # Volumen parse/create
-            self.data['VolumeP'], self.data['VolumeN'] = self.InitVolume(self.data['Close'], self.data['Volume'])
-            # OBV create
-            self.data['OBV'] = self.data.loc[::-1, 'Volume'].cumsum()[::-1]
-            # Money on market create
-            self.data['Money'] = self.data['Typical'] * self.data['Volume']
-            self.data['Money'] = self.data.loc[::-1, 'Money'].cumsum()[::-1]
+            # Volumen parse/create if exists
+            if  (self.hasVolume()):
+                self.data['VolumeP'], self.data['VolumeN'] = self.InitVolume(self.data['Close'], self.data['Volume'])
+                # OBV create
+                self.data['OBV'] = self.data.loc[::-1, 'Volume'].cumsum()[::-1]
+                # Money on market create
+                self.data['Money'] = self.data['Typical'] * self.data['Volume']
+                self.data['Money'] = self.data.loc[::-1, 'Money'].cumsum()[::-1]
 
             # Create subset of data
             self.dataSubset  = SetReindex(self.data,beginDate,endDate)
