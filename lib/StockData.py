@@ -96,7 +96,7 @@ class StockData:
         rxData = ""
 
         # Read from database if exists today file
-        if (len(rxData) == 0) and (self.cache.IsOfToday(stockCode) == True):
+        if (len(rxData) == 0) and (self.cache.IsOfTodaySession(stockCode) == True):
             print("Restoring today cache...")
             rxData = self.cache.Load(stockCode)
 

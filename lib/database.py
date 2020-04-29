@@ -46,12 +46,21 @@ class StockDatabase(object):
         return False
 
     # True if exists and is of today
-    def IsOfToday(self, objectName):
-        today = datetime.datetime.now().strftime("%Y-%m-%d")
+    def IsOfTodaySession(self, objectName):
+        currentDay = datetime.datetime.now().strftime("%Y-%m-%d")
+        currentHour = int(datetime.datetime.now().strftime("%H"))
         filepath = self.directory+objectName+".bin"
         if os.path.isfile(filepath):
-            fileutime = time.strftime(
+            fileDate = time.strftime(
                 "%Y-%m-%d", time.localtime(os.path.getmtime(filepath)))
-            if (today == fileutime):
-                return True
+            fileHour = int(time.strftime(
+                "%H", time.localtime(os.path.getmtime(filepath))))
+            # if is of today 
+            if (currentDay == fileDate):
+                # if session ended then check if file is after session 
+                if (currentHour>=18):
+                    return (fileHour>=18)
+                else:
+                    return True
+                
         return False
