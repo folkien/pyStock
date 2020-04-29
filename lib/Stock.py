@@ -16,7 +16,9 @@ from lib.DataOperations import *
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-def GetData(code,begin,end):
+
+
+def GetData(code, begin, end):
     receivedData = data.DataReader(code, 'stooq', begin, end)
 
     if len(receivedData) == 0:
@@ -26,29 +28,33 @@ def GetData(code,begin,end):
     return receivedData
 
 # Change volumeTotal to neg/pos value
-def SetVolumeWithTrend(price,volumeTotal):
+
+
+def SetVolumeWithTrend(price, volumeTotal):
     # Assert condition
     if (price.size != volumeTotal.size):
         return
 
-    lastPrice=price.values[-1]
+    lastPrice = price.values[-1]
     # We start from end because data from Stooq is reversed
-    for i in reversed(range(1,len(price.values))):
+    for i in reversed(range(1, len(price.values))):
         # If price drop then volumeTotal wih minus value
         if (lastPrice > price.values[i]):
-            volumeTotal.values[i]=-volumeTotal.values[i]
+            volumeTotal.values[i] = -volumeTotal.values[i]
 
-        lastPrice=price.values[i]
+        lastPrice = price.values[i]
 
 
 """
  Returns percent return rate for last N days.
 """
-def GetReturnRates(price,days=1):
-    startPrice=price[-1-days]
-    endPrice  =price[-1]
+
+
+def GetReturnRates(price, days=1):
+    startPrice = price[-1-days]
+    endPrice = price[-1]
     return ((endPrice-startPrice)*100)/startPrice
-    
+
 
 """
 Typical Price
@@ -62,6 +68,9 @@ Params:
 Returns:
     copy of 'data' DataFrame with 'typical_price' column added
 """
-def typical_price(data, high_col = 'High', low_col = 'Low', close_col = 'Close'):
-    data['typical_price'] = (data[high_col] + data[low_col] + data[close_col]) / 3
+
+
+def typical_price(data, high_col='High', low_col='Low', close_col='Close'):
+    data['typical_price'] = (
+        data[high_col] + data[low_col] + data[close_col]) / 3
     return data

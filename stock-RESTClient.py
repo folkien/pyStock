@@ -1,10 +1,10 @@
+from flask_restful import Resource, Api, reqparse
+import json
+from waitress import serve
+from flask import Flask, Response
+from lib.Stock import *
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
-from lib.Stock import *
-from flask import Flask, Response
-from flask_restful import Resource, Api ,reqparse
-from waitress import serve
-import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -26,11 +26,13 @@ class StockDataEP(Resource):
                         mimetype="application/json")
         return(resp)
 
-api.add_resource(StockDataEP, '/stockdata/<string:stock_code>/<string:stock_index>')
+
+api.add_resource(
+    StockDataEP, '/stockdata/<string:stock_code>/<string:stock_index>')
 
 if __name__ == '__main__':
-    #for debug
+    # for debug
     #app.run(debug=True, port=5000)
-    
-    #for production
+
+    # for production
     serve(app, host='0.0.0.0', port=5000)

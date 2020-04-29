@@ -1,9 +1,10 @@
 import datetime
 
-executionIntervals = [ "monthly", "weekly", "daily"]
+executionIntervals = ["monthly", "weekly", "daily"]
+
 
 def GetIntervalBegin(intervalName):
-    if (intervalName in  executionIntervals):
+    if (intervalName in executionIntervals):
         today = datetime.datetime.now()
 
         if (intervalName == "monthly"):
@@ -15,8 +16,8 @@ def GetIntervalBegin(intervalName):
 
         return interval
 
+
 class TimeInterval:
-    
+
     def __init__(self):
-        self.intervals = [ "monthly", "weekly", "daily"]
-        
+        self.intervals = ["monthly", "weekly", "daily"]
