@@ -245,42 +245,13 @@ obv = stockData.GetData('OBV')
 # PLOTS
 # #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
+Rows = 5
+Cols = 5
+gs = gridspec.GridSpec(Rows, Cols)
 
-
-# Price
+# Price All - Plot
 # #####################################################
-plot1 = plt.subplot(221)
-alligator.Plot()
-stockData.Plot()
-stockData.PlotAssets()
-# plt.plot(maxs.index,maxs,'go', label="Maxs")
-# plt.plot(mins.index,mins,'ro', label="Mins")
-plt.ylabel('Price (%s)' % (info.GetCurrency()))
-plt.grid()
-plt.title("Price, OBV, MoneyOnMarket")
-plt.legend(loc='upper left')
-
-# OBV
-# #####################################################
-if (stockData.hasVolume()):
-    plot1A = plot1.twinx()
-    plot1A.plot(obv.index, obv, "-.", linewidth=1.2, label="OBV", color="blue")
-    plot1A.legend(loc='upper left')
-    plot1A.tick_params(axis='y', labelcolor='tab:blue')
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
-
-# Money on market
-# #####################################################
-if (stockData.hasVolume()):
-    plot1B = plot1.twinx()
-    stockData.PlotMoneyOnMarket(plot1B)
-    plot1B.tick_params(axis='y', labelcolor='tab:red')
-    plt.legend(loc='upper left')
-
-
-# Price - ALL
-# #####################################################
-plot2 = plt.subplot(222)
+plot2 = plt.subplot(gs[0:2,0:2])
 stockData.PlotAll()
 stockData.PlotAllAssets()
 rect = CreateRect(datetime.datetime.strptime(start_date, "%Y-%m-%d"),
@@ -294,7 +265,6 @@ plt.title("Price, OBV, MoneyOnMarket - alltime")
 plt.legend(loc='upper left')
 
 # OBV - ALL
-# #####################################################
 if (stockData.hasVolume()):
     plot2A = plot2.twinx()
     plot2A.plot(obvTotal.index, obvTotal, label="OBV total")
@@ -302,12 +272,60 @@ if (stockData.hasVolume()):
     plot2A.tick_params(axis='y', labelcolor='tab:blue')
 
 # Money on market - ALL
-# #####################################################
 if (stockData.hasVolume()):
     plot2B = plot2.twinx()
     stockData.PlotMoneyOnMarketAll(plot2B)
     plot2B.tick_params(axis='y', labelcolor='tab:red')
     plt.legend(loc='upper left')
+
+# #####################################################
+
+# Price - Plot
+# #####################################################
+plot1 = plt.subplot(gs[0:2,2:5])
+alligator.Plot()
+stockData.Plot()
+stockData.PlotAssets()
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
+plt.grid()
+plt.title("Price, OBV, MoneyOnMarket")
+plt.legend(loc='upper left')
+
+# OBV
+if (stockData.hasVolume()):
+    plot1A = plot1.twinx()
+    plot1A.plot(obv.index, obv, "-.", linewidth=1.2, label="OBV", color="blue")
+    plot1A.legend(loc='upper left')
+    plot1A.tick_params(axis='y', labelcolor='tab:blue')
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
+
+# Money on market
+if (stockData.hasVolume()):
+    plot1B = plot1.twinx()
+    stockData.PlotMoneyOnMarket(plot1B)
+    plot1B.tick_params(axis='y', labelcolor='tab:red')
+    plt.legend(loc='upper left')
+
+# #####################################################
+
+
+period = 3
+upTrends = FindUptrends(closePrice,period)
+downTrends = FindDowntrends(closePrice,period)
+maxs = FindMaxPeaks(closePrice,period)
+mins = FindMinPeaks(closePrice,period)
+
+# Price trends - Plot
+# #####################################################
+plot3 = plt.subplot(gs[2:5,:])
+stockData.Plot()
+plt.plot(maxs.index,maxs,'go', label="Maxs")
+plt.plot(mins.index,mins,'ro', label="Mins")
+PlotTrends(upTrends, 'blue', "rising")
+PlotTrends(downTrends, 'pink', "falling")
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
+plt.grid()
+plt.legend(loc='upper left')
 
 # Plot to file
 if (args.plotToFile):
@@ -315,10 +333,10 @@ if (args.plotToFile):
 
 ###
 fig = plt.figure(figsize=(16.0, 9.0))
-
-# Total close price
 Rows = 6
 gs = gridspec.GridSpec(Rows, 1)
+
+# Total close price
 plot5 = plt.subplot(gs[0:4])
 stockData.PlotCandle(plot5)
 stockData.PlotAssets()
