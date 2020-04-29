@@ -266,6 +266,11 @@ def FindUptrends(data,n=7):
             trend = ExtendedTrendForward(trend)
             uptrends.append(trend)
             trend = pd.Series()
+
+    # Add last trend
+    if (trend.size > 0):
+        trend = ExtendedTrendForward(trend)
+        uptrends.append(trend)
             
     # Calculate regression line most fitting.
     # If some point is far away from line then drop it.
@@ -289,6 +294,12 @@ def FindDowntrends(data,n=7):
             trend = ExtendedTrendForward(trend)
             downtrends.append(trend)
             trend = pd.Series()
+    
+    # Add last trend
+    if (trend.size > 0):
+        trend = ExtendedTrendForward(trend)
+        downtrends.append(trend)
+        
     return downtrends
 
 #Plots all trends list
