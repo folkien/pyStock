@@ -309,7 +309,7 @@ if (stockData.hasVolume()):
 # #####################################################
 
 
-period = 3
+period = 4
 upTrends = FindUptrends(closePrice,period)
 downTrends = FindDowntrends(closePrice,period)
 maxs = FindMaxPeaks(closePrice,period)
@@ -321,8 +321,8 @@ plot3 = plt.subplot(gs[2:5,:])
 stockData.Plot()
 plt.plot(maxs.index,maxs,'go', label="Maxs")
 plt.plot(mins.index,mins,'ro', label="Mins")
-PlotTrends(upTrends, 'blue', "rising")
-PlotTrends(downTrends, 'pink', "falling")
+PlotTrends(upTrends, 'green', "rising")
+PlotTrends(downTrends, 'red', "falling")
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.legend(loc='upper left')

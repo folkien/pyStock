@@ -237,18 +237,33 @@ def FindPeaks(data, delta):
 
     return mins, maxs
 
+# Linear extended further trend by amount of days
+def ExtendedTrendForward(trend,days=7):
+    # Delta of values
+    dy=trend[-1]-trend[-2]
+    # Time delta in days
+    dt=trend.index[-1]-trend.index[-2]
+    dt=dt.days
+    # Append last element
+    t = trend.index[-1]+datetime.timedelta(days=days)
+    y = trend[-1]+days*(dy/dt)
+    return trend.append(pd.Series(y, index=[t]))
+
 # Uptrend calculation is based on mins
 def FindUptrends(data,n=7):
+    timeDelta=datetime.timedelta(days=n)
     uptrends = []
     trend = pd.Series()
     mins = FindMinPeaks(data,n)
 
     # Find rising series. Start from end
     for i in range(len(mins.values)-1):
-        if (mins[i] < mins[i+1]):
+        # If rising and more than time delta
+        if (mins[i] < mins[i+1]) and (mins.index[i]+timeDelta < mins.index[i+1]):
             trend = trend.append(pd.Series(mins.values[i], index=[mins.index[i]]))
             trend = trend.append(pd.Series(mins.values[i+1], index=[mins.index[i+1]]))
         elif (trend.size > 0):
+            trend = ExtendedTrendForward(trend)
             uptrends.append(trend)
             trend = pd.Series()
             
@@ -271,6 +286,7 @@ def FindDowntrends(data,n=7):
             trend = trend.append(pd.Series(maxs.values[i], index=[maxs.index[i]]))
             trend = trend.append(pd.Series(maxs.values[i+1], index=[maxs.index[i+1]]))
         elif (trend.size > 0):
+            trend = ExtendedTrendForward(trend)
             downtrends.append(trend)
             trend = pd.Series()
     return downtrends
