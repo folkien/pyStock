@@ -74,7 +74,8 @@ class ChaikinMoneyFlow:
         return cmf, cosc
 
     # Export indicator signals to report
-#         def ExportSignals(self, reportSignals):
+    def ExportSignals(self, reportSignals):
+        return 0
 #             reportSignals.AddDataframeSignals(self.buy, "MFI","buy")
 #             reportSignals.AddDataframeSignals(self.sell,"MFI","sell")
 #             reportSignals.AddDataframeSignals(self.buyStrong, "MFI","buyStrong")
