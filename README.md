@@ -201,34 +201,6 @@ optional arguments:
   -W, --lastWeek        Last Week
 ```
 
-## TODO Viewer
-- TRIX,
-- Add levels of wsparcia based on STD consolidations,
-- Add MACD Convergence-Divergence add,
-- Add RSI Convergence-Divergence
-- Add trend lines for max/mins peaks,
-* Wykrycie ogólnych trendów na bazie maximów oraz minmów, kolorowanie tła pod wykresem.
-    https://openwritings.net/pg/python/python-find-peaks-and-valleys-chart-using-scipysignalargrelextrema
-* Rysowani lini trendu w zakresach trendu z poprzedniego punktu za pomocą algorytmu z 
-    https://stackoverflow.com/questions/43769906/how-to-calculate-the-trendline-for-stock-price
-- ADD trend power factor,
-TESTS :
-- test and extend MACD + report info,
-- test and extend RSI + report info,
-
-## TODO Simulator
-- Create simulator,
-- Add strategy 10%,
-
-## TODO Manager
-
-## TODO Alarmy : 
-- aktywny i nieaktywne alarmy,
-- pokazywanie alarmów,
-- Wysyłanie emaili,
-- Sprawdzanie najnowszych raportów dla inwestorów,
-- Monitorowanie trendów oraz alarmy z trendów,
-
 # License
 
 MIT License
