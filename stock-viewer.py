@@ -309,9 +309,9 @@ if (stockData.hasVolume()):
 # #####################################################
 
 
-period = 4
-upTrends = FindUptrends(closePrice,period)
-downTrends = FindDowntrends(closePrice,period)
+period = 2
+upTrends = FindUptrends(closePrice,6,period)
+downTrends = FindDowntrends(closePrice,6,period)
 maxs = FindMaxPeaks(closePrice,period)
 mins = FindMinPeaks(closePrice,period)
 

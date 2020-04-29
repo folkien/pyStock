@@ -250,8 +250,8 @@ def ExtendedTrendForward(trend,days=7):
     return trend.append(pd.Series(y, index=[t]))
 
 # Uptrend calculation is based on mins
-def FindUptrends(data,n=7):
-    timeDelta=datetime.timedelta(days=n)
+def FindUptrends(data,days=7,n=4):
+    timeDelta=datetime.timedelta(days=days)
     uptrends = []
     trend = pd.Series()
     mins = FindMinPeaks(data,n)
@@ -278,8 +278,8 @@ def FindUptrends(data,n=7):
     return uptrends
 
 # Downtrend calculation is based on maxs
-def FindDowntrends(data,n=7):
-    timeDelta=datetime.timedelta(days=n)
+def FindDowntrends(data,days=7,n=4):
+    timeDelta=datetime.timedelta(days=days)
     downtrends = []
     trend = pd.Series()
     maxs = FindMaxPeaks(data,n)
