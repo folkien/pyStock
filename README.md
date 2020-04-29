@@ -5,8 +5,6 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 * stock-viewer - tool for generating stock plots and text reports for given stock code. Diffrent plot options, volume, MACD, Williams indicator or RSI.
 * stock-viewer-manager - tool manager which can send emails with stock reports, generates reports and plots using stock-viewer. Configurable via json settings files.
 
-!! **Please fork and contribute! Contributors needed to develop project!** Merge requests with yout features welcomed !!
-
 # Installation 
 (Linux) To install all commands and systemd timers and services run script.
 ```
@@ -49,7 +47,7 @@ StockWeekly.timer
 
 Services execute stock-manager.
 
-## Emails sending
+## E-mails sending
 
 Stock-manager can send emails :
 
@@ -102,6 +100,8 @@ optional arguments:
   -g, --plotToFile      Plot to file
   -r, --reports         Generate extra reports
 ```
+
+### Examples
 
 Plot Apple last 6M to file
 ```bash
@@ -201,25 +201,6 @@ optional arguments:
   -W, --lastWeek        Last Week
 ```
 
-
-# Known Issues
-
-# Problem with pandas_datareader
-There was a problem with pandas_datareader
-https://stackoverflow.com/questions/53097523/importing-data-from-stooq-with-pandas-datareader-returns-empty-dataframe-in-pyth
-
-Problem was solved in new pandas version. Recommeneded to use newest version. With newest version `country codes` after stock code works. 
-Example of polish CDPR
-```bash
-./stock-viewer.py -n CDR.pl -Y
-```
-or USA google alphabet
-```bash
-./stock-viewer.py -n GOOG.us -Y
-```
-
-# TODO - for developers
-
 ## TODO Viewer
 - TRIX,
 - Add levels of wsparcia based on STD consolidations,
@@ -231,7 +212,6 @@ or USA google alphabet
 * Rysowani lini trendu w zakresach trendu z poprzedniego punktu za pomocą algorytmu z 
     https://stackoverflow.com/questions/43769906/how-to-calculate-the-trendline-for-stock-price
 - ADD trend power factor,
-- Read assets and show on plot,
 TESTS :
 - test and extend MACD + report info,
 - test and extend RSI + report info,
@@ -248,6 +228,10 @@ TESTS :
 - Wysyłanie emaili,
 - Sprawdzanie najnowszych raportów dla inwestorów,
 - Monitorowanie trendów oraz alarmy z trendów,
+
+# License
+
+MIT License
 
 # Bibliography
 * https://www.edukacjagieldowa.pl/gieldowe-abc/analiza-techniczna/
