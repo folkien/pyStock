@@ -21,27 +21,22 @@ from lib.TimeInterval import *
 from lib.assets import *
 
 # Create plot figures file
-
-
 def PlotSave(fig):
     global graphsCreated
     filePath = outputFilepath+str(fig.number)+outputExtension
     plt.figure(fig.number)
     plt.savefig(filePath)
     graphsCreated.append(filePath)
-    print(filePath)
+    print("Created plot %s." % (filePath))
 
 # remove all created plots
-
-
 def PlotsRemove():
     global graphsCreated
     for filepath in graphsCreated:
         os.system("rm -rf %s" % (filepath))
+        print("Removed %s." % (filepath))
 
 # Save reports to file. Append text.
-
-
 def ReportBaseSave(filepath):
     global outputFilename
     global args
@@ -92,6 +87,7 @@ def ReportBaseSave(filepath):
         f.write("\n")
 
     lock.release()
+    print("Reported to %s." % (filepath))
 
 
 # Const objects
@@ -149,7 +145,6 @@ if (args.plotToFile):
     import matplotlib
     matplotlib.use('Agg')
 
-
 # Dates
 today = datetime.datetime.now()
 lastYear = datetime.datetime.now() - datetime.timedelta(days=365)
@@ -202,14 +197,15 @@ reportSignals.SetBeginTimestamp(GetIntervalBegin(executionInterval))
 reportSignals.SetStockCode(args.stockCode)
 
 
-# 1. Get DATA from URL
+# Get stock data
 # #####################################################
 stockAssets = StockAssets()
 stockData = StockData(args.stockCode, start_date, end_date)
 stockData.SetAssets(stockAssets)
 stockData.SetCurrencySymbol(info.GetCurrency())
 
-# Get Close price and average
+# Create oscillators/indicators
+# #####################################################
 closePriceTotal = stockData.GetAllData('Close')
 closePrice = stockData.GetData('Close')
 alligator = CreateWilliamsAlligator(closePrice)
@@ -232,12 +228,12 @@ if (stockData.hasVolume()):
 alligator.ExportSignals(reportSignals)
 macd.ExportSignals(reportSignals)
 rsi.ExportSignals(reportSignals)
+cci.ExportSignals(reportSignals)
 bollinger.ExportSignals(reportSignals)
-
-# Find max and mins
-PriceRange = closePrice.max()-closePrice.min()
-print("ClosePrice Pk-Pk change %2.2f.\n" % (PriceRange))
-mins, maxs = FindPeaks(closePrice, PriceRange/10)
+dmi.ExportSignals(reportSignals)
+if (stockData.hasVolume()):
+    mfi.ExportSignals(reportSignals)
+    cmf.ExportSignals(reportSignals)
 
 # Volume
 obvTotal = stockData.GetAllData('OBV')
