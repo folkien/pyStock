@@ -6,6 +6,8 @@ import pandas as pd
 from scipy import signal
 import numpy
 from numpy import NaN
+import matplotlib.pyplot as plt
+import datetime
 
 # Creates empty dataframe
 
@@ -236,21 +238,45 @@ def FindPeaks(data, delta):
     return mins, maxs
 
 # Uptrend calculation is based on mins
-
-
-def FindUptrends(data):
+def FindUptrends(data,n=7):
     uptrends = []
-    mins = FindMinPeaks(data)
+    trend = pd.Series()
+    mins = FindMinPeaks(data,n)
 
     # Find rising series. Start from end
-#     for i in range(len(data.values)):
+    for i in range(len(mins.values)-1):
+        if (mins[i] < mins[i+1]):
+            trend = trend.append(pd.Series(mins.values[i], index=[mins.index[i]]))
+            trend = trend.append(pd.Series(mins.values[i+1], index=[mins.index[i+1]]))
+        elif (trend.size > 0):
+            uptrends.append(trend)
+            trend = pd.Series()
+            
     # Calculate regression line most fitting.
     # If some point is far away from line then drop it.
     # Add to data.
-    return 0
+    return uptrends
 
 # Downtrend calculation is based on maxs
+def FindDowntrends(data,n=7):
+    timeDelta=datetime.timedelta(days=n)
+    downtrends = []
+    trend = pd.Series()
+    maxs = FindMaxPeaks(data,n)
 
+    # Find falling series. Start from end
+    for i in range(len(maxs.values)-1):
+        # If falling and more than time delta
+        if (maxs[i] > maxs[i+1]) and (maxs.index[i]+timeDelta < maxs.index[i+1]):
+            trend = trend.append(pd.Series(maxs.values[i], index=[maxs.index[i]]))
+            trend = trend.append(pd.Series(maxs.values[i+1], index=[maxs.index[i+1]]))
+        elif (trend.size > 0):
+            downtrends.append(trend)
+            trend = pd.Series()
+    return downtrends
 
-def FindDowntrends(data):
-    return 0
+#Plots all trends list
+def PlotTrends(trendsList,tColor,tName=""):
+    for trend in trendsList:
+        plt.plot(trend.index,trend,'--',color=tColor)
+    
