@@ -13,6 +13,7 @@ from mpl_finance import candlestick_ohlc
 from lib.DataOperations import *
 from lib.assets import *
 from lib.database import *
+from lib.Stock import *
 
 # StockData object which creates StockData data
 
@@ -77,7 +78,9 @@ class StockData:
 
     # Returns current close price
     def GetReturnRates(self, days):
-        return GetReturnRates(self.Data['Close'], days)
+        startPrice = self.data['Close'][-1-days]
+        endPrice = self.data['Close'][-1]
+        return ((endPrice-startPrice)*100)/startPrice
 
     # Returns current close price
     def GetStockCode(self):
@@ -123,7 +126,7 @@ class StockData:
     def Report(self, f, interval):
         if (interval == "daily"):
             f.write("    * **%2.2f**%% daily change.\n" %
-                    (GetReturnRates(self.Data['Close'], 1)))
+                    (self.GetReturnRates(1)))
         elif (interval == "weekly"):
             # Get last range date
             lastRangeDate = self.endDate - datetime.timedelta(days=7)
