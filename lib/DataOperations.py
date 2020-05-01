@@ -8,16 +8,10 @@ import numpy
 from numpy import NaN
 import matplotlib.pyplot as plt
 import datetime
+from scipy.stats import linregress
 
-# Creates empty dataframe
-
-
-def CreateEmptyDataFrame():
-    return pd.DataFrame()
 
 # Creates DataFrame line
-
-
 def CreateHorizontalLine(indexes, startValue, endValue, allIndexes=False):
     data = pd.DataFrame()
     # Only start and begin
@@ -259,17 +253,15 @@ def FindUptrends(data,days=7,n=4):
     # Find rising series. Start from end
     for i in range(len(mins.values)-1):
         # If rising and more than time delta
-        if (mins[i] < mins[i+1]) and (mins.index[i]+timeDelta < mins.index[i+1]):
+        if (mins[i] <= mins[i+1]) and (mins.index[i]+timeDelta < mins.index[i+1]):
             trend = trend.append(pd.Series(mins.values[i], index=[mins.index[i]]))
             trend = trend.append(pd.Series(mins.values[i+1], index=[mins.index[i+1]]))
         elif (trend.size > 0):
-            trend = ExtendedTrendForward(trend)
             uptrends.append(trend)
             trend = pd.Series()
 
     # Add last trend
     if (trend.size > 0):
-        trend = ExtendedTrendForward(trend)
         uptrends.append(trend)
             
     # Calculate regression line most fitting.
@@ -291,13 +283,11 @@ def FindDowntrends(data,days=7,n=4):
             trend = trend.append(pd.Series(maxs.values[i], index=[maxs.index[i]]))
             trend = trend.append(pd.Series(maxs.values[i+1], index=[maxs.index[i+1]]))
         elif (trend.size > 0):
-            trend = ExtendedTrendForward(trend)
             downtrends.append(trend)
             trend = pd.Series()
     
     # Add last trend
     if (trend.size > 0):
-        trend = ExtendedTrendForward(trend)
         downtrends.append(trend)
         
     return downtrends
@@ -305,5 +295,32 @@ def FindDowntrends(data,days=7,n=4):
 #Plots all trends list
 def PlotTrends(trendsList,tColor,tName=""):
     for trend in trendsList:
-        plt.plot(trend.index,trend,'--',color=tColor)
+        # For only two dots plot direct line
+        if (trend.size == 2):
+            trend = ExtendedTrendForward(trend)
+            plt.plot(trend.index,trend,'--',color=tColor)
+        # For more dots, calculate regression line
+        else:
+            # Remember datetime of first and last point
+            dt0 = trend.index[0]
+            dt1 = trend.index[-1]
+            # Convert trend to (t,y)
+            t = []
+            y = trend.values
+            deltas = (trend.index.date - trend.index.date.min())
+            for i in range(len(deltas)):
+                t.append(deltas[i].days)
+
+            # Calculate regression
+            reg = linregress(t, y)
+
+            # Create new trend base on regression and saved datetimes
+            trend = pd.Series()
+            y0 = reg.slope * t[0] + reg.intercept
+            y1 = reg.slope * t[-1] + reg.intercept
+            trend = trend.append(pd.Series(y0, index=[dt0]))
+            trend = trend.append(pd.Series(y1, index=[dt1]))
+            trend = ExtendedTrendForward(trend)
+            plt.plot(trend.index,trend,'--',color=tColor)
+            
     
