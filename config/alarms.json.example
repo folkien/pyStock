@@ -1,9 +1,9 @@
 [
     {
-        "name": "ING", 
-        "reference": 6.5, 
-        "state": 1, 
-        "type": "percent", 
+        "name": "ING",
+        "reference": 6.5,
+        "state": 1,
+        "type": "percent",
         "value": 15.0
     }
 ]

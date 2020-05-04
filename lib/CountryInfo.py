@@ -12,18 +12,18 @@ class CountryInfo(object):
         self.SetStockCode(stockCode)
 
     def SetStockCode(self, stockCode):
-        symbol_parts = stockCode.split(".")
+        symbol_parts = stockCode.split('.')
         if len(symbol_parts) > 1:
             self.countrySymbol = symbol_parts[1].lower()
 
     def GetCurrency(self):
         currencies = {
-            "pl": "zl",
-            "de": "eur",
-            "hk": "?",
-            "hu": "?",
-            "jp": "yen",
-            "uk": "GBP",
-            "us": "$",
+            'pl': 'zl',
+            'de': 'eur',
+            'hk': '?',
+            'hu': '?',
+            'jp': 'yen',
+            'uk': 'GBP',
+            'us': '$',
         }
         return currencies[self.countrySymbol]

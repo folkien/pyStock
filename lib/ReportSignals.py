@@ -13,7 +13,7 @@ class SignalEntry():
     # report to file
     def Report(self, fileObject):
         fileObject.write("* **%s** %-20s - <span style='color:blue'>%s</span>\n" %
-                         (self.timestamp.strftime("%d.%m"),
+                         (self.timestamp.strftime('%d.%m'),
                              self.parentName,
                              self.signalName))
 
@@ -27,7 +27,7 @@ class ReportSignals():
 
     def __init__(self):
         self.signals = []
-        self.stockCode = ""
+        self.stockCode = ''
         self.reportedAnything = False
         self.beginTimestamp = datetime.datetime.now() - datetime.timedelta(days=1)
 
@@ -52,11 +52,11 @@ class ReportSignals():
 
     # Returns Allowed signals for no assets stock
     def GetAllSignalTypes(self):
-        return ["buy", "NotSell", "MayBuy", "NotBuy", "sell"]
+        return ['buy', 'NotSell', 'MayBuy', 'NotBuy', 'sell']
 
     # Returns Allowed signals for no assets stock
     def GetBuySignalTypes(self):
-        return ["buy", "NotSell", "MayBuy"]
+        return ['buy', 'NotSell', 'MayBuy']
 
     # Report to file
     def Report(self, filepath, allSignalTypes=True):
@@ -83,9 +83,9 @@ class ReportSignals():
             # Create report
             if (filteredSignals is not None and (len(filteredSignals) > 0)):
                 with open(filepath, 'a+') as f:
-                    f.write("## Signals for %s :\n" % (self.stockCode))
+                    f.write('## Signals for %s :\n' % (self.stockCode))
                     for signal in filteredSignals:
                         signal.Report(f)
-                    f.write("\n")
+                    f.write('\n')
                     f.close()
                     self.reportedAnything = True

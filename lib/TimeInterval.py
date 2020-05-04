@@ -1,15 +1,15 @@
 import datetime
 
-executionIntervals = ["monthly", "weekly", "daily"]
+executionIntervals = ['monthly', 'weekly', 'daily']
 
 
 def GetIntervalBegin(intervalName):
     if (intervalName in executionIntervals):
         today = datetime.datetime.now()
 
-        if (intervalName == "monthly"):
+        if (intervalName == 'monthly'):
             interval = today - datetime.timedelta(days=30)
-        elif (intervalName == "weekly"):
+        elif (intervalName == 'weekly'):
             interval = today - datetime.timedelta(days=7)
         else:
             interval = today - datetime.timedelta(days=1)
@@ -20,4 +20,4 @@ def GetIntervalBegin(intervalName):
 class TimeInterval:
 
     def __init__(self):
-        self.intervals = ["monthly", "weekly", "daily"]
+        self.intervals = ['monthly', 'weekly', 'daily']

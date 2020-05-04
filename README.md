@@ -5,7 +5,7 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 * stock-viewer - tool for generating stock plots and text reports for given stock code. Diffrent plot options, volume, MACD, Williams indicator or RSI.
 * stock-viewer-manager - tool manager which can send emails with stock reports, generates reports and plots using stock-viewer. Configurable via json settings files.
 
-# Installation 
+# Installation
 (Linux) To install all commands and systemd timers and services run script.
 ```
 ./install.sh
@@ -15,19 +15,19 @@ pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 
 # Configuration
 
-All stock tools are configured through .json files inside config/ directory. 
+All stock tools are configured through .json files inside config/ directory.
 
 * config/alarms.json - all set followe alarams,
 * config/assets.json - wallet of currently bought/sold assets,
 * config/recipients.json - email addresses of recipents,
-* config/viewer.json - list of followed stocks, stock-viewer commands executed 
-by stock manager 
+* config/viewer.json - list of followed stocks, stock-viewer commands executed
+by stock manager
 
 # Usage
 
 ## Systemd services
 
-There are two services with timers.  
+There are two services with timers.
 
 * daily reports,
 
@@ -55,14 +55,14 @@ Stock-manager can send emails :
 stocks that exists in assets jsons.
 * **weekly email** - with plots, signals for all followed stocks.
 
-**Emails from stock-manager are send through linux command `mutt`.** Please install this command and configure it with your local 
-email server or with your email mailbox. You can use install & configuration script from here 
+**Emails from stock-manager are send through linux command `mutt`.** Please install this command and configure it with your local
+email server or with your email mailbox. You can use install & configuration script from here
 [Link to .sh script from github](https://github.com/folkien/scripts/blob/master/packages/ubuntu-packages/ssmtp-gmail.sh)
 
 
 ## Stock viewer.
 
-Viewer/Plotter tool. Features : 
+Viewer/Plotter tool. Features :
 * Plots/Oscillators,
     * Close price - linear,
     * Close price - candlestick OHLC,

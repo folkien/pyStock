@@ -16,7 +16,7 @@ def CreateATR(high, low, close, n=14):
 # ATR object which creates ATR data
 class ATR:
 
-    def __init__(self, high, low, close,  n=14):
+    def __init__(self, high, low, close, n=14):
         self.n = n
         self.tr, self.atr = self.InitATR(high, low, close)
 
@@ -39,9 +39,9 @@ class ATR:
         tr = pd.DataFrame()
 
         for i in range(len(high.values)):
-            value = max(high.values[i]-low.values[i],
-                        abs(high.values[i]-close.values[i]),
-                        abs(low.values[i]-close.values[i]))
+            value = max(high.values[i] - low.values[i],
+                        abs(high.values[i] - close.values[i]),
+                        abs(low.values[i] - close.values[i]))
             tr = tr.append(pd.DataFrame(
                 {'value': value}, index=[high.index[i]]))
 
@@ -57,8 +57,8 @@ class ATR:
     # Plot method
     def Plot(self):
         # ATR
-        plt.plot(self.atr.index, self.atr, label='ATR' +
-                 str(self.n), linewidth=1.0, color='#000000')
+        plt.plot(self.atr.index, self.atr, label='ATR'
+                 + str(self.n), linewidth=1.0, color='#000000')
 
         # Historic average
 #             hAverage = CreateHorizontalLine(self.atr.index, 0, 0)

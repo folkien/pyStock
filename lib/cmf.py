@@ -58,7 +58,7 @@ class ChaikinMoneyFlow:
     # Set Chaikin MoneyFlow and Chaikin oscillator
     def Init(self, high, low, close, volume, n):
         # Money flow Volume
-        N = ((close-low)-(high-close))/(high-low)
+        N = ((close - low) - (high - close)) / (high - low)
         M = N * abs(volume)
 
         # Create Chaikin money flow
@@ -83,8 +83,8 @@ class ChaikinMoneyFlow:
 
     # Plot Chaikin money flow
     def PlotChaikinMoneyFlow(self):
-        plt.plot(self.cmf.index, self.cmf, label='CMF' +
-                 str(self.n), linewidth=1.0, color='#000000')
+        plt.plot(self.cmf.index, self.cmf, label='CMF'
+                 + str(self.n), linewidth=1.0, color='#000000')
         x_axis = self.cmf.index.get_level_values(0)
 
         # over > 0 is rising/bullish
@@ -116,8 +116,8 @@ class ChaikinMoneyFlow:
     # Plot chaikin oscillator
     def PlotChaikinOscillator(self):
         #
-        plt.plot(self.cosc.index, self.cosc, label='CHAIKIN' +
-                 str(self.n), linewidth=1.0, color='#000000')
+        plt.plot(self.cosc.index, self.cosc, label='CHAIKIN'
+                 + str(self.n), linewidth=1.0, color='#000000')
         x_axis = self.cosc.index.get_level_values(0)
 
         # over > 0 is rising/bullish

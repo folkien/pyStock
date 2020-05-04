@@ -36,15 +36,15 @@ class MACD:
         exp1 = price.ewm(span=12, adjust=False).mean()
         exp2 = price.ewm(span=26, adjust=False).mean()
 
-        macdLine = exp1-exp2
+        macdLine = exp1 - exp2
         signalLine = macdLine.ewm(span=9, adjust=False).mean()
 
         return macdLine, signalLine
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        reportSignals.AddDataframeSignals(self.buy, "MACD", "buy")
-        reportSignals.AddDataframeSignals(self.sell, "MACD", "sell")
+        reportSignals.AddDataframeSignals(self.buy, 'MACD', 'buy')
+        reportSignals.AddDataframeSignals(self.sell, 'MACD', 'sell')
 
     # Plot MACD
     def Plot(self):
@@ -61,9 +61,9 @@ class MACD:
         # Plot
         plt.plot(zeroLine.index, zeroLine, '--', color='#777777')
         plt.plot(self.macd.index, self.macd, label='AMD MACD',
-                 linewidth=1.0,  color='#FF0000')
+                 linewidth=1.0, color='#FF0000')
         plt.plot(self.signal.index, self.signal, label='Signal Line',
-                 linewidth=1.0,  color='#008800')
+                 linewidth=1.0, color='#008800')
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):
@@ -81,5 +81,5 @@ class MACD:
         zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
         plt.plot(zeroLine.index, zeroLine, '--', color='#777777')
 
-        plt.bar(self.hplus.index, self.hplus['value'],  color="green")
-        plt.bar(self.hminus.index, self.hminus['value'], color="red")
+        plt.bar(self.hplus.index, self.hplus['value'], color='green')
+        plt.bar(self.hminus.index, self.hminus['value'], color='red')

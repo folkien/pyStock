@@ -21,22 +21,28 @@ from lib.TimeInterval import *
 from lib.assets import *
 
 # Create plot figures file
+
+
 def PlotSave(fig):
     global graphsCreated
-    filePath = outputFilepath+str(fig.number)+outputExtension
+    filePath = outputFilepath + str(fig.number) + outputExtension
     plt.figure(fig.number)
     plt.savefig(filePath)
     graphsCreated.append(filePath)
-    print("Created plot %s." % (filePath))
+    print('Created plot %s.' % (filePath))
 
 # remove all created plots
+
+
 def PlotsRemove():
     global graphsCreated
     for filepath in graphsCreated:
-        os.system("rm -rf %s" % (filepath))
-        print("Removed %s." % (filepath))
+        os.system('rm -rf %s' % (filepath))
+        print('Removed %s.' % (filepath))
 
 # Save reports to file. Append text.
+
+
 def ReportBaseSave(filepath):
     global outputFilename
     global args
@@ -50,53 +56,53 @@ def ReportBaseSave(filepath):
     minPrice = closePriceTotal.values.min()
     maxWindowPrice = closePrice.values.max()
     minWindowPrice = closePrice.values.min()
-    lastPriceAsPercentOfMaxPrice = (lastPrice*100)/maxPrice
-    growthChance = (maxPrice*100)/lastPrice - 100
-    lostChance = 100-(minPrice*100)/lastPrice
+    lastPriceAsPercentOfMaxPrice = (lastPrice * 100) / maxPrice
+    growthChance = (maxPrice * 100) / lastPrice - 100
+    lostChance = 100 - (minPrice * 100) / lastPrice
     # Volume statistics
     volumeSubset = GetSubsetByDates(volume, last2Weeks, today)
     volumeAvgChange = volumeSubset.median()
 
-    lock = FileLock(filepath+".lock", timeout=lockTimeout)
+    lock = FileLock(filepath + '.lock', timeout=lockTimeout)
     lock.acquire()
     with open(filepath, 'a+') as f:
         # Write statistics
-        f.write("# Report for %s.\n" % (args.stockCode))
+        f.write('# Report for %s.\n' % (args.stockCode))
         f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
                  growth chance <span style='color:green'>+%u%%</span>, \
                  lost chance <span style='color:red'>-%u%%</span>)\n" %
                 (lastPrice, info.GetCurrency(), lastPriceAsPercentOfMaxPrice, growthChance, lostChance))
-        f.write("    * Current - **%2.2f%s - %2.2f%s**\n" % (minWindowPrice,
+        f.write('    * Current - **%2.2f%s - %2.2f%s**\n' % (minWindowPrice,
                                                              info.GetCurrency(), maxWindowPrice, info.GetCurrency()))
-        f.write("    * History - **%2.2f%s - %2.2f%s**\n" %
+        f.write('    * History - **%2.2f%s - %2.2f%s**\n' %
                 (minPrice, info.GetCurrency(), maxPrice, info.GetCurrency()))
-        f.write("    * Volume chng. (2 weeks) - med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n" %
+        f.write('    * Volume chng. (2 weeks) - med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n' %
                 (volumeSubset.median(), volumeSubset.max(), volumeSubset.min()))
-        f.write("    * **%2.2f**%% return rate for last 7 days.\n" %
+        f.write('    * **%2.2f**%% return rate for last 7 days.\n' %
                 (GetReturnRates(closePrice, 7)))
-        f.write("\n")
+        f.write('\n')
 
         # Assets
         stockData.ReportAssets(f)
-        f.write("\n")
+        f.write('\n')
 
         # Insert all created graphs
-        f.write("## Graphs\n\n")
+        f.write('## Graphs\n\n')
         for path in graphsCreated:
-            f.write("![Graph](%s)\n\n" % (os.path.basename(path)))
-        f.write("\n")
+            f.write('![Graph](%s)\n\n' % (os.path.basename(path)))
+        f.write('\n')
 
     lock.release()
-    print("Reported to %s." % (filepath))
+    print('Reported to %s.' % (filepath))
 
 
 # Const objects
 # #####################################################
-lockTimeout = 5*60
-executionIntervals = ["monthly", "weekly", "daily"]
-reportFile = "plots/report.md"
-plotsPath = "plots/"
-outputExtension = ".png"
+lockTimeout = 5 * 60
+executionIntervals = ['monthly', 'weekly', 'daily']
+reportFile = 'plots/report.md'
+plotsPath = 'plots/'
+outputExtension = '.png'
 
 # Varaables
 # #####################################################
@@ -104,37 +110,37 @@ outputExtension = ".png"
 # Arguments and config
 # #####################################################
 parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--stockCode", type=str,
-                    required=True, help="Stock name code")
-parser.add_argument("-d", "--beginDate", type=str,
-                    required=False, help="Begin date")
-parser.add_argument("-Y", "--lastYear", action='store_true',
-                    required=False, help="Last Year")
-parser.add_argument("-6M", "--last6Months", action='store_true',
-                    required=False, help="Last 6 Months")
-parser.add_argument("-3M", "--last3Months", action='store_true',
-                    required=False, help="Last 3 Months")
-parser.add_argument("-M", "--lastMonth", action='store_true',
-                    required=False, help="Last Month")
-parser.add_argument("-W", "--lastWeek", action='store_true',
-                    required=False, help="Last Week")
-parser.add_argument("-g", "--plotToFile", action='store_true',
-                    required=False, help="Plot to file")
-parser.add_argument("-r", "--reports", action='store_true',
-                    required=False, help="Generate extra reports")
-parser.add_argument("-ri", "--reportsInterval", type=str,
-                    required=False, help="Interval of extra reports")
+parser.add_argument('-n', '--stockCode', type=str,
+                    required=True, help='Stock name code')
+parser.add_argument('-d', '--beginDate', type=str,
+                    required=False, help='Begin date')
+parser.add_argument('-Y', '--lastYear', action='store_true',
+                    required=False, help='Last Year')
+parser.add_argument('-6M', '--last6Months', action='store_true',
+                    required=False, help='Last 6 Months')
+parser.add_argument('-3M', '--last3Months', action='store_true',
+                    required=False, help='Last 3 Months')
+parser.add_argument('-M', '--lastMonth', action='store_true',
+                    required=False, help='Last Month')
+parser.add_argument('-W', '--lastWeek', action='store_true',
+                    required=False, help='Last Week')
+parser.add_argument('-g', '--plotToFile', action='store_true',
+                    required=False, help='Plot to file')
+parser.add_argument('-r', '--reports', action='store_true',
+                    required=False, help='Generate extra reports')
+parser.add_argument('-ri', '--reportsInterval', type=str,
+                    required=False, help='Interval of extra reports')
 args = parser.parse_args()
 
 # Assert
 if (not args.stockCode):
-    print("No stockCode!")
+    print('No stockCode!')
     sys.exit(1)
 
 # Assert
 if (args.reportsInterval is not None):
     if (args.reportsInterval not in executionIntervals):
-        print("Wrong execution interval!")
+        print('Wrong execution interval!')
         sys.exit(1)
 
 # Create Country Info
@@ -148,12 +154,12 @@ if (args.plotToFile):
 # Dates
 today = datetime.datetime.now()
 lastYear = datetime.datetime.now() - datetime.timedelta(days=365)
-last6Months = datetime.datetime.now() - datetime.timedelta(days=30*6)
+last6Months = datetime.datetime.now() - datetime.timedelta(days=30 * 6)
 lastMonth = datetime.datetime.now() - datetime.timedelta(days=30)
 last2Weeks = datetime.datetime.now() - datetime.timedelta(days=14)
 lastWeek = datetime.datetime.now() - datetime.timedelta(days=7)
 # End date
-end_date = today.strftime("%Y-%m-%d")
+end_date = today.strftime('%Y-%m-%d')
 # Start date
 if (args.beginDate):
     start_date = args.beginDate
@@ -162,32 +168,32 @@ else:
 # Check last year
 if (args.lastYear):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=365)
-    start_date = tmpDate.strftime("%Y-%m-%d")
+    start_date = tmpDate.strftime('%Y-%m-%d')
 # Check last 6 month
 if (args.last6Months):
-    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30*6)
-    start_date = tmpDate.strftime("%Y-%m-%d")
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30 * 6)
+    start_date = tmpDate.strftime('%Y-%m-%d')
 # Check last 3 month
 if (args.last3Months):
-    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30*3)
-    start_date = tmpDate.strftime("%Y-%m-%d")
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30 * 3)
+    start_date = tmpDate.strftime('%Y-%m-%d')
 # Check last month
 if (args.lastMonth):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=30)
-    start_date = tmpDate.strftime("%Y-%m-%d")
+    start_date = tmpDate.strftime('%Y-%m-%d')
 # Check last Week
 if (args.lastWeek):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=7)
-    start_date = tmpDate.strftime("%Y-%m-%d")
+    start_date = tmpDate.strftime('%Y-%m-%d')
 
 
 # Dynamic variables
 # #####################################################
-outputFilename = args.stockCode+"_"+end_date+"_"
-outputFilepath = plotsPath+outputFilename
+outputFilename = args.stockCode + '_' + end_date + '_'
+outputFilepath = plotsPath + outputFilename
 graphsCreated = []
 reportSignals = CreateReportSignals()
-executionInterval = "weekly"
+executionInterval = 'weekly'
 
 # Update - execution Interval
 if (args.reportsInterval is not None):
@@ -251,23 +257,23 @@ gs = gridspec.GridSpec(Rows, Cols)
 
 # Price All - Plot
 # #####################################################
-plot2 = plt.subplot(gs[0:2,0:2])
+plot2 = plt.subplot(gs[0:2, 0:2])
 stockData.PlotAll()
 stockData.PlotAllAssets()
-rect = CreateRect(datetime.datetime.strptime(start_date, "%Y-%m-%d"),
+rect = CreateRect(datetime.datetime.strptime(start_date, '%Y-%m-%d'),
                   stockData.GetAllData('Close').max(),
-                  datetime.datetime.strptime(end_date, "%Y-%m-%d"),
+                  datetime.datetime.strptime(end_date, '%Y-%m-%d'),
                   stockData.GetAllData('Close').min())
-plt.plot(rect.index, rect, "--", linewidth=1.2, color="#FF0000")
+plt.plot(rect.index, rect, '--', linewidth=1.2, color='#FF0000')
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
-plt.title("Price, OBV, MoneyOnMarket - alltime")
+plt.title('Price, OBV, MoneyOnMarket - alltime')
 plt.legend(loc='upper left')
 
 # OBV - ALL
 if (stockData.hasVolume()):
     plot2A = plot2.twinx()
-    plot2A.plot(obvTotal.index, obvTotal, label="OBV total")
+    plot2A.plot(obvTotal.index, obvTotal, label='OBV total')
     plot2A.legend(loc='upper left')
     plot2A.tick_params(axis='y', labelcolor='tab:blue')
 
@@ -282,19 +288,19 @@ if (stockData.hasVolume()):
 
 # Price - Plot
 # #####################################################
-plot1 = plt.subplot(gs[0:2,2:5])
+plot1 = plt.subplot(gs[0:2, 2:5])
 alligator.Plot()
 stockData.Plot()
 stockData.PlotAssets()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
-plt.title("Price, OBV, MoneyOnMarket")
+plt.title('Price, OBV, MoneyOnMarket')
 plt.legend(loc='upper left')
 
 # OBV
 if (stockData.hasVolume()):
     plot1A = plot1.twinx()
-    plot1A.plot(obv.index, obv, "-.", linewidth=1.2, label="OBV", color="blue")
+    plot1A.plot(obv.index, obv, '-.', linewidth=1.2, label='OBV', color='blue')
     plot1A.legend(loc='upper left')
     plot1A.tick_params(axis='y', labelcolor='tab:blue')
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
@@ -310,19 +316,19 @@ if (stockData.hasVolume()):
 
 
 period = 2
-upTrends = FindUptrends(closePrice,6,period)
-downTrends = FindDowntrends(closePrice,6,period)
-maxs = FindMaxPeaks(closePrice,period)
-mins = FindMinPeaks(closePrice,period)
+upTrends = FindUptrends(closePrice, 6, period)
+downTrends = FindDowntrends(closePrice, 6, period)
+maxs = FindMaxPeaks(closePrice, period)
+mins = FindMinPeaks(closePrice, period)
 
 # Price trends - Plot
 # #####################################################
-plot3 = plt.subplot(gs[2:5,:])
+plot3 = plt.subplot(gs[2:5, :])
 stockData.Plot()
-plt.plot(maxs.index,maxs,'go', label="Maxs")
-plt.plot(mins.index,mins,'ro', label="Mins")
-PlotTrends(upTrends, 'green', "rising")
-PlotTrends(downTrends, 'red', "falling")
+plt.plot(maxs.index, maxs, 'go', label='Maxs')
+plt.plot(mins.index, mins, 'ro', label='Mins')
+PlotTrends(upTrends, 'green', 'rising')
+PlotTrends(downTrends, 'red', 'falling')
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.legend(loc='upper left')
@@ -341,7 +347,7 @@ plot5 = plt.subplot(gs[0:4])
 stockData.PlotCandle(plot5)
 stockData.PlotAssets()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
-plt.title("Price and oscillators - period")
+plt.title('Price and oscillators - period')
 plt.legend(loc='upper left')
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both', color='k')
@@ -350,7 +356,7 @@ plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
 
 # MACD
-plot6 = plt.subplot(gs[Rows-2], sharex=plot5)
+plot6 = plt.subplot(gs[Rows - 2], sharex=plot5)
 macd.Plot()
 macd.Histogram()
 plt.ylabel('Value')
@@ -360,7 +366,7 @@ plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
 
 # RSI
-plot8 = plt.subplot(gs[Rows-1], sharex=plot5)
+plot8 = plt.subplot(gs[Rows - 1], sharex=plot5)
 PlotRSI(rsi)
 plt.ylabel('RSI')
 plt.grid()
@@ -384,7 +390,7 @@ stockData.PlotCandle(plot9)
 stockData.PlotAssets()
 bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
-plt.title("Price candlestick")
+plt.title('Price candlestick')
 plt.legend(loc='upper left')
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both', color='k')
@@ -393,7 +399,7 @@ plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
 
 # ATR
-plot10 = plt.subplot(gs[Rows-2], sharex=plot9)
+plot10 = plt.subplot(gs[Rows - 2], sharex=plot9)
 # atr.Plot()
 dmi.Plot()
 plt.legend(loc='upper left')
@@ -402,7 +408,7 @@ plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
 
 # CCI
-plot11 = plt.subplot(gs[Rows-1], sharex=plot9)
+plot11 = plt.subplot(gs[Rows - 1], sharex=plot9)
 cci.Plot()
 plt.legend(loc='upper left')
 plt.grid()
@@ -431,7 +437,7 @@ if (stockData.hasVolume()):
     stockData.PlotAssets()
     bollinger.Plot()
     plt.ylabel('Price (%s)' % (info.GetCurrency()))
-    plt.title("Price candlestick")
+    plt.title('Price candlestick')
     plt.legend(loc='upper left')
     plt.minorticks_on()
     plt.grid(b=True, which='major', axis='both', color='k')
@@ -445,7 +451,7 @@ if (stockData.hasVolume()):
     plt.legend(loc='upper left')
 
     # CMF
-    plot10 = plt.subplot(gs[Rows-2], sharex=plot9)
+    plot10 = plt.subplot(gs[Rows - 2], sharex=plot9)
 #     cmf.PlotChaikinMoneyFlow()
     cmf.PlotChaikinOscillator()
     plt.legend(loc='upper left')
@@ -454,7 +460,7 @@ if (stockData.hasVolume()):
                     top=False, labelbottom=False)
 
     # MFI
-    plot11 = plt.subplot(gs[Rows-1], sharex=plot9)
+    plot11 = plt.subplot(gs[Rows - 1], sharex=plot9)
     mfi.Plot()
     plt.legend(loc='upper left')
     plt.grid()
@@ -472,7 +478,7 @@ if (args.reports):
         reportAllSignalTypes = True
 
     # Daily report
-    if (executionInterval == "daily"):
+    if (executionInterval == 'daily'):
         reportSignals.Report(reportFile, reportAllSignalTypes)
 
         # If signals reported

@@ -32,22 +32,22 @@ class RSI:
         self.notSellSignal = CreateSubsetByValues(self.rsi, 0, 30)
         self.notBuySignal = CreateSubsetByValues(self.rsi, 70, 100)
         self.trendToFall = CreateSubsetByValues(
-            self.rsi, 100-self.hystersis, 100)
+            self.rsi, 100 - self.hystersis, 100)
         self.trendToRise = CreateSubsetByValues(self.rsi, 0, self.hystersis)
         self.fromBottom50, self.fromTop50 = FindIntersections(self.rsi, 50)
 
     # Set RSI indicator
     def InitRSI(self, prices, n):
         deltas = numpy.diff(prices)
-        seed = deltas[:n+1]
-        up = seed[seed >= 0].sum()/n
-        down = -seed[seed < 0].sum()/n
-        rs = up/down
+        seed = deltas[:n + 1]
+        up = seed[seed >= 0].sum() / n
+        down = -seed[seed < 0].sum() / n
+        rs = up / down
         rsi = numpy.zeros_like(prices)
-        rsi[:n] = 100. - 100./(1.+rs)
+        rsi[:n] = 100. - 100. / (1. + rs)
 
         for i in range(n, len(prices)):
-            delta = deltas[i-1]  # cause the diff is 1 shorter
+            delta = deltas[i - 1]  # cause the diff is 1 shorter
 
             if delta > 0:
                 upval = delta
@@ -56,19 +56,19 @@ class RSI:
                 upval = 0.
                 downval = -delta
 
-            up = (up*(n-1) + upval)/n
-            down = (down*(n-1) + downval)/n
+            up = (up * (n - 1) + upval) / n
+            down = (down * (n - 1) + downval) / n
 
-            rs = up/down
-            rsi[i] = 100. - 100./(1.+rs)
+            rs = up / down
+            rsi[i] = 100. - 100. / (1. + rs)
 
         return pd.Series(data=rsi, index=prices.index)
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        reportSignals.AddDataframeSignals(self.fromBottom50, "RSI", "MayBuy")
-        reportSignals.AddDataframeSignals(self.notSellSignal, "RSI", "NotSell")
-        reportSignals.AddDataframeSignals(self.notBuySignal, "RSI", "NotBuy")
+        reportSignals.AddDataframeSignals(self.fromBottom50, 'RSI', 'MayBuy')
+        reportSignals.AddDataframeSignals(self.notSellSignal, 'RSI', 'NotSell')
+        reportSignals.AddDataframeSignals(self.notBuySignal, 'RSI', 'NotBuy')
 
     # Plot method
     def Plot(self):
@@ -76,8 +76,8 @@ class RSI:
         line50 = CreateHorizontalLine(self.rsi.index, 50, 50)
         plt.plot(line50.index, line50, '-.', linewidth=1.0, color='#333333')
         # RSI
-        plt.plot(self.rsi.index, self.rsi, label='RSI' +
-                 str(self.n), linewidth=1.0, color='#000000')
+        plt.plot(self.rsi.index, self.rsi, label='RSI'
+                 + str(self.n), linewidth=1.0, color='#000000')
         x_axis = self.rsi.index.get_level_values(0)
         # OverBought
         overBought = CreateHorizontalLine(self.rsi.index, 70, 70, True)

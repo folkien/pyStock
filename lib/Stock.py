@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+ Stock object.
+"""
+
 from pandas_datareader import data
 import matplotlib.pyplot as plt
 import copy
@@ -22,7 +26,7 @@ def GetData(code, begin, end):
     receivedData = data.DataReader(code, 'stooq', begin, end)
 
     if len(receivedData) == 0:
-        print("No Stooq data for entry!")
+        print('No Stooq data for entry!')
         sys.exit(1)
 
     return receivedData
@@ -45,32 +49,28 @@ def SetVolumeWithTrend(price, volumeTotal):
         lastPrice = price.values[i]
 
 
-"""
- Returns percent return rate for last N days.
-"""
-
-
 def GetReturnRates(price, days=1):
-    startPrice = price[-1-days]
+    """
+    Returns percent return rate for last N days.
+    """
+    startPrice = price[-1 - days]
     endPrice = price[-1]
-    return ((endPrice-startPrice)*100)/startPrice
-
-
-"""
-Typical Price
-Source: https://en.wikipedia.org/wiki/Typical_price
-Params: 
-    data: pandas DataFrame
-    high_col: the name of the HIGH values column
-    low_col: the name of the LOW values column
-    close_col: the name of the CLOSE values column
-    
-Returns:
-    copy of 'data' DataFrame with 'typical_price' column added
-"""
+    return ((endPrice - startPrice) * 100) / startPrice
 
 
 def typical_price(data, high_col='High', low_col='Low', close_col='Close'):
+    """
+    Typical Price
+    Source: https://en.wikipedia.org/wiki/Typical_price
+    Params:
+        data: pandas DataFrame
+        high_col: the name of the HIGH values column
+        low_col: the name of the LOW values column
+        close_col: the name of the CLOSE values column
+
+    Returns:
+        copy of 'data' DataFrame with 'typical_price' column added
+    """
     data['typical_price'] = (
         data[high_col] + data[low_col] + data[close_col]) / 3
     return data

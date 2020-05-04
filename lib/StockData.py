@@ -20,9 +20,9 @@ from lib.Stock import *
 
 class StockData:
 
-    def __init__(self, stockCode, beginDate="1990-01-01", endDate=datetime.datetime.now().strftime("%Y-%m-%d")):
+    def __init__(self, stockCode, beginDate='1990-01-01', endDate=datetime.datetime.now().strftime('%Y-%m-%d')):
         self.assets = []
-        self.symbol = "zł"
+        self.symbol = 'zł'
         self.stockCode = stockCode
         # Data fetch/create
         self.cache = StockDatabase()
@@ -30,7 +30,7 @@ class StockData:
         self.currentPrice = self.data['Close'][0]
         # Typical price create
         self.data['Typical'] = (
-            self.data['Close']+self.data['High']+self.data['Low'])/3
+            self.data['Close'] + self.data['High'] + self.data['Low']) / 3
         # Volumen parse/create if exists
         if (self.hasVolume()):
             self.data['VolumeP'], self.data['VolumeN'] = self.InitVolume(
@@ -44,8 +44,8 @@ class StockData:
         # Create subset of data
         self.dataSubset = SetReindex(self.data, beginDate, endDate)
         # Change dates
-        self.beginDate = datetime.datetime.strptime(beginDate, "%Y-%m-%d")
-        self.endDate = datetime.datetime.strptime(endDate, "%Y-%m-%d")
+        self.beginDate = datetime.datetime.strptime(beginDate, '%Y-%m-%d')
+        self.endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
 
     # Change volumeTotal to neg/pos value
     def InitVolume(self, price, volume):
@@ -58,10 +58,10 @@ class StockData:
         volumeNegative = pd.Series()
 
         # Data starts from oldest to youngest
-        for i in (range(0, len(price.values)-1)):
+        for i in (range(0, len(price.values) - 1)):
 
             # If price dropped, then volume - sign
-            if (price.values[i] < price.values[i+1]):
+            if (price.values[i] < price.values[i + 1]):
                 volumeNegative = volumeNegative.append(
                     pd.Series(volume.values[i], index=[volume.index[i]]))
                 volume.values[i] = -volume.values[i]
@@ -78,9 +78,9 @@ class StockData:
 
     # Returns current close price
     def GetReturnRates(self, days):
-        startPrice = self.data['Close'][-1-days]
+        startPrice = self.data['Close'][-1 - days]
         endPrice = self.data['Close'][-1]
-        return ((endPrice-startPrice)*100)/startPrice
+        return ((endPrice - startPrice) * 100) / startPrice
 
     # Returns current close price
     def GetStockCode(self):
@@ -96,21 +96,21 @@ class StockData:
 
     # Get data from URL/database
     def FetchData(self, stockCode, beginDate, endDate):
-        rxData = ""
+        rxData = ''
 
         # Read from database if exists today file
         if (len(rxData) == 0) and (self.cache.IsOfTodaySession(stockCode) == True):
-            print("Restoring today cache...")
+            print('Restoring today cache...')
             rxData = self.cache.Load(stockCode)
 
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
         if (len(rxData) == 0):
-            print("Fetching `%s` from stooq." % (stockCode))
+            print('Fetching `%s` from stooq.' % (stockCode))
             rxData = data.DataReader(stockCode, 'stooq', beginDate, endDate)
 
         # Use old data if exists
         if (len(rxData) == 0) and (self.cache.IsExists(stockCode) == True):
-            print("Restoring old data...")
+            print('Restoring old data...')
             rxData = self.cache.Load(stockCode)
 
         # No data at all
@@ -124,13 +124,13 @@ class StockData:
         return rxData
 
     def Report(self, f, interval):
-        if (interval == "daily"):
-            f.write("    * **%2.2f**%% daily change.\n" %
+        if (interval == 'daily'):
+            f.write('    * **%2.2f**%% daily change.\n' %
                     (self.GetReturnRates(1)))
-        elif (interval == "weekly"):
+        elif (interval == 'weekly'):
             # Get last range date
             lastRangeDate = self.endDate - datetime.timedelta(days=7)
-            lastRangeDate = lastRangeDate.strftime("%Y-%m-%d")
+            lastRangeDate = lastRangeDate.strftime('%Y-%m-%d')
             # Get price, volume, subsets
             priceRange = SetReindex(self.dataSubset, lastRangeDate, endDate)
             volumeRange = SetReindex(self.dataSubset, lastRangeDate, endDate)
@@ -141,12 +141,12 @@ class StockData:
             rangeMinPrice = priceRange.max()
 
             currentPriceRelativeToMaxPrice = (
-                self.currentPrice*100)/totalMaxPrice
-            growthChance = (totalMaxPrice*100)/self.currentPrice - 100
-            lostChance = 100-(totalMinPrice*100)/self.currentPrice
+                self.currentPrice * 100) / totalMaxPrice
+            growthChance = (totalMaxPrice * 100) / self.currentPrice - 100
+            lostChance = 100 - (totalMinPrice * 100) / self.currentPrice
 
             # Write statistics
-            f.write("# Report for %s.\n" % (self.stockCode))
+            f.write('# Report for %s.\n' % (self.stockCode))
             # weekly changes
             f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
                         growth chance <span style='color:green'>+%u%%</span>, \
@@ -157,19 +157,19 @@ class StockData:
                         growth chance <span style='color:green'>+%u%%</span>, \
                         lost chance <span style='color:red'>-%u%%</span>)\n" %
                     (lastPrice, info.GetCurrency(), lastPriceAsPercentOfMaxPrice, growthChance, lostChance))
-            f.write("    * Current - **%2.2f%s - %2.2f%s**\n" % (minWindowPrice,
+            f.write('    * Current - **%2.2f%s - %2.2f%s**\n' % (minWindowPrice,
                                                                  info.GetCurrency(), maxWindowPrice, info.GetCurrency()))
-            f.write("    * History - **%2.2f%s - %2.2f%s**\n" %
+            f.write('    * History - **%2.2f%s - %2.2f%s**\n' %
                     (minPrice, info.GetCurrency(), maxPrice, info.GetCurrency()))
-            f.write("    * Volume chng. med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n" %
+            f.write('    * Volume chng. med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n' %
                     (volumeSubset.median(), volumeSubset.max(), volumeSubset.min()))
-            f.write("\n")
+            f.write('\n')
 
     # Report current assets
     def ReportAssets(self, file):
         assets = self.GetAssets()
         if (len(assets) > 0):
-            file.write("## Assets\n\n")
+            file.write('## Assets\n\n')
             for asset in assets:
                 ReportAsset(file, asset, self.currentPrice, self.symbol)
 
@@ -197,7 +197,7 @@ class StockData:
     def GetAssets(self):
         assets = []
         for asset in self.assets:
-            dt = datetime.datetime.strptime(asset["date"], "%d-%M-%Y")
+            dt = datetime.datetime.strptime(asset['date'], '%d-%M-%Y')
             if ((dt >= self.beginDate) and (dt <= self.endDate)):
                 assets.append(asset)
         return assets
@@ -212,13 +212,13 @@ class StockData:
 
     def PlotAll(self):
         plt.plot(self.data['Close'].index, self.data['Close'],
-                 "#000000", label=self.stockCode)
+                 '#000000', label=self.stockCode)
         return 0
 
     # Plot stock data
     def Plot(self):
         plt.plot(self.dataSubset['Close'].index,
-                 self.dataSubset['Close'], "#000000", label=self.stockCode)
+                 self.dataSubset['Close'], '#000000', label=self.stockCode)
         return 0
 
     # Plot assets
@@ -229,13 +229,13 @@ class StockData:
     # Plot assets
     def PlotAssets(self):
         for asset in self.assets:
-            dt = datetime.datetime.strptime(asset["date"], "%d-%M-%Y")
+            dt = datetime.datetime.strptime(asset['date'], '%d-%M-%Y')
             if ((dt >= self.beginDate) and (dt <= self.endDate)):
                 PlotAsset(plt, asset)
 
     # Plot stock data
     def PlotAsBackground(self):
-        plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'], "--", color="#777777",
+        plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'], '--', color='#777777',
                  label=self.stockCode, linewidth=0.5)
         return 0
 
@@ -243,18 +243,18 @@ class StockData:
     def PlotVolume(self, ax):
         ax2 = ax.twinx()
         ax2.bar(self.dataSubset['VolumeP'].index,
-                self.dataSubset['VolumeP'], color="green", label="")
+                self.dataSubset['VolumeP'], color='green', label='')
         ax2.bar(self.dataSubset['VolumeN'].index,
-                self.dataSubset['VolumeN'], color="red", label="")
+                self.dataSubset['VolumeN'], color='red', label='')
         ax2.tick_params(axis='y', labelcolor='tab:red')
 
     # Plot volume as bars
     def PlotVolumeAll(self, ax):
         ax2 = ax.twinx()
         ax2.bar(self.data['VolumeP'].index,
-                self.data['VolumeP'], color="green", label="")
+                self.data['VolumeP'], color='green', label='')
         ax2.bar(self.data['VolumeN'].index,
-                self.data['VolumeN'], color="red", label="")
+                self.data['VolumeN'], color='red', label='')
         ax2.tick_params(axis='y', labelcolor='tab:red')
 
     # Plot money on the market
@@ -293,19 +293,19 @@ class StockData:
 
         # line with close price
         plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'],
-                 "--", color="#777777", label=self.stockCode, linewidth=0.6)
+                 '--', color='#777777', label=self.stockCode, linewidth=0.6)
 
         # Rising(Close>Open) - Green bars,
-        plt.bar(pricesup.index, pricesup['Close']-pricesup['Open'],
-                widthOpenClose, bottom=pricesup['Open'], color='g', edgecolor="k")
-        plt.bar(pricesup.index, pricesup['High']-pricesup['Low'],
-                widthHighLow,   bottom=pricesup['Low'],  color='g')
+        plt.bar(pricesup.index, pricesup['Close'] - pricesup['Open'],
+                widthOpenClose, bottom=pricesup['Open'], color='g', edgecolor='k')
+        plt.bar(pricesup.index, pricesup['High'] - pricesup['Low'],
+                widthHighLow, bottom=pricesup['Low'], color='g')
 
         # Falling(Close<=Open) - Red bars
-        plt.bar(pricesdown.index, pricesdown['Open']-pricesdown['Close'],
-                widthOpenClose, bottom=pricesdown['Close'], color='r', edgecolor="k")
-        plt.bar(pricesdown.index, pricesdown['High']-pricesdown['Low'],
-                widthHighLow,   bottom=pricesdown['Low'],  color='r')
+        plt.bar(pricesdown.index, pricesdown['Open'] - pricesdown['Close'],
+                widthOpenClose, bottom=pricesdown['Close'], color='r', edgecolor='k')
+        plt.bar(pricesdown.index, pricesdown['High'] - pricesdown['Low'],
+                widthHighLow, bottom=pricesdown['Low'], color='r')
 
     # Plot stock data
     def PlotCandle(self, ax):

@@ -20,7 +20,7 @@ class CCI:
         self.n = n
         self.factor = 0.015
         self.cci = self.InitCCI(high, low, close)
-        self.cciSignal = CreateMovingAverage(self.cci, self.n*1.5)
+        self.cciSignal = CreateMovingAverage(self.cci, self.n * 1.5)
 
         # Signals
         fromBottom, fromTop = FindIntersections(self.cci, -100)
@@ -33,20 +33,20 @@ class CCI:
         ct = (high + low + close) / 3
         self.rollingMean = CreateMovingAverage(ct, self.n)
         self.rollingStd = CreateMovingStd(ct, self.n)
-        data = pd.Series((ct - self.rollingMean) / (self.factor *
-                                                    self.rollingStd), name='CCI_' + str(self.n))
+        data = pd.Series((ct - self.rollingMean) / (self.factor
+                                                    * self.rollingStd), name='CCI_' + str(self.n))
         return data
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        reportSignals.AddDataframeSignals(self.buy, "CCI", "buy")
-        reportSignals.AddDataframeSignals(self.sell, "CCI", "sell")
+        reportSignals.AddDataframeSignals(self.buy, 'CCI', 'buy')
+        reportSignals.AddDataframeSignals(self.sell, 'CCI', 'sell')
 
     # Plot method
     def Plot(self):
         # CCI
-        plt.plot(self.cci.index, self.cci, label='CCI' +
-                 str(self.n), linewidth=1.0, color='#000000')
+        plt.plot(self.cci.index, self.cci, label='CCI'
+                 + str(self.n), linewidth=1.0, color='#000000')
 #             plt.plot(self.cciSignal.index, self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
         x_axis = self.cci.index.get_level_values(0)
 

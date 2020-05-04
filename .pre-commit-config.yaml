@@ -1,9 +1,4 @@
 repos:
--   repo: https://github.com/ambv/black
-    rev: stable
-    hooks:
-    - id: black
-      language_version: python3.6
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.5.0
     hooks:
@@ -16,4 +11,7 @@ repos:
     -   id: name-tests-test
     -   id: requirements-txt-fixer
     -   id: double-quote-string-fixer
-    -   id: flake8
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: 'v1.5.2'  # Use the sha / tag you want to point at
+    hooks:
+    -   id: autopep8

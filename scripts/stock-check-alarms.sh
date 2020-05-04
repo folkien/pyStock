@@ -18,17 +18,17 @@ GetText()
 }
 
 stock-alarms -c | grep "!Alarm!" > alarms.log
-# for each alarm line 
+# for each alarm line
 # pyNotfiy
 # GetText value
-# Add to array 
+# Add to array
 
 #From array plot graphs
 
 # Create mail and send
 #echo "COntetn" | mail -s "[Stock] Notify!"
 
-# Clean 
+# Clean
 rm -rfv alarms.log
 
 # Go back

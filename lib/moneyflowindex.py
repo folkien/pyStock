@@ -20,7 +20,7 @@ class MoneyFlowIndex:
     def __init__(self, high, low, close, volume, info, n=14):
         self.n = n
         self.info = info
-        self.typicalPrice = (high+low+close)/3
+        self.typicalPrice = (high + low + close) / 3
         self.moneyFlow, self.posFlow, self.negFlow, self.mfi = self.InitMoneyFlow(
             self.typicalPrice, volume, n)
         # money on the market plot
@@ -61,21 +61,21 @@ class MoneyFlowIndex:
 
         posFlowAvg = CreateMovingAverage(posFlow, n)
         negFlowAvg = CreateMovingAverage(negFlow, n)
-        moneyRatio = posFlowAvg/negFlowAvg
-        moneyFlowIndex = (100*posFlowAvg)/(posFlowAvg+negFlowAvg)
+        moneyRatio = posFlowAvg / negFlowAvg
+        moneyFlowIndex = (100 * posFlowAvg) / (posFlowAvg + negFlowAvg)
         return moneyFlow, posFlow, negFlow, moneyFlowIndex
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        reportSignals.AddDataframeSignals(self.buy, "MFI", "buy")
-        reportSignals.AddDataframeSignals(self.sell, "MFI", "sell")
-        reportSignals.AddDataframeSignals(self.buyStrong, "MFI", "buyStrong")
-        reportSignals.AddDataframeSignals(self.sellStrong, "MFI", "sellStrong")
+        reportSignals.AddDataframeSignals(self.buy, 'MFI', 'buy')
+        reportSignals.AddDataframeSignals(self.sell, 'MFI', 'sell')
+        reportSignals.AddDataframeSignals(self.buyStrong, 'MFI', 'buyStrong')
+        reportSignals.AddDataframeSignals(self.sellStrong, 'MFI', 'sellStrong')
 
     # Plot method
     def PlotPosNegFlow(self):
-        plt.bar(self.negFlow.index, self.negFlow, color="red", label="")
-        plt.bar(self.posFlow.index, self.posFlow, color="green", label="")
+        plt.bar(self.negFlow.index, self.negFlow, color='red', label='')
+        plt.bar(self.posFlow.index, self.posFlow, color='green', label='')
         # MoneyFlowIndex
 #             plt.plot(self.posFlow.index, self.posFlow, label='PosFlow' + str(self.n), linewidth=1.0, color = 'green')
 #             plt.plot(self.negFlow.index, self.negFlow, label='NegFlow' + str(self.n), linewidth=1.0, color = 'red')
@@ -84,8 +84,8 @@ class MoneyFlowIndex:
 
     def Plot(self):
         # MoneyFlowIndex
-        plt.plot(self.mfi.index, self.mfi, label='MFI' +
-                 str(self.n), linewidth=1.0, color='#000000')
+        plt.plot(self.mfi.index, self.mfi, label='MFI'
+                 + str(self.n), linewidth=1.0, color='#000000')
         x_axis = self.mfi.index.get_level_values(0)
 
         # OverBought

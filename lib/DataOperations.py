@@ -23,10 +23,10 @@ def CreateHorizontalLine(indexes, startValue, endValue, allIndexes=False):
     # All data
     else:
         N = len(indexes)
-        alpha = (endValue-startValue)/N
+        alpha = (endValue - startValue) / N
         for i in range(len(indexes)):
             data = data.append(pd.DataFrame(
-                {'value': alpha*i+startValue},
+                {'value': alpha * i + startValue},
                 index=[indexes[i]]))
     return data
 
@@ -131,7 +131,7 @@ def FindZeroes(data):
 
     signs = numpy.sign(data.values)
     for i in range(1, len(signs)):
-        if (signs[i] != signs[i-1]):
+        if (signs[i] != signs[i - 1]):
             zeroes = zeroes.append(pd.DataFrame(
                 {'close': data.values[i]}, index=[data.index[i]]))
 
@@ -146,7 +146,7 @@ def FindIntersections(x, y):
         diffrence = x.subtract(y)
     # for int or float values
     else:
-        diffrence = x-y
+        diffrence = x - y
 
     fromBottom = pd.DataFrame()
     fromTop = pd.DataFrame()
@@ -154,11 +154,11 @@ def FindIntersections(x, y):
     signs = numpy.sign(diffrence.values)
     for i in range(1, len(signs)):
         # Bottom crossing
-        if (signs[i] == 1) and (signs[i-1] == -1):
+        if (signs[i] == 1) and (signs[i - 1] == -1):
             fromBottom = fromBottom.append(pd.DataFrame(
                 {'value': x.values[i]}, index=[diffrence.index[i]]))
         # Top crossing
-        elif (signs[i] == -1) and (signs[i-1] == 1):
+        elif (signs[i] == -1) and (signs[i - 1] == 1):
             fromTop = fromTop.append(pd.DataFrame(
                 {'value': x.values[i]}, index=[diffrence.index[i]]))
 
@@ -210,7 +210,7 @@ def FindPeaks(data, delta):
 
             if (search_max == True):
                 # Save last max value
-                if (current < (last_max-delta)):
+                if (current < (last_max - delta)):
                     maxs = maxs.append(pd.DataFrame(
                         {'close': last_max}, index=[data.index[last_max_pos]]))
                     #maxs.values[last_max_pos] = last_max
@@ -219,43 +219,48 @@ def FindPeaks(data, delta):
                     search_max = False
             else:
                 # Save last min value
-                if (current > (last_min+delta)):
+                if (current > (last_min + delta)):
                     mins = mins.append(pd.DataFrame(
                         {'close': last_min}, index=[data.index[last_min_pos]]))
                     last_min = current
                     last_min_pos = i
                     search_max = True
         # Adjust delta for another loop search if min/max not found
-        delta = (delta*80)/100
+        delta = (delta * 80) / 100
         loopIteration += 1
 
     return mins, maxs
 
 # Linear extended further trend by amount of days
-def ExtendedTrendForward(trend,days=7):
+
+
+def ExtendedTrendForward(trend, days=7):
     # Delta of values
-    dy=trend[-1]-trend[-2]
+    dy = trend[-1] - trend[-2]
     # Time delta in days
-    dt=trend.index[-1]-trend.index[-2]
-    dt=dt.days
+    dt = trend.index[-1] - trend.index[-2]
+    dt = dt.days
     # Append last element
-    t = trend.index[-1]+datetime.timedelta(days=days)
-    y = trend[-1]+days*(dy/dt)
+    t = trend.index[-1] + datetime.timedelta(days=days)
+    y = trend[-1] + days * (dy / dt)
     return trend.append(pd.Series(y, index=[t]))
 
 # Uptrend calculation is based on mins
-def FindUptrends(data,days=7,n=4):
-    timeDelta=datetime.timedelta(days=days)
+
+
+def FindUptrends(data, days=7, n=4):
+    timeDelta = datetime.timedelta(days=days)
     uptrends = []
     trend = pd.Series()
-    mins = FindMinPeaks(data,n)
+    mins = FindMinPeaks(data, n)
 
     # Find rising series. Start from end
-    for i in range(len(mins.values)-1):
+    for i in range(len(mins.values) - 1):
         # If rising and more than time delta
-        if (mins[i] <= mins[i+1]) and (mins.index[i]+timeDelta < mins.index[i+1]):
+        if (mins[i] <= mins[i + 1]) and (mins.index[i] + timeDelta < mins.index[i + 1]):
             trend = trend.append(pd.Series(mins.values[i], index=[mins.index[i]]))
-            trend = trend.append(pd.Series(mins.values[i+1], index=[mins.index[i+1]]))
+            trend = trend.append(
+                pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
         elif (trend.size > 0):
             uptrends.append(trend)
             trend = pd.Series()
@@ -263,42 +268,47 @@ def FindUptrends(data,days=7,n=4):
     # Add last trend
     if (trend.size > 0):
         uptrends.append(trend)
-            
+
     # Calculate regression line most fitting.
     # If some point is far away from line then drop it.
     # Add to data.
     return uptrends
 
 # Downtrend calculation is based on maxs
-def FindDowntrends(data,days=7,n=4):
-    timeDelta=datetime.timedelta(days=days)
+
+
+def FindDowntrends(data, days=7, n=4):
+    timeDelta = datetime.timedelta(days=days)
     downtrends = []
     trend = pd.Series()
-    maxs = FindMaxPeaks(data,n)
+    maxs = FindMaxPeaks(data, n)
 
     # Find falling series. Start from end
-    for i in range(len(maxs.values)-1):
+    for i in range(len(maxs.values) - 1):
         # If falling and more than time delta
-        if (maxs[i] > maxs[i+1]) and (maxs.index[i]+timeDelta < maxs.index[i+1]):
+        if (maxs[i] > maxs[i + 1]) and (maxs.index[i] + timeDelta < maxs.index[i + 1]):
             trend = trend.append(pd.Series(maxs.values[i], index=[maxs.index[i]]))
-            trend = trend.append(pd.Series(maxs.values[i+1], index=[maxs.index[i+1]]))
+            trend = trend.append(
+                pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
         elif (trend.size > 0):
             downtrends.append(trend)
             trend = pd.Series()
-    
+
     # Add last trend
     if (trend.size > 0):
         downtrends.append(trend)
-        
+
     return downtrends
 
-#Plots all trends list
-def PlotTrends(trendsList,tColor,tName=""):
+# Plots all trends list
+
+
+def PlotTrends(trendsList, tColor, tName=''):
     for trend in trendsList:
         # For only two dots plot direct line
         if (trend.size == 2):
             trend = ExtendedTrendForward(trend)
-            plt.plot(trend.index,trend,'--',color=tColor)
+            plt.plot(trend.index, trend, '--', color=tColor)
         # For more dots, calculate regression line
         else:
             # Remember datetime of first and last point
@@ -321,6 +331,4 @@ def PlotTrends(trendsList,tColor,tName=""):
             trend = trend.append(pd.Series(y0, index=[dt0]))
             trend = trend.append(pd.Series(y1, index=[dt1]))
             trend = ExtendedTrendForward(trend)
-            plt.plot(trend.index,trend,'--',color=tColor)
-            
-    
+            plt.plot(trend.index, trend, '--', color=tColor)

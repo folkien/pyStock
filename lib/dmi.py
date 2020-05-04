@@ -31,8 +31,8 @@ class DMI:
         DMn = pd.DataFrame()
 
         for i in range(1, len(high.values)):
-            moveUp = high.values[i]-high.values[i-1]
-            moveDown = low.values[i-1]-low.values[i]
+            moveUp = high.values[i] - high.values[i - 1]
+            moveDown = low.values[i - 1] - low.values[i]
             # DM+
             if (moveUp > moveDown) and (moveUp > 0):
                 DMp = DMp.append(pd.DataFrame({'value': moveUp},
@@ -48,9 +48,9 @@ class DMI:
                 DMn = DMn.append(pd.DataFrame({'value': 0},
                                               index=[high.index[i]]))
 
-        DIp = 100*CreateMovingAverage(DMp, self.n)/atr
-        DIn = 100*CreateMovingAverage(DMn, self.n)/atr
-        ADX = 100*abs(DIp-DIn)/abs(DIp+DIn)
+        DIp = 100 * CreateMovingAverage(DMp, self.n) / atr
+        DIn = 100 * CreateMovingAverage(DMn, self.n) / atr
+        ADX = 100 * abs(DIp - DIn) / abs(DIp + DIn)
         return DIp, DIn, ADX
 
     # Export indicator signals to report

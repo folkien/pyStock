@@ -23,7 +23,7 @@ class StockDataEP(Resource):
         out = df.to_json(orient='columns', date_format='iso')
         resp = Response(response=out,
                         status=200,
-                        mimetype="application/json")
+                        mimetype='application/json')
         return(resp)
 
 

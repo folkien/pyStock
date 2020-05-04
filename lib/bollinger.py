@@ -26,7 +26,7 @@ class Bollinger:
         self.mavg, self.upperBand, self.lowerBand = self.InitBollinger(
             prices, self.n, self.k)
         self.std = self.upperBand - self.lowerBand
-        self.absStd = (self.std*100)/self.std.max()
+        self.absStd = (self.std * 100) / self.std.max()
 
         # Signals
         fromBottom, fromTop = FindIntersections(self.upperBand, prices)
@@ -48,8 +48,8 @@ class Bollinger:
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        reportSignals.AddDataframeSignals(self.buy, "Bollinger", "buy")
-        reportSignals.AddDataframeSignals(self.sell, "Bollinger", "sell")
+        reportSignals.AddDataframeSignals(self.buy, 'Bollinger', 'buy')
+        reportSignals.AddDataframeSignals(self.sell, 'Bollinger', 'sell')
 
     # Plot method
     def Plot(self):
@@ -60,11 +60,11 @@ class Bollinger:
         plt.fill_between(x_axis, self.upperBand,
                          self.lowerBand, color='#BBBBBB')
         plt.plot(self.upperBand.index, self.upperBand, '--',
-                 linewidth=1.0, color='#940006', label="Sell band")
+                 linewidth=1.0, color='#940006', label='Sell band')
         plt.plot(self.lowerBand.index, self.lowerBand, '--',
-                 linewidth=1.0, color='#169400', label="Buy band")
+                 linewidth=1.0, color='#169400', label='Buy band')
         plt.plot(self.mavg.index, self.mavg, '--', linewidth=1.0,
-                 color='#0000FF', label=("MA %s days" % self.n))
+                 color='#0000FF', label=('MA %s days' % self.n))
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):
@@ -78,8 +78,8 @@ class Bollinger:
 
     # Plot method
     def PlotAbsDeviation(self):
-        plt.plot(self.absStd.index, self.absStd,  linewidth=1.0,
-                 color='#333333', label="Bol.AbsDeviation")
+        plt.plot(self.absStd.index, self.absStd, linewidth=1.0,
+                 color='#333333', label='Bol.AbsDeviation')
         plt.ylim(top=100, bottom=0)
         if (self.consolidation is not None and self.consolidation.size):
             plt.plot(self.consolidation.index, self.consolidation,
