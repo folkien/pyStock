@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/folkien/pyStock.svg?branch=master)](https://travis-ci.com/folkien/pyStock)
+
 pyStock - repository of stock analyze, alarm and follow tools.
 -------------
 pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
