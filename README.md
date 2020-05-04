@@ -111,6 +111,7 @@ Plot Apple last 6M to file
 ![image](doc/AAPL.US_1.png)
 ![image](doc/AAPL.US_2.png)
 ![image](doc/AAPL.US_3.png)
+![image](doc/AAPL.US_4.png)
 
 Plot BTC/USD last 6M to file (no volume indicators)
 ```bash
@@ -120,6 +121,7 @@ Plot BTC/USD last 6M to file (no volume indicators)
 ![image](doc/BTCUSD.pl_1.png)
 ![image](doc/BTCUSD.pl_2.png)
 ![image](doc/BTCUSD.pl_3.png)
+![image](doc/BTCUSD.pl_4.png)
 
 Last year of google with markdown reports into report.md
 ```bash
@@ -128,6 +130,7 @@ Last year of google with markdown reports into report.md
 ![image](doc/GOOG.US_1.png)
 ![image](doc/GOOG.US_2.png)
 ![image](doc/GOOG.US_3.png)
+![image](doc/GOOG.US_4.png)
 
 Markdown report
 ```markdown
@@ -156,6 +159,7 @@ Example CD Projekt Red plot
 ![CDPR image](doc/CDR.pl_1.png)
 ![CDPR image](doc/CDR.pl_2.png)
 ![CDPR image](doc/CDR.pl_3.png)
+![CDPR image](doc/CDR.pl_4.png)
 
 
 ## Stock manager
