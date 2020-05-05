@@ -77,9 +77,9 @@ class StockData:
         return self.currentPrice
 
     # Returns current close price
-    def GetReturnRates(self, days):
-        startPrice = self.data['Close'][days]
-        endPrice = self.data['Close'][0]
+    def GetReturnRates(self, days, column='Close'):
+        startPrice = self.data[column][days]
+        endPrice = self.data[column][0]
         return ((endPrice - startPrice) * 100) / startPrice
 
     # Returns current close price
@@ -126,11 +126,27 @@ class StockData:
     def Report(self, f, interval):
         if (interval == 'daily'):
             returnRate = self.GetReturnRates(1)
-            if returnRate>=0:
-                f.write('    * <span style="color:green">**+%2.2f**%%</span> daily change.\n' % (returnRate))
+
+            f.write('# Daily report for %s.\n' % (self.stockCode))
+            # Price
+            if returnRate >= 0:
+                f.write('    * **%2.2f%s** <span style="color:green">**+%2.2f**%%</span>.\n' %
+                        (self.currentPrice, self.symbol, returnRate))
             else:
-                f.write('    * <span style="color:red">**%2.2f**%%</span> daily change.\n' % (returnRate))
+                f.write('    * **%2.2f%s** <span style="color:red">**%2.2f**%%</span>.\n' %
+                        (self.currentPrice, self.symbol, returnRate))
+            # Volumen
+            if (self.hasVolume()):
+                volumeChange = self.data['Volume'][0]
+                if volumeChange >= 0:
+                    f.write('    * <span style="color:green">**+%2.2f**%%</span> vol.\n' %
+                            (volumeChange))
+                else:
+                    f.write('    * <span style="color:red">**%2.2f**%%</span> vol.\n' %
+                            (volumeChange))
+
             f.write('\n')
+
         elif (interval == 'weekly'):
             # Get last range date
             lastRangeDate = self.endDate - datetime.timedelta(days=7)
