@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.com/folkien/pyStock.svg?branch=master)](https://travis-ci.com/folkien/pyStock)
+![License](https://img.shields.io/github/license/folkien/pyStock)
+![Size](https://img.shields.io/github/repo-size/folkien/pyStock)
+![pythonversion](https://img.shields.io/badge/python-3.6-blue)
 
 pyStock - repository of stock analyze, alarm and follow tools.
 -------------
