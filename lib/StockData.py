@@ -135,6 +135,14 @@ class StockData:
             else:
                 return "<span style='color:red'>**%u**</span>" % (value)
 
+    def FormatNumInt(self, value):
+        if (value >= 1000000):
+            return ('%2.3fmln' % (value/1000000))
+        elif (value >= 1000):
+            return ('%2.3fk' % (value/1000))
+        else:
+            return ('%u' % value)
+
     def Report(self, f, interval):
         if (interval == 'daily'):
             returnRate = self.GetReturnRates(1)
@@ -150,19 +158,19 @@ class StockData:
             # Volumen
             if (self.hasVolume()):
                 volumenChange = self.data['Volume'][0]
-                f.write('* %sj. vol.\n' % (self.Colorify(volumenChange)))
+                f.write('* %sj vol.\n' % (self.Colorify(volumenChange)))
 
                 # OBV
                 obvReturnRate = self.GetReturnRates(1, 'OBV')
-                f.write('* %s%% %sj. OBV.\n' %
+                f.write('* %s%% %s OBV\n' %
                         (self.Colorify(obvReturnRate),
-                         self.GetCurrentPrice('OBV')
+                         self.FormatNumInt(self.GetCurrentPrice('OBV'))
                          ))
                 # Money on the market
                 moneyReturnRate = self.GetReturnRates(1, 'Money')
-                f.write('* %s%% %s%s.\n' %
+                f.write('* %s%% %s %s\n' %
                         (self.Colorify(moneyReturnRate),
-                         self.GetCurrentPrice('Money'),
+                         self.FormatNumInt(self.GetCurrentPrice('Money')),
                          self.symbol)
                         )
 
