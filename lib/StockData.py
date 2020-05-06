@@ -72,9 +72,9 @@ class StockData:
 
         return volumePositive, volumeNegative
 
-    # Returns current close price
-    def GetCurrentPrice(self):
-        return self.currentPrice
+    # Returns current price
+    def GetCurrentPrice(self, column='Close'):
+        return self.data[column][0]
 
     # Returns current close price
     def GetReturnRates(self, days, column='Close'):
@@ -123,27 +123,48 @@ class StockData:
 
         return rxData
 
+    def Colorify(self, value):
+        if type(value) in (float, numpy.float64):
+            if (value >= 0):
+                return "<span style='color:green'>**+%2.2f**</span>" % (value)
+            else:
+                return "<span style='color:red'>**%2.2f**</span>" % (value)
+        elif type(value) in (int, numpy.int64):
+            if (value >= 0):
+                return "<span style='color:green'>**+%u**</span>" % (value)
+            else:
+                return "<span style='color:red'>**%u**</span>" % (value)
+
     def Report(self, f, interval):
         if (interval == 'daily'):
             returnRate = self.GetReturnRates(1)
 
             f.write('# Daily report for %s.\n' % (self.stockCode))
             # Price
-            if returnRate >= 0:
-                f.write('    * **%2.2f%s** <span style="color:green">**+%2.2f**%%</span>.\n' %
-                        (self.currentPrice, self.symbol, returnRate))
-            else:
-                f.write('    * **%2.2f%s** <span style="color:red">**%2.2f**%%</span>.\n' %
-                        (self.currentPrice, self.symbol, returnRate))
+            f.write('* %s%% **%2.2f%s** [%2.2f%s - %2.2f%s]\n' %
+                    (self.Colorify(returnRate),
+                     self.GetCurrentPrice(), self.symbol,
+                     self.GetCurrentPrice('High'), self.symbol,
+                     self.GetCurrentPrice('Low'), self.symbol
+                     ))
             # Volumen
             if (self.hasVolume()):
-                volumeChange = self.data['Volume'][0]
-                if volumeChange >= 0:
-                    f.write('    * <span style="color:green">**+%2.2f**%%</span> vol.\n' %
-                            (volumeChange))
-                else:
-                    f.write('    * <span style="color:red">**%2.2f**%%</span> vol.\n' %
-                            (volumeChange))
+                volumenChange = self.data['Volume'][0]
+                f.write('* %sj. vol.\n' % (self.Colorify(volumenChange)))
+
+                # OBV
+                obvReturnRate = self.GetReturnRates(1, 'OBV')
+                f.write('* %s%% %sj. OBV.\n' %
+                        (self.Colorify(obvReturnRate),
+                         self.GetCurrentPrice('OBV')
+                         ))
+                # Money on the market
+                moneyReturnRate = self.GetReturnRates(1, 'Money')
+                f.write('* %s%% %s%s.\n' %
+                        (self.Colorify(moneyReturnRate),
+                         self.GetCurrentPrice('Money'),
+                         self.symbol)
+                        )
 
             f.write('\n')
 
