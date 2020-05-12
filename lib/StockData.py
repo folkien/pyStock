@@ -46,6 +46,8 @@ class StockData:
         # Change dates
         self.beginDate = datetime.datetime.strptime(beginDate, '%Y-%m-%d')
         self.endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
+        # Create place for indicators
+        self.indicators = {}
 
     # Change volumeTotal to neg/pos value
     def InitVolume(self, price, volume):
@@ -93,6 +95,13 @@ class StockData:
     # SEt currency symbol
     def SetCurrencySymbol(self, symbol):
         self.symbol = symbol
+
+    # Add indicator
+    def AddIndicator(self, indicator):
+        if (indicator.GetType() in self.indicators):
+            self.indicators[indicator.GetType()].append(indicator)
+        else:
+            self.indicators[indicator.GetType()] = indicator
 
     # Get data from URL/database
     def FetchData(self, stockCode, beginDate, endDate):

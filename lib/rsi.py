@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
+from lib.indicator import indicator
 
 # Creates RSI object
 
@@ -18,12 +19,12 @@ def CreateRSI(prices, n=14):
 def PlotRSI(rsi):
     rsi.Plot()
 
-# RSI object which creates RSI data
 
-
-class RSI:
+class RSI(indicator):
+    # RSI object which creates RSI data
 
     def __init__(self, prices, n=14):
+        indicator.__init__(self, 'RSI', 'momentum')
         self.n = n
         self.overBoughtLvl = 70
         self.overSellLvl = 30

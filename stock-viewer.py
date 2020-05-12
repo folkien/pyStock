@@ -237,6 +237,9 @@ rsi.ExportSignals(reportSignals)
 cci.ExportSignals(reportSignals)
 bollinger.ExportSignals(reportSignals)
 dmi.ExportSignals(reportSignals)
+# Add indicators to stock data
+stockData.AddIndicator(rsi)
+
 if (stockData.hasVolume()):
     mfi.ExportSignals(reportSignals)
     cmf.ExportSignals(reportSignals)
