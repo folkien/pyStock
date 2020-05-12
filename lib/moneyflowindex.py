@@ -76,7 +76,7 @@ class MoneyFlowIndex(indicator):
 
     # retunrs -100...100 value
     def GetUnifiedValue(self):
-        return (self.mfi[0] - 50)*2
+        return (self.mfi[-1] - 50)*2
 
     # Plot method
     def PlotPosNegFlow(self):

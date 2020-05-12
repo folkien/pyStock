@@ -73,7 +73,7 @@ class RSI(indicator):
 
     # retunrs -100...100 value
     def GetUnifiedValue(self):
-        return (self.rsi[0] - 50) * 2
+        return (self.rsi[-1] - 50) * 2
 
     # Plot method
     def Plot(self):

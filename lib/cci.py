@@ -37,6 +37,7 @@ class CCI(indicator):
         self.rollingStd = CreateMovingStd(ct, self.n)
         data = pd.Series((ct - self.rollingMean) / (self.factor
                                                     * self.rollingStd), name='CCI_' + str(self.n))
+        data = data.fillna(0)
         return data
 
     # Export indicator signals to report
@@ -47,7 +48,7 @@ class CCI(indicator):
     # retunrs -100...100 value
     def GetUnifiedValue(self):
         absmax = max(self.cci.values.max(), abs(self.cci.values.min()))
-        return (self.cci[0]*100 / absmax)
+        return (self.cci[-1]*100 / absmax)
 
     # Plot method
     def Plot(self):
