@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
+from lib.indicator import indicator
 
 # Creation of Williams for data
 

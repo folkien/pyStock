@@ -24,6 +24,12 @@ class indicator(object):
         assert(len(name) > 0)
         self.name = name
 
+    def GetName(self):
+        '''
+         Returns type of object
+        '''
+        return self.name
+
     def GetType(self):
         '''
          Returns type of object

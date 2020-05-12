@@ -101,7 +101,7 @@ class StockData:
         if (indicator.GetType() in self.indicators):
             self.indicators[indicator.GetType()].append(indicator)
         else:
-            self.indicators[indicator.GetType()] = indicator
+            self.indicators[indicator.GetType()] = [indicator]
 
     # Get data from URL/database
     def FetchData(self, stockCode, beginDate, endDate):
@@ -152,6 +152,12 @@ class StockData:
         else:
             return ('%u' % value)
 
+    def FormatUnifiedIndicator(self, value):
+        if (value > 0):
+            return "<table><tr><td style='color:green;width:%upx'>%u</td></tr></table>" % (value, value)
+        else:
+            return "<table><tr><td style='color:red;width:%upx'>%u</td></tr></table>" % (value, value)
+
     def Report(self, f, interval):
         if (interval == 'daily'):
             returnRate = self.GetReturnRates(1)
@@ -182,6 +188,11 @@ class StockData:
                          self.FormatNumInt(self.GetCurrentPrice('Money')),
                          self.symbol)
                         )
+            # Stock momentum indicators
+            f.write('## Momentum indicators.\nIf price is oversold or overbought.\n')
+            for indicator in self.indicators['momentum']:
+                f.write('* %s %s.\n' % (indicator.GetName(),
+                                        self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
 
             f.write('\n')
 

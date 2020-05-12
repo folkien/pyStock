@@ -71,6 +71,10 @@ class RSI(indicator):
         reportSignals.AddDataframeSignals(self.notSellSignal, 'RSI', 'NotSell')
         reportSignals.AddDataframeSignals(self.notBuySignal, 'RSI', 'NotBuy')
 
+    # retunrs -100...100 value
+    def GetUnifiedValue(self):
+        return (self.rsi[0] - 50) * 2
+
     # Plot method
     def Plot(self):
         # Base 50% line

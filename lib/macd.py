@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
+from lib.indicator import *
 
 # Creates MACD object
 
@@ -21,9 +22,10 @@ def PlotMACD(rsi):
 # MACD object which creates MACD data
 
 
-class MACD:
+class MACD(indicator):
 
     def __init__(self, prices):
+        indicator.__init__(self, 'MACD', 'trend')
         self.macd, self.signal = self.InitMACD(prices)
         self.buy, self.sell = FindIntersections(self.macd, self.signal)
         # Create histogram

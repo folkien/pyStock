@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
 from lib.Stock import *
+from lib.indicator import indicator
 
 # Creates MoneyFlowIndex object
 
@@ -15,9 +16,10 @@ def CreateMoneyFlowIndex(high, low, close, volume, info, n=14):
 
 
 # MoneyFlowIndex object which creates MoneyFlowIndex data
-class MoneyFlowIndex:
+class MoneyFlowIndex(indicator):
 
     def __init__(self, high, low, close, volume, info, n=14):
+        indicator.__init__(self, 'MFI', 'momentum')
         self.n = n
         self.info = info
         self.typicalPrice = (high + low + close) / 3
@@ -71,6 +73,10 @@ class MoneyFlowIndex:
         reportSignals.AddDataframeSignals(self.sell, 'MFI', 'sell')
         reportSignals.AddDataframeSignals(self.buyStrong, 'MFI', 'buyStrong')
         reportSignals.AddDataframeSignals(self.sellStrong, 'MFI', 'sellStrong')
+
+    # retunrs -100...100 value
+    def GetUnifiedValue(self):
+        return (self.mfi[0] - 50)*2
 
     # Plot method
     def PlotPosNegFlow(self):

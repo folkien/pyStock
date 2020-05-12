@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
+from lib.indicator import indicator
 
 # Creates CCI object
 
@@ -14,9 +15,10 @@ def CreateCCI(high, low, close, n=20):
 
 
 # CCI object which creates CCI data
-class CCI:
+class CCI(indicator):
 
     def __init__(self, high, low, close, n=14):
+        indicator.__init__(self, 'CCI', 'momentum')
         self.n = n
         self.factor = 0.015
         self.cci = self.InitCCI(high, low, close)
@@ -41,6 +43,11 @@ class CCI:
     def ExportSignals(self, reportSignals):
         reportSignals.AddDataframeSignals(self.buy, 'CCI', 'buy')
         reportSignals.AddDataframeSignals(self.sell, 'CCI', 'sell')
+
+    # retunrs -100...100 value
+    def GetUnifiedValue(self):
+        absmax = max(self.cci.values.max(), abs(self.cci.values.min()))
+        return (self.cci[0]*100 / absmax)
 
     # Plot method
     def Plot(self):

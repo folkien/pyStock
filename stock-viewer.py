@@ -239,10 +239,14 @@ bollinger.ExportSignals(reportSignals)
 dmi.ExportSignals(reportSignals)
 # Add indicators to stock data
 stockData.AddIndicator(rsi)
+stockData.AddIndicator(cci)
+stockData.AddIndicator(macd)
 
 if (stockData.hasVolume()):
     mfi.ExportSignals(reportSignals)
     cmf.ExportSignals(reportSignals)
+    stockData.AddIndicator(mfi)
+    stockData.AddIndicator(cmf)
 
 # Volume
 obvTotal = stockData.GetAllData('OBV')

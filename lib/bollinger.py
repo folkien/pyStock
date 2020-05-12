@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from numpy.core.defchararray import lower
 from lib.ReportSignals import *
+from lib.indicator import indicator
 
 # Creates  object
 

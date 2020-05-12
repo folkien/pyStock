@@ -36,6 +36,7 @@ import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
 from lib.Stock import *
+from lib.indicator import indicator
 
 # Creates ChaikinMoneyFlow object
 
@@ -45,9 +46,10 @@ def CreateChaikinMoneyFlow(high, low, close, volume, info, n=21):
 
 
 # ChaikinMoneyFlow object which creates ChaikinMoneyFlow data
-class ChaikinMoneyFlow:
+class ChaikinMoneyFlow(indicator):
 
     def __init__(self, high, low, close, volume, info, n=21):
+        indicator.__init__(self, 'CMF', 'trend')
         self.n = n
         self.info = info
         self.cmf, self.cosc = self.Init(high, low, close, volume, n)
