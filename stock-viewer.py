@@ -40,10 +40,17 @@ def PlotsRemove():
         os.system('rm -rf %s' % (filepath))
         print('Removed %s.' % (filepath))
 
-# Save reports to file. Append text.
+
+def ReportGraphs(f):
+    # Insert all created graphs
+    f.write('## Graphs\n\n')
+    for path in graphsCreated:
+        f.write('![Graph](%s)\n\n' % (os.path.basename(path)))
+    f.write('\n')
 
 
 def ReportBaseSave(filepath):
+    # Save reports to file. Append text.
     global outputFilename
     global args
     global closePrice
@@ -86,10 +93,7 @@ def ReportBaseSave(filepath):
         stockData.ReportAssets(f)
         f.write('\n')
 
-        # Insert all created graphs
-        f.write('## Graphs\n\n')
-        for path in graphsCreated:
-            f.write('![Graph](%s)\n\n' % (os.path.basename(path)))
+        ReportGraphs(f)
         f.write('\n')
 
     lock.release()
@@ -489,9 +493,10 @@ if (args.reports):
         reportSignals.Report(reportFile, reportAllSignalTypes)
 
         # If signals reported
-        if (reportSignals.reportedAnything == True):
+        if (reportSignals.reportedAnything == True) or (True):
             with open(reportFile, 'a+') as f:
                 stockData.Report(f, executionInterval)
+                ReportGraphs(f)
         # remove plots if nothing reported
         else:
             PlotsRemove()
