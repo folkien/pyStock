@@ -83,6 +83,11 @@ class ChaikinMoneyFlow(indicator):
 #             reportSignals.AddDataframeSignals(self.buyStrong, "MFI","buyStrong")
 #             reportSignals.AddDataframeSignals(self.sellStrong,"MFI","sellStrong")
 
+    # returns -100...100 value
+    def GetUnifiedValue(self):
+        absmax = max(self.cosc.values.max(), abs(self.cosc.values.min()))
+        return (self.cosc.values[-1]*100/absmax)
+
     # Plot Chaikin money flow
     def PlotChaikinMoneyFlow(self):
         plt.plot(self.cmf.index, self.cmf, label='CMF'

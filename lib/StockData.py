@@ -152,8 +152,8 @@ class StockData:
         else:
             return ('%u' % value)
 
-    def FormatUnifiedIndicator(self, value):
-        if (value < 0):
+    def FormatUnifiedIndicator(self, value, inverted=False):
+        if ((inverted == True) and (value < 0)) or ((inverted == False) and (value > 0)):
             return "<div style='border:1px solid black;float:left;'><div style='width:100px;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='background:green;width:%upx;height:20px;float:left'></div><div style='width:%upx;height:20px;float:left'></div></div><div style='clear:both'></div>" % (abs(value), 100-abs(value))
         else:
             return "<div style='border:1px solid black;float:left;'><div style='width:%upx;height:20px;float:left'></div><div style='background:red;width:%upx;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='width:100px;height:20px;float:left'></div></div><div style='clear:both'></div>" % (100-abs(value), abs(value))
@@ -195,6 +195,16 @@ class StockData:
             f.write(
                 '## Momentum indicators.\nIf price is oversold or overbought. Range -100 to 100.\n\n')
             for indicator in self.indicators['momentum']:
+                f.write('* %s %u %s.\n' % (indicator.GetName(),
+                                           indicator.GetUnifiedValue(),
+                                           self.FormatUnifiedIndicator(indicator.GetUnifiedValue(), True)))
+
+            f.write('\n')
+
+            # Stock trend indicators
+            f.write(
+                '## Trend indicators.\nIf trend is rising or falling, strong or weak.\n\n')
+            for indicator in self.indicators['trend']:
                 f.write('* %s %u %s.\n' % (indicator.GetName(), indicator.GetUnifiedValue(),
                                            self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
 

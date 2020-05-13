@@ -48,7 +48,16 @@ class MACD(indicator):
         reportSignals.AddDataframeSignals(self.buy, 'MACD', 'buy')
         reportSignals.AddDataframeSignals(self.sell, 'MACD', 'sell')
 
+    # returns -100...100 value
+    def GetUnifiedValue(self):
+        absmax = max(self.hplus.values.max(), abs(self.hminus.values.min()))
+        if (self.macd.values[-1] >= self.signal.values[-1]):
+            return (self.hplus.values[-1]*100/absmax)
+        else:
+            return (self.hminus.values[-1]*100/absmax)
+
     # Plot MACD
+
     def Plot(self):
         # Create ZeroLine
         zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
