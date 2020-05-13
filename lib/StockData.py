@@ -154,11 +154,22 @@ class StockData:
 
     def FormatUnifiedIndicator(self, value):
         if (value > 0):
-            return "<table><tr><td style='color:green;width:%upx'>%u</td></tr></table>" % (value, value)
+            return """<table><tr>
+                                <td style='width:100px'></td>
+                                <td style='background:black;width:10px'></td>
+                                <td style='background:green;width:%upx'>%u</td>
+                             </tr>
+                      </table>""" % (value, value)
         else:
-            return "<table><tr><td style='color:red;width:%upx'>%u</td></tr></table>" % (value, value)
+            return """<table><tr>
+                                <td style='width:%upx'></td>
+                                <td style='background:red;width:%upx'>%u</td>
+                                <td style='background:black;width:10px'></td>
+                             </tr>
+                      </table>""" % (100-abs(value), abs(value), abs(value))
 
     def Report(self, f, interval):
+        print('Report %s creation...' % interval)
         if (interval == 'daily'):
             returnRate = self.GetReturnRates(1)
 
@@ -188,6 +199,8 @@ class StockData:
                          self.FormatNumInt(self.GetCurrentPrice('Money')),
                          self.symbol)
                         )
+            f.write('\n')
+
             # Stock momentum indicators
             f.write('## Momentum indicators.\nIf price is oversold or overbought.\n')
             for indicator in self.indicators['momentum']:
