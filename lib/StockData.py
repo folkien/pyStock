@@ -154,9 +154,9 @@ class StockData:
 
     def FormatUnifiedIndicator(self, value):
         if (value < 0):
-            return "<div style='width:100px;height:20px;float:left'> </div><div style='background:black;width:5px;height:20px;float:left'> </div><div style='background:green;width:%upx;height:20px;float:left'> </div><div style='clear:both'></div>" % (abs(value))
+            return "<div style='border:1px solid black;float:left;'><div style='width:100px;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='background:green;width:%upx;height:20px;float:left'></div><div style='width:%upx;height:20px;float:left'></div></div><div style='clear:both'></div>" % (abs(value), 100-abs(value))
         else:
-            return "<div style='width:%upx;height:20px;float:left'> </div><div style='background:red;width:%upx;height:20px;float:left'> </div><div style='background:black;width:5px;height:20px;float:left'> </div><div style='clear:both'></div>" % (100-abs(value), abs(value))
+            return "<div style='border:1px solid black;float:left;'><div style='width:%upx;height:20px;float:left'></div><div style='background:red;width:%upx;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='width:100px;height:20px;float:left'></div></div><div style='clear:both'></div>" % (100-abs(value), abs(value))
 
     def Report(self, f, interval):
         print('Report %s creation...' % interval)
