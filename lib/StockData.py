@@ -153,20 +153,10 @@ class StockData:
             return ('%u' % value)
 
     def FormatUnifiedIndicator(self, value):
-        if (value > 0):
-            return """<table><tr>
-                                <td style='width:100px'></td>
-                                <td style='background:black;width:10px'></td>
-                                <td style='background:green;width:%upx'>%u</td>
-                             </tr>
-                      </table>""" % (value, value)
+        if (value < 0):
+            return "<div style='width:100px;height:20px;float:left'> </div><div style='background:black;width:5px;height:20px;float:left'> </div><div style='background:green;width:%upx;height:20px;float:left'> </div><div style='clear:both'></div>" % (abs(value))
         else:
-            return """<table><tr>
-                                <td style='width:%upx'></td>
-                                <td style='background:red;width:%upx'>%u</td>
-                                <td style='background:black;width:10px'></td>
-                             </tr>
-                      </table>""" % (100-abs(value), abs(value), abs(value))
+            return "<div style='width:%upx;height:20px;float:left'> </div><div style='background:red;width:%upx;height:20px;float:left'> </div><div style='background:black;width:5px;height:20px;float:left'> </div><div style='clear:both'></div>" % (100-abs(value), abs(value))
 
     def Report(self, f, interval):
         print('Report %s creation...' % interval)
@@ -194,7 +184,7 @@ class StockData:
                          ))
                 # Money on the market
                 moneyReturnRate = self.GetReturnRates(1, 'Money')
-                f.write('* %s%% %s %s\n' %
+                f.write('* %s%% %s %s\n\n' %
                         (self.Colorify(moneyReturnRate),
                          self.FormatNumInt(self.GetCurrentPrice('Money')),
                          self.symbol)
@@ -202,10 +192,11 @@ class StockData:
             f.write('\n')
 
             # Stock momentum indicators
-            f.write('## Momentum indicators.\nIf price is oversold or overbought.\n')
+            f.write(
+                '## Momentum indicators.\nIf price is oversold or overbought. Range -100 to 100.\n\n')
             for indicator in self.indicators['momentum']:
-                f.write('* %s %s.\n' % (indicator.GetName(),
-                                        self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
+                f.write('* %s %u %s.\n' % (indicator.GetName(), indicator.GetUnifiedValue(),
+                                           self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
 
             f.write('\n')
 
