@@ -55,9 +55,17 @@ class DMI:
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        return 0
-#             reportSignals.AddDataframeSignals(self.buy,"DMI","buy")
-#             reportSignals.AddDataframeSignals(self.sell,"DMI","sell")
+        reportSignals.AddDataframeSignals(self.buy, 'DMI', 'buy')
+        reportSignals.AddDataframeSignals(self.sell, 'DMI', 'sell')
+
+    # retunrs -100...100 value
+    def GetUnifiedValue(self):
+        # If trend rising is stronger
+        if (self.dip.values[-1] >= self.din[-1].values):
+            return 100 * self.dip.values[-1] * self.adx.values[-1]
+        # else if falling trend is stronger
+        else:
+            return 100 * self.din.values[-1] * self.adx.values[-1]
 
     # Plot method
     def Plot(self):

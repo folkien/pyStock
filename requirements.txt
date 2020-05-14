@@ -23,7 +23,6 @@ pytz==2018.7
 requests==2.21.0
 requests-file==1.4.3
 requests-ftp==0.3.1
-scipy
 six==1.12.0
 urllib3==1.24.2
 waitress==1.4.3
