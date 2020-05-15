@@ -149,13 +149,14 @@ def ReportsIsAnyting(filepath):
 
 def ReportsToHTML(filepath):
     os.system('make -C plots/ html')
-    # Replace images with embedded imaces code
-    os.system("sed -i 's/img src=\"/img src=\"cid:/g' %s" % (reportFile))
 
-# mail all reports
+
+def ReportsToPDF(filepath):
+    os.system('make -C plots/ htmltopdf')
 
 
 def ReportsMail(recipient, filepath):
+    # mail all reports
     print('Mail %s to %s.' % (filepath, recipient))
     currentDate = datetime.date.today()
     # Send email with attamchents through mutt smtp
@@ -249,8 +250,8 @@ if (args.execute is not None):
     if (ReportsIsAnyting(reportFile)):
         # Report also assets
         ReportAssets(reportFile)
-        # Generate HTML
-        ReportsToHTML(reportFile)
+        # Generate HTML & PDF
+        ReportsToPDF(reportFile)
         # Send emails to all recipients
         for i in range(len(recipients)):
             ReportsMail(recipients[i]['address'], reportFile + '.html')

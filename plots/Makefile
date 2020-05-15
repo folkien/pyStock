@@ -11,3 +11,5 @@ html:
 	-H header.html \
 	--metadata title="pyStock report" \
 	-o report.md.html
+htmltopdf: html
+	wkhtmltopdf report.md.html report.pdf
