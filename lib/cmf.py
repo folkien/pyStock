@@ -67,11 +67,13 @@ class ChaikinMoneyFlow(indicator):
         Msum = M.rolling(window=n, min_periods=1).sum()
         Vsum = abs(volume).rolling(window=n, min_periods=1).sum()
         cmf = Msum / Vsum
+        cmf = cmf.fillna(0)
 
         # Create Chaikin oscillator based on AD (Accumulation/Distribution)
         AD = M.cumsum()
         cosc = AD.ewm(span=3, adjust=False).mean() - \
             AD.ewm(span=10, adjust=False).mean()
+        cosc = cosc.fillna(0)
 
         return cmf, cosc
 
