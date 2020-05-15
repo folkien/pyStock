@@ -18,7 +18,7 @@ def CreateCCI(high, low, close, n=20):
 class CCI(indicator):
 
     def __init__(self, high, low, close, n=14):
-        indicator.__init__(self, 'CCI', 'momentum')
+        indicator.__init__(self, 'CCI%u' % n, 'momentum')
         self.n = n
         self.factor = 0.015
         self.cci = self.InitCCI(high, low, close)

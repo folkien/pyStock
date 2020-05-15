@@ -49,7 +49,7 @@ def CreateChaikinMoneyFlow(high, low, close, volume, info, n=21):
 class ChaikinMoneyFlow(indicator):
 
     def __init__(self, high, low, close, volume, info, n=21):
-        indicator.__init__(self, 'CMF', 'trend')
+        indicator.__init__(self, 'CMF%u' % n, 'trend')
         self.n = n
         self.info = info
         self.cmf, self.cosc = self.Init(high, low, close, volume, n)

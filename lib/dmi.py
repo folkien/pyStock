@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
+from lib.indicator import indicator
 
 # Creates DMI object
 
@@ -14,9 +15,10 @@ def CreateDMI(high, low, atr, n=14):
 
 
 # DMI object which creates DMI data
-class DMI:
+class DMI(indicator):
 
     def __init__(self, high, low, atr, n=14):
+        indicator.__init__(self, 'DMI%u' % n, 'trend')
         self.n = n
         self.dip, self.din, self.adx = self.InitDMI(high, low, atr)
 

@@ -19,7 +19,7 @@ def CreateMoneyFlowIndex(high, low, close, volume, info, n=14):
 class MoneyFlowIndex(indicator):
 
     def __init__(self, high, low, close, volume, info, n=14):
-        indicator.__init__(self, 'MFI', 'momentum')
+        indicator.__init__(self, 'MFI%u' % n, 'momentum')
         self.n = n
         self.info = info
         self.typicalPrice = (high + low + close) / 3

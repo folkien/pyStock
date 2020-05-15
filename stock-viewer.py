@@ -241,16 +241,22 @@ rsi.ExportSignals(reportSignals)
 cci.ExportSignals(reportSignals)
 bollinger.ExportSignals(reportSignals)
 dmi.ExportSignals(reportSignals)
-# Add indicators to stock data
-stockData.AddIndicator(rsi)
-stockData.AddIndicator(cci)
-stockData.AddIndicator(macd)
-
 if (stockData.hasVolume()):
     mfi.ExportSignals(reportSignals)
     cmf.ExportSignals(reportSignals)
+
+# Add momentum inidicators to stock data
+stockData.AddIndicator(rsi)
+stockData.AddIndicator(cci)
+if (stockData.hasVolume()):
     stockData.AddIndicator(mfi)
+
+# Add trend inidicators to stock data
+stockData.AddIndicator(macd)
+stockData.AddIndicator(dmi)
+if (stockData.hasVolume()):
     stockData.AddIndicator(cmf)
+
 
 # Volume
 obvTotal = stockData.GetAllData('OBV')
