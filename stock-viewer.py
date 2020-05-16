@@ -264,10 +264,11 @@ if (stockData.hasVolume()):
 
 
 # Volume
-obvTotal = stockData.GetAllData('OBV')
-volumeTotal = stockData.GetAllData('Volume')
-volume = stockData.GetData('Volume')
-obv = stockData.GetData('OBV')
+if (stockData.hasVolume()):
+    obvTotal = stockData.GetAllData('OBV')
+    volumeTotal = stockData.GetAllData('Volume')
+    volume = stockData.GetData('Volume')
+    obv = stockData.GetData('OBV')
 
 
 # PLOTS
