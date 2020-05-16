@@ -1,8 +1,8 @@
 [Unit]
-Description=Call weekly stock service.
+Description=Call weekly (at the end of week) stock service.
 
 [Timer]
-OnCalendar=Mon *-*-* 18:00:00
+OnCalendar=Fri *-*-* 18:00:00
 Persistent=true
 Unit=StockWeekly.service
 
