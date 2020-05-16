@@ -159,118 +159,85 @@ class StockData:
             return "<div style='border:1px solid black;float:left;'><div style='width:%upx;height:20px;float:left'></div><div style='background:red;width:%upx;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='width:100px;height:20px;float:left'></div></div><div style='clear:both'></div>" % (100-abs(value), abs(value))
 
     def Report(self, f, interval):
-        print('Report %s creation...' % interval)
+        # select number of days in interval
         if (interval == 'daily'):
-            returnRate = self.GetReturnRates(1)
+            period = 1
+        elif(interval == 'weekly'):
+            period = 7
+        else:
+            period = 28
 
-            f.write('# Daily report for %s.\n' % (self.stockCode))
-            # Price
-            f.write('* %s%% **%2.2f%s** [%2.2f%s - %2.2f%s]\n' %
-                    (self.Colorify(returnRate),
-                     self.GetValue(), self.symbol,
-                     self.GetValue('High'), self.symbol,
-                     self.GetValue('Low'), self.symbol
+        print('Report %s creation...' % interval)
+        f.write('# %s report for %u days..\n' % (self.stockCode, period))
+        # Price
+        f.write('* %s%% **%2.2f%s** [%2.2f%s - %2.2f%s]\n' %
+                (self.Colorify(self.GetReturnRates(period)),
+                 self.GetValue(), self.symbol,
+                 self.GetValue('High'), self.symbol,
+                 self.GetValue('Low'), self.symbol
+                 ))
+        # Volumen
+        if (self.hasVolume()):
+            volumenChange = self.data['Volume'][0]
+            f.write('* %sj vol.\n' % (self.Colorify(volumenChange)))
+
+            # OBV
+            obvReturnRate = self.GetReturnRates(period, 'OBV')
+            f.write('* %s%% %s OBV\n' %
+                    (self.Colorify(obvReturnRate),
+                     self.FormatNumInt(self.GetValue('OBV'))
                      ))
-            # Volumen
-            if (self.hasVolume()):
-                volumenChange = self.data['Volume'][0]
-                f.write('* %sj vol.\n' % (self.Colorify(volumenChange)))
+            # Money on the market
+            moneyReturnRate = self.GetReturnRates(period, 'Money')
+            f.write('* %s%% %s %s\n\n' %
+                    (self.Colorify(moneyReturnRate),
+                     self.FormatNumInt(self.GetValue('Money')),
+                     self.symbol)
+                    )
+        f.write('\n')
 
-                # OBV
-                obvReturnRate = self.GetReturnRates(1, 'OBV')
-                f.write('* %s%% %s OBV\n' %
-                        (self.Colorify(obvReturnRate),
-                         self.FormatNumInt(self.GetValue('OBV'))
-                         ))
-                # Money on the market
-                moneyReturnRate = self.GetReturnRates(1, 'Money')
-                f.write('* %s%% %s %s\n\n' %
-                        (self.Colorify(moneyReturnRate),
-                         self.FormatNumInt(self.GetValue('Money')),
-                         self.symbol)
-                        )
-            f.write('\n')
+        # Stock return rates. Days no has to be *7.
+        f.write('## Return rates.\nRevenues of close price across time.\n\n')
+        f.write('* %s %s%% from **%2.2f%s** \n' %
+                ('day',
+                 self.Colorify(self.GetReturnRates(days=1)),
+                 self.GetValue(days=1), self.symbol,
+                 ))
+        f.write('* %s %s%% from **%2.2f%s** \n' %
+                ('week',
+                 self.Colorify(self.GetReturnRates(days=7)),
+                 self.GetValue(days=7), self.symbol,
+                 ))
+        f.write('* %s %s%% from **%2.2f%s** \n' %
+                ('month',
+                 self.Colorify(self.GetReturnRates(days=28)),
+                 self.GetValue(days=28), self.symbol,
+                 ))
+        f.write('* %s %s%% from **%2.2f%s** \n' %
+                ('year',
+                 self.Colorify(self.GetReturnRates(days=371)),
+                 self.GetValue(days=371), self.symbol,
+                 ))
+        f.write('\n')
 
-            # Stock historical return rates. Days no has to be *7.
-            f.write('## Return rates.\nRevenues of close price across time.\n\n')
-            f.write('* %s %s%% from **%2.2f%s** \n' %
-                    ('day',
-                     self.Colorify(self.GetReturnRates(days=1)),
-                     self.GetValue(days=1), self.symbol,
-                     ))
-            f.write('* %s %s%% from **%2.2f%s** \n' %
-                    ('week',
-                     self.Colorify(self.GetReturnRates(days=7)),
-                     self.GetValue(days=7), self.symbol,
-                     ))
-            f.write('* %s %s%% from **%2.2f%s** \n' %
-                    ('month',
-                     self.Colorify(self.GetReturnRates(days=28)),
-                     self.GetValue(days=28), self.symbol,
-                     ))
-            f.write('* %s %s%% from **%2.2f%s** \n' %
-                    ('year',
-                     self.Colorify(self.GetReturnRates(days=371)),
-                     self.GetValue(days=371), self.symbol,
-                     ))
-            f.write('\n')
+        # Stock momentum indicators
+        f.write(
+            '## Momentum indicators.\nIf price is oversold or overbought. Range -100 to 100.\n\n')
+        for indicator in self.indicators['momentum']:
+            f.write('* %s %u %s.\n' % (indicator.GetName(),
+                                       indicator.GetUnifiedValue(),
+                                       self.FormatUnifiedIndicator(indicator.GetUnifiedValue(), True)))
 
-            # Stock momentum indicators
-            f.write(
-                '## Momentum indicators.\nIf price is oversold or overbought. Range -100 to 100.\n\n')
-            for indicator in self.indicators['momentum']:
-                f.write('* %s %u %s.\n' % (indicator.GetName(),
-                                           indicator.GetUnifiedValue(),
-                                           self.FormatUnifiedIndicator(indicator.GetUnifiedValue(), True)))
+        f.write('\n')
 
-            f.write('\n')
+        # Stock trend indicators
+        f.write(
+            '## Trend indicators.\nIf trend is rising or falling, strong or weak.\n\n')
+        for indicator in self.indicators['trend']:
+            f.write('* %s %u %s.\n' % (indicator.GetName(), indicator.GetUnifiedValue(),
+                                       self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
 
-            # Stock trend indicators
-            f.write(
-                '## Trend indicators.\nIf trend is rising or falling, strong or weak.\n\n')
-            for indicator in self.indicators['trend']:
-                f.write('* %s %u %s.\n' % (indicator.GetName(), indicator.GetUnifiedValue(),
-                                           self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
-
-            f.write('\n')
-
-        elif (interval == 'weekly'):
-            # Get last range date
-            lastRangeDate = self.endDate - datetime.timedelta(days=7)
-            lastRangeDate = lastRangeDate.strftime('%Y-%m-%d')
-            # Get price, volume, subsets
-            priceRange = SetReindex(self.dataSubset, lastRangeDate, endDate)
-            volumeRange = SetReindex(self.dataSubset, lastRangeDate, endDate)
-            # Calculate informations
-            totalMaxPrice = self.Data['High'].max()
-            totalMinPrice = self.Data['Low'].max()
-            rangeMaxPrice = priceRange.max()
-            rangeMinPrice = priceRange.max()
-
-            currentPriceRelativeToMaxPrice = (
-                self.currentPrice * 100) / totalMaxPrice
-            growthChance = (totalMaxPrice * 100) / self.currentPrice - 100
-            lostChance = 100 - (totalMinPrice * 100) / self.currentPrice
-
-            # Write statistics
-            f.write('# Report for %s.\n' % (self.stockCode))
-            # weekly changes
-            f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
-                        growth chance <span style='color:green'>+%u%%</span>, \
-                        lost chance <span style='color:red'>-%u%%</span>)\n" %
-                    (lastPrice, info.GetCurrency(), lastPriceAsPercentOfMaxPrice, growthChance, lostChance))
-            # relative to historical changes
-            f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
-                        growth chance <span style='color:green'>+%u%%</span>, \
-                        lost chance <span style='color:red'>-%u%%</span>)\n" %
-                    (lastPrice, info.GetCurrency(), lastPriceAsPercentOfMaxPrice, growthChance, lostChance))
-            f.write('    * Current - **%2.2f%s - %2.2f%s**\n' % (minWindowPrice,
-                                                                 info.GetCurrency(), maxWindowPrice, info.GetCurrency()))
-            f.write('    * History - **%2.2f%s - %2.2f%s**\n' %
-                    (minPrice, info.GetCurrency(), maxPrice, info.GetCurrency()))
-            f.write('    * Volume chng. med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n' %
-                    (volumeSubset.median(), volumeSubset.max(), volumeSubset.min()))
-            f.write('\n')
+        f.write('\n')
 
     # Report current assets
     def ReportAssets(self, file):

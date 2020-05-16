@@ -54,57 +54,6 @@ def ReportGraphs(f):
     f.write('\n')
 
 
-def ReportBaseSave(filepath):
-    # Save reports to file. Append text.
-    global outputFilename
-    global args
-    global closePrice
-    global closePriceTotal
-    global volume
-    global volumeTotal
-
-    lastPrice = closePriceTotal.values[0]
-    maxPrice = closePriceTotal.values.max()
-    minPrice = closePriceTotal.values.min()
-    maxWindowPrice = closePrice.values.max()
-    minWindowPrice = closePrice.values.min()
-    lastPriceAsPercentOfMaxPrice = (lastPrice * 100) / maxPrice
-    growthChance = (maxPrice * 100) / lastPrice - 100
-    lostChance = 100 - (minPrice * 100) / lastPrice
-    # Volume statistics
-    volumeSubset = GetSubsetByDates(volume, last2Weeks, today)
-    volumeAvgChange = volumeSubset.median()
-
-    lock = FileLock(filepath + '.lock', timeout=lockTimeout)
-    lock.acquire()
-    with open(filepath, 'a+') as f:
-        # Write statistics
-        f.write('# Report for %s.\n' % (args.stockCode))
-        f.write("1. Price **%2.2f%s** - (**%u%%** of history, \
-                 growth chance <span style='color:green'>+%u%%</span>, \
-                 lost chance <span style='color:red'>-%u%%</span>)\n" %
-                (lastPrice, info.GetCurrency(), lastPriceAsPercentOfMaxPrice, growthChance, lostChance))
-        f.write('    * Current - **%2.2f%s - %2.2f%s**\n' % (minWindowPrice,
-                                                             info.GetCurrency(), maxWindowPrice, info.GetCurrency()))
-        f.write('    * History - **%2.2f%s - %2.2f%s**\n' %
-                (minPrice, info.GetCurrency(), maxPrice, info.GetCurrency()))
-        f.write('    * Volume chng. (2 weeks) - med. **%2.2f**, max **+%2.2f**, min **%2.2f**\n' %
-                (volumeSubset.median(), volumeSubset.max(), volumeSubset.min()))
-        f.write('    * **%2.2f**%% return rate for last 7 days.\n' %
-                (GetReturnRates(closePrice, 7)))
-        f.write('\n')
-
-        # Assets
-        stockData.ReportAssets(f)
-        f.write('\n')
-
-        ReportGraphs(f)
-        f.write('\n')
-
-    lock.release()
-    print('Reported to %s.' % (filepath))
-
-
 # Const objects
 # #####################################################
 lockTimeout = 5 * 60
@@ -514,8 +463,12 @@ if (args.reports):
             PlotsRemove()
     # Weekly report
     else:
-        ReportBaseSave(reportFile)
+        with open(reportFile, 'a+') as f:
+            stockData.Report(f, executionInterval)
         reportSignals.Report(reportFile, reportAllSignalTypes)
+        with open(reportFile, 'a+') as f:
+            stockData.ReportAssets(f)
+            ReportGraphs(f)
 
 # Show all plots
 if (not args.plotToFile):
