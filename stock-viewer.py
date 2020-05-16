@@ -25,6 +25,11 @@ from lib.assets import *
 
 def PlotSave(fig):
     global graphsCreated
+    #     emf, eps, pdf, png, ps, raw, rgba, svg, svgz
+    #     for ext in [ ".png", ".jpeg", ".svg", ".eps", ".raw"]:
+    #         filePath = outputFilepath + str(fig.number) + ext
+    #         plt.figure(fig.number)
+    #         plt.savefig(filePath)
     filePath = outputFilepath + str(fig.number) + outputExtension
     plt.figure(fig.number)
     plt.savefig(filePath)
@@ -106,7 +111,7 @@ lockTimeout = 5 * 60
 executionIntervals = ['monthly', 'weekly', 'daily']
 reportFile = 'plots/report.md'
 plotsPath = 'plots/'
-outputExtension = '.png'
+outputExtension = '.svg'
 
 # Varaables
 # #####################################################

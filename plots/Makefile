@@ -4,7 +4,7 @@ pdf:
     -V linkcolor:blue \
     -V geometry:a4paper \
     -V geometry:margin=2cm \
-	--latex-engine=xelatex -o ECG.pdf && okular ECG.pdf
+	--latex-engine=xelatex -o report.pdf && okular report.pdf
 html:
 	pandoc -s report.md \
     -V linkcolor:blue \
