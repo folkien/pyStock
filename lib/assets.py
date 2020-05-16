@@ -51,7 +51,7 @@ class Asset(object):
 
     def Init(self):
         stock = StockData(self.data['code'])
-        self.currentPrice = stock.GetCurrentPrice()
+        self.currentPrice = stock.GetValue()
         self.originalValue = self.data['price'] * self.data['number']
         self.currentValue = self.currentPrice * self.data['number']
         # money change

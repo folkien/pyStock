@@ -74,12 +74,12 @@ class StockData:
 
         return volumePositive, volumeNegative
 
-    # Returns current price
-    def GetCurrentPrice(self, column='Close'):
-        return self.data[column][0]
+    # Returns value
+    def GetValue(self, column='Close', days=0):
+        return self.data[column][days]
 
     # Returns current close price
-    def GetReturnRates(self, days, column='Close'):
+    def GetReturnRates(self, days=1, column='Close'):
         startPrice = self.data[column][days]
         endPrice = self.data[column][0]
         return ((endPrice - startPrice) * 100) / startPrice
@@ -167,9 +167,9 @@ class StockData:
             # Price
             f.write('* %s%% **%2.2f%s** [%2.2f%s - %2.2f%s]\n' %
                     (self.Colorify(returnRate),
-                     self.GetCurrentPrice(), self.symbol,
-                     self.GetCurrentPrice('High'), self.symbol,
-                     self.GetCurrentPrice('Low'), self.symbol
+                     self.GetValue(), self.symbol,
+                     self.GetValue('High'), self.symbol,
+                     self.GetValue('Low'), self.symbol
                      ))
             # Volumen
             if (self.hasVolume()):
@@ -180,15 +180,39 @@ class StockData:
                 obvReturnRate = self.GetReturnRates(1, 'OBV')
                 f.write('* %s%% %s OBV\n' %
                         (self.Colorify(obvReturnRate),
-                         self.FormatNumInt(self.GetCurrentPrice('OBV'))
+                         self.FormatNumInt(self.GetValue('OBV'))
                          ))
                 # Money on the market
                 moneyReturnRate = self.GetReturnRates(1, 'Money')
                 f.write('* %s%% %s %s\n\n' %
                         (self.Colorify(moneyReturnRate),
-                         self.FormatNumInt(self.GetCurrentPrice('Money')),
+                         self.FormatNumInt(self.GetValue('Money')),
                          self.symbol)
                         )
+            f.write('\n')
+
+            # Stock historical return rates. Days no has to be *7.
+            f.write('## Return rates.\nRevenues of close price across time.\n\n')
+            f.write('* %s %s%% from **%2.2f%s** \n' %
+                    ('day',
+                     self.Colorify(self.GetReturnRates(days=1)),
+                     self.GetValue(days=1), self.symbol,
+                     ))
+            f.write('* %s %s%% from **%2.2f%s** \n' %
+                    ('week',
+                     self.Colorify(self.GetReturnRates(days=7)),
+                     self.GetValue(days=7), self.symbol,
+                     ))
+            f.write('* %s %s%% from **%2.2f%s** \n' %
+                    ('month',
+                     self.Colorify(self.GetReturnRates(days=28)),
+                     self.GetValue(days=28), self.symbol,
+                     ))
+            f.write('* %s %s%% from **%2.2f%s** \n' %
+                    ('year',
+                     self.Colorify(self.GetReturnRates(days=371)),
+                     self.GetValue(days=371), self.symbol,
+                     ))
             f.write('\n')
 
             # Stock momentum indicators
