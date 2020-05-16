@@ -124,7 +124,7 @@ def ReportsClean(filepath):
     global reportFileEmptySize
     with FileLock(filepath + '.lock', timeout=lockTimeout):
         os.system('rm -rf plots/report.md*')
-        os.system('rm -rf plots/*.png')
+        os.system('rm -rf plots/*.svg')
 
         # Create file for reports with header
         with open(filepath, 'w') as f:

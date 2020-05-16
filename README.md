@@ -83,7 +83,7 @@ Viewer/Plotter tool. Features :
     * ADX,
     * Williams alligator,
     * Bollinger,
-* Save plots to files \*.png
+* Save plots to files \*.svg
 * Generates daily/weekly report.md with some usefull informations,
 
 ```bash
@@ -113,29 +113,29 @@ Plot Apple last 6M to file
 ./stock-viewer.py -n AAPL.US -6M -g
 ```
 
-![image](doc/AAPL.US_1.png)
-![image](doc/AAPL.US_2.png)
-![image](doc/AAPL.US_3.png)
-![image](doc/AAPL.US_4.png)
+![image](doc/AAPL.US_1.svg)
+![image](doc/AAPL.US_2.svg)
+![image](doc/AAPL.US_3.svg)
+![image](doc/AAPL.US_4.svg)
 
 Plot BTC/USD last 6M to file (no volume indicators)
 ```bash
 ./stock-viewer.py -n BTCUSD.pl -6M -g
 ```
 
-![image](doc/BTCUSD.pl_1.png)
-![image](doc/BTCUSD.pl_2.png)
-![image](doc/BTCUSD.pl_3.png)
-![image](doc/BTCUSD.pl_4.png)
+![image](doc/BTCUSD.pl_1.svg)
+![image](doc/BTCUSD.pl_2.svg)
+![image](doc/BTCUSD.pl_3.svg)
+![image](doc/BTCUSD.pl_4.svg)
 
 Last year of google with markdown reports into report.md
 ```bash
 ./stock-viewer.py -n GOOG.US -Y -r
 ```
-![image](doc/GOOG.US_1.png)
-![image](doc/GOOG.US_2.png)
-![image](doc/GOOG.US_3.png)
-![image](doc/GOOG.US_4.png)
+![image](doc/GOOG.US_1.svg)
+![image](doc/GOOG.US_2.svg)
+![image](doc/GOOG.US_3.svg)
+![image](doc/GOOG.US_4.svg)
 
 Markdown report
 ```markdown
@@ -152,8 +152,8 @@ Markdown report
     * History - **492.55zl - 1486.65zl**
     * Volume chng. (2 weeks) - med. **1345387.50**, max **+2396215.00**, min **-1784644.00**
 
-![Graph](GOOG.us_2020-02-01_1.png)
-![Graph](GOOG.us_2020-02-01_2.png)
+![Graph](GOOG.us_2020-02-01_1.svg)
+![Graph](GOOG.us_2020-02-01_2.svg)
 ```
 
 Example CD Projekt Red plot
@@ -161,10 +161,10 @@ Example CD Projekt Red plot
  ./stock-viewer.py -n CDR.pl -6M -g
 ```
 
-![CDPR image](doc/CDR.pl_1.png)
-![CDPR image](doc/CDR.pl_2.png)
-![CDPR image](doc/CDR.pl_3.png)
-![CDPR image](doc/CDR.pl_4.png)
+![CDPR image](doc/CDR.pl_1.svg)
+![CDPR image](doc/CDR.pl_2.svg)
+![CDPR image](doc/CDR.pl_3.svg)
+![CDPR image](doc/CDR.pl_4.svg)
 
 
 ## Stock manager
