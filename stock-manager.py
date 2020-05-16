@@ -160,7 +160,7 @@ def ReportsMail(recipient, filepath):
     print('Mail %s to %s.' % (filepath, recipient))
     currentDate = datetime.date.today()
     # Send email with attamchents through mutt smtp
-    os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report %s for %s' -a plots/*.png -- %s < %s" %
+    os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report %s for %s' -a plots/report.pdf -- %s < %s" %
               (args.execute, currentDate.strftime('%d/%m/%Y'), recipient, filepath))
 
 
