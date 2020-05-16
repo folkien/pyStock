@@ -168,7 +168,7 @@ class StockData:
             period = 28
 
         print('Report %s creation...' % interval)
-        f.write('# %s report for %u days..\n' % (self.stockCode, period))
+        f.write('# %s report for %u days.\n' % (self.stockCode, period))
         # Price
         f.write('* %s%% **%2.2f%s** [%2.2f%s - %2.2f%s]\n' %
                 (self.Colorify(self.GetReturnRates(period)),
@@ -246,6 +246,7 @@ class StockData:
             file.write('## Assets\n\n')
             for asset in assets:
                 ReportAsset(file, asset, self.currentPrice, self.symbol)
+            file.write('\n')
 
         return 0
 
