@@ -256,12 +256,14 @@ def FindUptrends(data, days=7, n=4):
 
     # Find rising series. Start from end
     for i in range(len(mins.values) - 1):
-        # If rising and more than time delta
-        if (mins[i] <= mins[i + 1]) and (mins.index[i] + timeDelta < mins.index[i + 1]):
-            trend = trend.append(
-                pd.Series(mins.values[i], index=[mins.index[i]]))
-            trend = trend.append(
-                pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
+        # If rising
+        if (mins[i] <= mins[i + 1]):
+            # If more than time delta
+            if (mins.index[i] + timeDelta < mins.index[i + 1]):
+                trend = trend.append(
+                    pd.Series(mins.values[i], index=[mins.index[i]]))
+                trend = trend.append(
+                    pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
         elif (trend.size > 0):
             uptrends.append(trend)
             trend = pd.Series()
@@ -286,12 +288,14 @@ def FindDowntrends(data, days=7, n=4):
 
     # Find falling series. Start from end
     for i in range(len(maxs.values) - 1):
-        # If falling and more than time delta
-        if (maxs[i] > maxs[i + 1]) and (maxs.index[i] + timeDelta < maxs.index[i + 1]):
-            trend = trend.append(
-                pd.Series(maxs.values[i], index=[maxs.index[i]]))
-            trend = trend.append(
-                pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
+        # If falling
+        if (maxs[i] >= maxs[i + 1]):
+            # If more than time delta
+            if (maxs.index[i] + timeDelta < maxs.index[i + 1]):
+                trend = trend.append(
+                    pd.Series(maxs.values[i], index=[maxs.index[i]]))
+                trend = trend.append(
+                    pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
         elif (trend.size > 0):
             downtrends.append(trend)
             trend = pd.Series()
