@@ -85,14 +85,13 @@ def entryPrint(entry):
 
 
 def entryExecute(entry, interval):
-
     # Execute stock-viewer
     if (os.system('stock-viewer ' + entry['arguments'] + ' -g -r -ri ' + interval) != 0):
         print('Entry %s execution failed!\n' % (entry['arguments']))
         return False
 
     # Use HTML fetcher to fetch additional data
-    if (entry['url'] != '') and (interval == 'weekly'):
+    if (entry['url'] != ''):
         fetcher = htmlFetcher(
             entry['url'], entry['htmlElement'], entry['htmlClasses'])
         ReportsAppend(reportFile, fetcher.Process() + '\n')
