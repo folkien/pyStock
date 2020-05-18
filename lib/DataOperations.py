@@ -258,7 +258,8 @@ def FindUptrends(data, days=7, n=4):
     for i in range(len(mins.values) - 1):
         # If rising and more than time delta
         if (mins[i] <= mins[i + 1]) and (mins.index[i] + timeDelta < mins.index[i + 1]):
-            trend = trend.append(pd.Series(mins.values[i], index=[mins.index[i]]))
+            trend = trend.append(
+                pd.Series(mins.values[i], index=[mins.index[i]]))
             trend = trend.append(
                 pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
         elif (trend.size > 0):
@@ -287,7 +288,8 @@ def FindDowntrends(data, days=7, n=4):
     for i in range(len(maxs.values) - 1):
         # If falling and more than time delta
         if (maxs[i] > maxs[i + 1]) and (maxs.index[i] + timeDelta < maxs.index[i + 1]):
-            trend = trend.append(pd.Series(maxs.values[i], index=[maxs.index[i]]))
+            trend = trend.append(
+                pd.Series(maxs.values[i], index=[maxs.index[i]]))
             trend = trend.append(
                 pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
         elif (trend.size > 0):
@@ -300,10 +302,18 @@ def FindDowntrends(data, days=7, n=4):
 
     return downtrends
 
-# Plots all trends list
+
+def GetDistances(t, y, a, b):
+    # Calculates sum of distances between line(at+b) and set of values(t,y)
+    sum = 0
+    for i in range(0, len(t)):
+        liney = a*t[i] + b
+        sum += abs(y[i]-liney)
+    return sum
 
 
 def PlotTrends(trendsList, tColor, tName=''):
+    # Plots all trends list
     for trend in trendsList:
         # For only two dots plot direct line
         if (trend.size == 2):
@@ -321,13 +331,25 @@ def PlotTrends(trendsList, tColor, tName=''):
             for i in range(len(deltas)):
                 t.append(deltas[i].days)
 
-            # Calculate regression
-            reg = linregress(t, y)
+            # Check all possible lines and find line
+            # with smallest overall distances from y points.
+            a = (y[1]-y[0])/t[1]
+            b = y[0]
+            bestIndex = 1
+            lowestDistances = GetDistances(t, y, a, b)
+            for i in range(2, len(t)):
+                a = (y[i]-y[0])/t[i]
+                distances = GetDistances(t, y, a, b)
+                if (lowestDistances > distances):
+                    bestIndex = i
+                    lowestDistances = distances
 
-            # Create new trend base on regression and saved datetimes
+            # Calculate bestIndex a slop factor
+            a = (y[bestIndex]-y[0])/t[bestIndex]
+            # Create line from bestIndex ax+b
             trend = pd.Series()
-            y0 = reg.slope * t[0] + reg.intercept
-            y1 = reg.slope * t[-1] + reg.intercept
+            y0 = a * t[0] + b
+            y1 = a * t[-1] + b
             trend = trend.append(pd.Series(y0, index=[dt0]))
             trend = trend.append(pd.Series(y1, index=[dt1]))
             trend = ExtendedTrendForward(trend)
