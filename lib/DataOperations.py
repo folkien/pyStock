@@ -307,12 +307,18 @@ def FindDowntrends(data, days=7, n=4):
     return downtrends
 
 
-def GetDistances(t, y, a, b):
+def GetDistances(t, y, a, b, posFactor=1, negFactor=1):
     # Calculates sum of distances between line(at+b) and set of values(t,y)
+    # Positive/negative factors could be used to diffrent calculate points
+    # below/above line.
     sum = 0
     for i in range(0, len(t)):
         liney = a*t[i] + b
-        sum += abs(y[i]-liney)
+        delta = (y[i]-liney)
+        if (delta >= 0):
+            sum += posFactor*abs(delta)
+        else:
+            sum += negFactor*abs(delta)
     return sum
 
 
@@ -335,15 +341,26 @@ def PlotTrends(trendsList, tColor, tName=''):
             for i in range(len(deltas)):
                 t.append(deltas[i].days)
 
+            # Set distance calculation factors for
+            # data above/below line.
+            if (tName == 'rising'):
+                # For rising trend
+                pFactor = 1
+                nFactor = 3
+            else:
+                # For falling trend
+                pFactor = 3
+                nFactor = 1
+
             # Check all possible lines and find line
             # with smallest overall distances from y points.
             a = (y[1]-y[0])/t[1]
             b = y[0]
             bestIndex = 1
-            lowestDistances = GetDistances(t, y, a, b)
+            lowestDistances = GetDistances(t, y, a, b, pFactor, nFactor)
             for i in range(2, len(t)):
                 a = (y[i]-y[0])/t[i]
-                distances = GetDistances(t, y, a, b)
+                distances = GetDistances(t, y, a, b, pFactor, nFactor)
                 if (lowestDistances > distances):
                     bestIndex = i
                     lowestDistances = distances
