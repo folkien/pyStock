@@ -457,6 +457,7 @@ if (args.reports):
         if (reportSignals.reportedAnything == True) or (True):
             with open(reportFile, 'a+') as f:
                 stockData.Report(f, executionInterval)
+                stockData.ReportAssets(f)
                 ReportGraphs(f)
         # remove plots if nothing reported
         else:
