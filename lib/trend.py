@@ -122,7 +122,7 @@ class trend(indicator):
                 sum += negFactor*abs(delta)
         return sum
 
-    def Plot(self, tColor='black', tName=''):
+    def Plot(self, tColor='black', tName='', tLinewidth=0.8):
         ''' Plots all trends found trends '''
         for trend in self.trends:
             # For only two dots plot direct line
@@ -175,4 +175,5 @@ class trend(indicator):
                 trend = trend.append(pd.Series(y0, index=[dt0]))
                 trend = trend.append(pd.Series(y1, index=[dt1]))
                 trend = self.ExtendedTrendForward(trend)
-                plt.plot(trend.index, trend, '--', color=tColor)
+                plt.plot(trend.index, trend, '--',
+                         color=tColor, linewidth=tLinewidth)
