@@ -56,13 +56,13 @@ class trend(indicator):
                     trend = trend.append(
                         pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
             elif (trend.size > 0):
-                trend = trend.drop_duplicates()
+                trend = trend.loc[~trend.index.duplicated()]
                 uptrends.append(trend)
                 trend = pd.Series()
 
         # Add last trend
         if (trend.size > 0):
-            trend = trend.drop_duplicates()
+            trend = trend.loc[~trend.index.duplicated()]
             uptrends.append(trend)
 
         # Calculate regression line most fitting.
@@ -88,13 +88,13 @@ class trend(indicator):
                     trend = trend.append(
                         pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
             elif (trend.size > 0):
-                trend = trend.drop_duplicates()
+                trend = trend.loc[~trend.index.duplicated()]
                 downtrends.append(trend)
                 trend = pd.Series()
 
         # Add last trend
         if (trend.size > 0):
-            trend = trend.drop_duplicates()
+            trend = trend.loc[~trend.index.duplicated()]
             downtrends.append(trend)
 
         return downtrends
