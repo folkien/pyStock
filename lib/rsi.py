@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
 from lib.indicator import indicator
+from lib.trend import *
 
 # Creates RSI object
 
@@ -108,5 +109,11 @@ class RSI(indicator):
         if (self.fromBottom50.size):
             plt.plot(self.fromBottom50.index,
                      self.fromBottom50, 'go', label='MayBuy')
+
+        # Plot trend lines
+        upTrends = trend(self.rsi, 'rising')
+        downTrends = trend(self.rsi, 'falling')
+        upTrends.Plot('green', 'rising', 0.6)
+        downTrends.Plot('red', 'falling', 0.6)
 
         plt.ylim(top=100, bottom=0)

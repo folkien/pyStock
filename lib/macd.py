@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from lib.DataOperations import *
 from lib.ReportSignals import *
 from lib.indicator import *
+from lib.trend import *
 
 # Creates MACD object
 
@@ -85,6 +86,12 @@ class MACD(indicator):
             plt.plot(self.sell.index, self.sell, 'o', color='#000000', ms=8)
             plt.plot(self.sell.index, self.sell, 'o',
                      label='Sell', color='#FF0000')
+
+        # Plot trend lines
+        upTrends = trend(self.macd, 'rising')
+        downTrends = trend(self.macd, 'falling')
+        upTrends.Plot('green', 'rising', 0.6)
+        downTrends.Plot('red', 'falling', 0.6)
 
     # Plot Histogram
     def Histogram(self):
