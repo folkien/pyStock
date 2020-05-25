@@ -38,9 +38,13 @@ class trend(indicator):
             data.values, numpy.less_equal, order=n)[0]]
         return mins
 
+    def GetTrendDaysLength(self, trend):
+        ''' Returns trend days length '''
+        delta = trend.index[-1]-trend.index[0]
+        return delta.days
+
     def FindUptrends(self, data, days=6, n=2):
         ''' Downtrend calculation is based on mins '''
-        timeDelta = datetime.timedelta(days=days)
         uptrends = []
         trend = pd.Series()
         mins = self.FindMinPeaks(data, n)
@@ -49,21 +53,21 @@ class trend(indicator):
         for i in range(len(mins.values) - 1):
             # If rising
             if (mins[i] <= mins[i + 1]):
-                # If more than time delta
-                if (mins.index[i] + timeDelta < mins.index[i + 1]):
-                    trend = trend.append(
-                        pd.Series(mins.values[i], index=[mins.index[i]]))
-                    trend = trend.append(
-                        pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
+                trend = trend.append(
+                    pd.Series(mins.values[i], index=[mins.index[i]]))
+                trend = trend.append(
+                    pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
             elif (trend.size > 0):
                 trend = trend.loc[~trend.index.duplicated()]
-                uptrends.append(trend)
+                if (self.GetTrendDaysLength(trend) >= days):
+                    uptrends.append(trend)
                 trend = pd.Series()
 
         # Add last trend
         if (trend.size > 0):
             trend = trend.loc[~trend.index.duplicated()]
-            uptrends.append(trend)
+            if (self.GetTrendDaysLength(trend) >= days):
+                uptrends.append(trend)
 
         # Calculate regression line most fitting.
         # If some point is far away from line then drop it.
@@ -72,7 +76,6 @@ class trend(indicator):
 
     def FindDowntrends(self, data, days=6, n=2):
         ''' Downtrend calculation is based on maxs '''
-        timeDelta = datetime.timedelta(days=days)
         downtrends = []
         trend = pd.Series()
         maxs = self.FindMaxPeaks(data, n)
@@ -81,21 +84,21 @@ class trend(indicator):
         for i in range(len(maxs.values) - 1):
             # If falling
             if (maxs[i] >= maxs[i + 1]):
-                # If more than time delta
-                if (maxs.index[i] + timeDelta < maxs.index[i + 1]):
-                    trend = trend.append(
-                        pd.Series(maxs.values[i], index=[maxs.index[i]]))
-                    trend = trend.append(
-                        pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
+                trend = trend.append(
+                    pd.Series(maxs.values[i], index=[maxs.index[i]]))
+                trend = trend.append(
+                    pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
             elif (trend.size > 0):
                 trend = trend.loc[~trend.index.duplicated()]
-                downtrends.append(trend)
+                if (self.GetTrendDaysLength(trend) >= days):
+                    downtrends.append(trend)
                 trend = pd.Series()
 
         # Add last trend
         if (trend.size > 0):
             trend = trend.loc[~trend.index.duplicated()]
-            downtrends.append(trend)
+            if (self.GetTrendDaysLength(trend) >= days):
+                downtrends.append(trend)
 
         return downtrends
 
