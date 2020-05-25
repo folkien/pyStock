@@ -38,7 +38,7 @@ class trend(indicator):
             data.values, numpy.less_equal, order=n)[0]]
         return mins
 
-    def FindUptrends(self, data, days=7, n=4):
+    def FindUptrends(self, data, days=6, n=2):
         ''' Downtrend calculation is based on mins '''
         timeDelta = datetime.timedelta(days=days)
         uptrends = []
@@ -56,11 +56,13 @@ class trend(indicator):
                     trend = trend.append(
                         pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
             elif (trend.size > 0):
+                trend = trend.drop_duplicates()
                 uptrends.append(trend)
                 trend = pd.Series()
 
         # Add last trend
         if (trend.size > 0):
+            trend = trend.drop_duplicates()
             uptrends.append(trend)
 
         # Calculate regression line most fitting.
@@ -68,7 +70,7 @@ class trend(indicator):
         # Add to data.
         return uptrends
 
-    def FindDowntrends(self, data, days=7, n=4):
+    def FindDowntrends(self, data, days=6, n=2):
         ''' Downtrend calculation is based on maxs '''
         timeDelta = datetime.timedelta(days=days)
         downtrends = []
@@ -86,11 +88,13 @@ class trend(indicator):
                     trend = trend.append(
                         pd.Series(maxs.values[i + 1], index=[maxs.index[i + 1]]))
             elif (trend.size > 0):
+                trend = trend.drop_duplicates()
                 downtrends.append(trend)
                 trend = pd.Series()
 
         # Add last trend
         if (trend.size > 0):
+            trend = trend.drop_duplicates()
             downtrends.append(trend)
 
         return downtrends
@@ -122,7 +126,7 @@ class trend(indicator):
                 sum += negFactor*abs(delta)
         return sum
 
-    def Plot(self, tColor='black', tName='', tLinewidth=0.8):
+    def Plot(self, tColor='black', tName='rising', tLinewidth=0.8):
         ''' Plots all trends found trends '''
         for trend in self.trends:
             # For only two dots plot direct line
