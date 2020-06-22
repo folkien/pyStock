@@ -395,3 +395,17 @@ class StockData:
                          colordown='r',
                          alpha=1)
         ax.autoscale_view()
+        self.PlotPriceLine(ax, self.dataSubset['Close'])
+
+    def PlotPriceLine(self, ax, price):
+        '''
+         price - dataframe/series with price values and indexes,
+        '''
+        priceLine = CreateHorizontalLine(
+            price.index, price.values[-1], price.values[-1])
+        ax.plot(priceLine.index, priceLine, '--',
+                color='#000000', linewidth=1.0, alpha=0.6)
+        bbox_props = dict(boxstyle='larrow,pad=0.3',
+                          fc='w', ec='0.5', alpha=0.6)
+        ax.annotate('%2.2f' % priceLine.values[-1], xy=(mdates.date2num(priceLine.index[-1]), priceLine.values[-1]),
+                    xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
