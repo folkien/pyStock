@@ -199,16 +199,23 @@ class trend(indicator):
 
             # Add annotations
             if (iterator >= lastIterator) and (annotate == True):
-                #             if (annotate == True):
                 # Calc coordinates of annotation
                 x = (mdates.date2num(
                     trend.index[-1])+mdates.date2num(trend.index[0]))/2
                 y = (trend.values[-1]+trend.values[0])/2
+                # week slope converted to int with rounding 2 decimal places
+                weekSlope = int((a*7)*100)
                 text = '%2.2f/w' % (a*7)
 
-                if (tName == 'rising'):
+                if (weekSlope > 0):
                     bbox_props = dict(
                         boxstyle='larrow,pad=0.3', fc='g', ec='0.5', alpha=0.6)
+                    plt.annotate(text, xy=(x, y),
+                                 xytext=(0, -30), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=-45)
+                elif (weekSlope == 0):
+                    text = '%2.2f lvl' % (trend.values[0])
+                    bbox_props = dict(
+                        boxstyle='darrow,pad=0.3', fc='w', ec='0.5', alpha=0.6)
                     plt.annotate(text, xy=(x, y),
                                  xytext=(0, -30), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=-45)
                 else:
