@@ -409,3 +409,26 @@ class StockData:
                           fc='w', ec='0.5', alpha=0.6)
         ax.annotate('%2.2f' % priceLine.values[-1], xy=(mdates.date2num(priceLine.index[-1]), priceLine.values[-1]),
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
+
+    def AddReturnRatesAxle(self, ax, data=None):
+        '''
+         Add another axle with return rates based on dataframe 'data'.
+        '''
+        # Checks
+        if (data is None):
+            data = self.dataSubset
+
+        # Data creation
+        price = data['Close'].values[-1]
+        index = data['Close'].index[-1]
+        maxPrice = data['High'].max()
+        maxRRate = ((maxPrice-price)*100/price)
+        minPrice = data['Low'].min()
+        minRRate = -((price-minPrice)*100/price)
+        data = CreateVerticalLine(index, minRRate, maxRRate)
+        # Data display
+        ax2 = ax.twinx()
+        ax2.plot(data.index, data, '_',
+                 color='#000000', linewidth=1.0, alpha=0.6)
+        ax2.tick_params(axis='y', labelcolor='tab:red')
+        plt.ylabel('%', color='red')

@@ -331,6 +331,8 @@ upTrends = trend(stockData.GetData('Low'), 'rising')
 downTrends = trend(stockData.GetData('High'), 'falling')
 upTrends.Plot('green', 'rising', 0.6)
 downTrends.Plot('red', 'falling', 0.6)
+# Add return rates axle
+stockData.AddReturnRatesAxle(plot5)
 
 # MACD
 plot6 = plt.subplot(gs[Rows - 2], sharex=plot5)
@@ -374,6 +376,9 @@ plt.grid(b=True, which='major', axis='both', color='k')
 plt.grid(b=True, which='minor', axis='both')
 plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
+# Add return rates axle
+stockData.AddReturnRatesAxle(plot9)
+
 
 # ATR
 plot10 = plt.subplot(gs[Rows - 2], sharex=plot9)
