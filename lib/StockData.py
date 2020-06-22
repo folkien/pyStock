@@ -294,7 +294,7 @@ class StockData:
     def Plot(self):
         plt.plot(self.dataSubset['Close'].index,
                  self.dataSubset['Close'], '#000000', label=self.stockCode)
-        return 0
+        self.PlotPriceLine(plt.gca(), self.dataSubset['Close'])
 
     # Plot assets
     def PlotAllAssets(self):
