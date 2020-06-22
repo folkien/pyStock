@@ -132,11 +132,20 @@ class trend(indicator):
 
     def Plot(self, tColor='black', tName='rising', tLinewidth=0.8, annotate=False):
         ''' Plots all trends found trends '''
+        iterator = 0
+        lastIterator = len(self.trends)-2
         for trend in self.trends:
             # For only two dots plot direct line
             if (trend.size == 2):
                 trend = self.ExtendedTrendForward(trend)
                 plt.plot(trend.index, trend, '--', color=tColor)
+                # Calculate slope
+                t = []
+                deltas = (trend.index.date - trend.index.date.min())
+                for i in range(len(deltas)):
+                    t.append(deltas[i].days)
+                y = trend.values
+                a = (y[1]-y[0])/t[1]
             # For more dots, calculate regression line
             else:
                 # Remember datetime of first and last point
@@ -187,17 +196,25 @@ class trend(indicator):
                 # Plot trend line on graph
                 plt.plot(trend.index, trend, '--',
                          color=tColor, linewidth=tLinewidth)
-                # Add annotations
-                if (annotate == True):
-                    if (tName == 'rising'):
-                        text = '%2.2f/w' % (a*7)
-                        bbox_props = dict(
-                            boxstyle='larrow,pad=0.3', fc='g', ec='0.5', alpha=0.6)
-                        plt.annotate(text, xy=(mdates.date2num(trend.index[-1]), trend.values[-1]),
-                                     xytext=(15, -3), textcoords='offset points', fontsize=8, bbox=bbox_props)
-                    else:
-                        text = '%2.2f/w' % (a*7)
-                        bbox_props = dict(
-                            boxstyle='rarrow,pad=0.3', fc='r', ec='0.5', alpha=0.6)
-                        plt.annotate(text, xy=(mdates.date2num(trend.index[-1]), trend.values[-1]),
-                                     xytext=(-15, -3), textcoords='offset points', fontsize=8, bbox=bbox_props)
+
+            # Add annotations
+            if (iterator >= lastIterator) and (annotate == True):
+                #             if (annotate == True):
+                # Calc coordinates of annotation
+                x = (mdates.date2num(
+                    trend.index[-1])+mdates.date2num(trend.index[0]))/2
+                y = (trend.values[-1]+trend.values[0])/2
+                text = '%2.2f/w' % (a*7)
+
+                if (tName == 'rising'):
+                    bbox_props = dict(
+                        boxstyle='larrow,pad=0.3', fc='g', ec='0.5', alpha=0.6)
+                    plt.annotate(text, xy=(x, y),
+                                 xytext=(0, -30), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=-45)
+                else:
+                    bbox_props = dict(
+                        boxstyle='larrow,pad=0.3', fc='r', ec='0.5', alpha=0.6)
+                    plt.annotate(text, xy=(x, y),
+                                 xytext=(0, 5), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=45)
+            # Increment trend iterator
+            iterator = iterator+1
