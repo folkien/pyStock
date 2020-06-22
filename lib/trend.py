@@ -9,6 +9,7 @@ import numpy
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from lib.indicator import indicator
 
 
@@ -129,7 +130,7 @@ class trend(indicator):
                 sum += negFactor*abs(delta)
         return sum
 
-    def Plot(self, tColor='black', tName='rising', tLinewidth=0.8):
+    def Plot(self, tColor='black', tName='rising', tLinewidth=0.8, annotate=False):
         ''' Plots all trends found trends '''
         for trend in self.trends:
             # For only two dots plot direct line
@@ -182,5 +183,21 @@ class trend(indicator):
                 trend = trend.append(pd.Series(y0, index=[dt0]))
                 trend = trend.append(pd.Series(y1, index=[dt1]))
                 trend = self.ExtendedTrendForward(trend)
+
+                # Plot trend line on graph
                 plt.plot(trend.index, trend, '--',
                          color=tColor, linewidth=tLinewidth)
+                # Add annotations
+                if (annotate == True):
+                    if (tName == 'rising'):
+                        text = '%2.2f/w' % (a*7)
+                        bbox_props = dict(
+                            boxstyle='larrow,pad=0.3', fc='g', ec='0.5', alpha=0.6)
+                        plt.annotate(text, xy=(mdates.date2num(trend.index[-1]), trend.values[-1]),
+                                     xytext=(15, -3), textcoords='offset points', fontsize=8, bbox=bbox_props)
+                    else:
+                        text = '%2.2f/w' % (a*7)
+                        bbox_props = dict(
+                            boxstyle='rarrow,pad=0.3', fc='r', ec='0.5', alpha=0.6)
+                        plt.annotate(text, xy=(mdates.date2num(trend.index[-1]), trend.values[-1]),
+                                     xytext=(-15, -3), textcoords='offset points', fontsize=8, bbox=bbox_props)

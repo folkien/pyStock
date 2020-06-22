@@ -299,8 +299,8 @@ plot3 = plt.subplot(gs[2:5, :])
 stockData.Plot()
 plt.plot(maxs.index, maxs, 'go', label='Maxs')
 plt.plot(mins.index, mins, 'ro', label='Mins')
-upTrends.Plot('green', 'rising')
-downTrends.Plot('red', 'falling')
+upTrends.Plot('green', 'rising', annotate=True)
+downTrends.Plot('red', 'falling', annotate=True)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.legend(loc='upper left')
@@ -329,8 +329,8 @@ plt.tick_params(axis='x', which='both', bottom=False,
 # Plot trend lines
 upTrends = trend(stockData.GetData('Low'), 'rising')
 downTrends = trend(stockData.GetData('High'), 'falling')
-upTrends.Plot('green', 'rising', 0.6)
-downTrends.Plot('red', 'falling', 0.6)
+upTrends.Plot('green', 'rising', 0.6, annotate=True)
+downTrends.Plot('red', 'falling', 0.6, annotate=True)
 # Add return rates axle
 stockData.AddReturnRatesAxle(plot5)
 
