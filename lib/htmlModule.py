@@ -20,8 +20,20 @@ class htmlFetcher:
 
     def fetchHtmlData(self):
         'Fetches HTML data from given URL'
-        import urllib.request
-        with urllib.request.urlopen(self.url) as response:
+        from urllib.request import Request, urlopen
+        from urllib.error import URLError
+
+        req = Request(self.url)
+        try:
+            response = urlopen(req)
+        except URLError as e:
+            if hasattr(e, 'reason'):
+                print('(Error) We failed to reach a server.')
+                print('(Error) Reason: ', e.reason)
+            elif hasattr(e, 'code'):
+                print('(Error) The server couldn\'t fulfill the request.')
+                print('(Error) Error code: ', e.code)
+        else:
             data = response.read()
 
             # Get encoding, try utf-8 if not found.
