@@ -288,6 +288,7 @@ class StockData:
     def PlotAll(self):
         plt.plot(self.data['Close'].index, self.data['Close'],
                  '#000000', label=self.stockCode)
+        self.PlotPriceLine(plt.gca(), self.data['Close'])
         return 0
 
     # Plot stock data

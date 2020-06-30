@@ -331,6 +331,7 @@ gs = gridspec.GridSpec(Rows, 1)
 plot5 = plt.subplot(gs[0:4])
 stockData.PlotCandle(plot5)
 stockData.PlotAssets()
+bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 1' % stockData.GetStockCode())
 plt.legend(loc='upper left')
@@ -340,8 +341,6 @@ plt.grid(b=True, which='minor', axis='both')
 plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
 # Plot trend lines
-upTrends = trend(stockData.GetData('Low'), 'rising')
-downTrends = trend(stockData.GetData('High'), 'falling')
 upTrends.Plot('green', 'rising', 0.6, annotate=True)
 downTrends.Plot('red', 'falling', 0.6, annotate=True)
 # Add return rates axle
@@ -371,7 +370,9 @@ plt.gca().xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
 if (args.plotToFile):
     PlotSave(fig)
 
-# FIG 3
+# PLOT 3
+# #####################################################
+# #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
 
 # Bollinger with candleplot
@@ -389,6 +390,9 @@ plt.grid(b=True, which='major', axis='both', color='k')
 plt.grid(b=True, which='minor', axis='both')
 plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
+# Plot trend lines
+upTrends.Plot('green', 'rising', 0.6, annotate=True)
+downTrends.Plot('red', 'falling', 0.6, annotate=True)
 # Add return rates axle
 stockData.AddReturnRatesAxle(plot9)
 
@@ -420,7 +424,9 @@ if (args.plotToFile):
     PlotSave(fig)
 
 if (stockData.hasVolume()):
-    # FIG 4
+    # PLOT 4
+    # #####################################################
+    # #####################################################
     fig = plt.figure(figsize=(16.0, 9.0))
 
     # Create rows
