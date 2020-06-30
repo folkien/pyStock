@@ -24,8 +24,10 @@ class trend(indicator):
         '''Init trend based on given data'''
         if (self.type == 'rising'):
             return self.FindUptrends(data)
-        else:
+        elif (self.type == 'falling'):
             return self.FindDowntrends(data)
+        else:
+            return self.FindSupport(data)
 
     def FindMaxPeaks(self, data, n=7):
         '''Return series of max points from given data'''
@@ -69,6 +71,41 @@ class trend(indicator):
             trend = trend.loc[~trend.index.duplicated()]
             if (self.GetTrendDaysLength(trend) >= days):
                 uptrends.append(trend)
+
+        # Calculate regression line most fitting.
+        # If some point is far away from line then drop it.
+        # Add to data.
+        return uptrends
+
+    def FindSupport(self, data, days=6, n=2):
+        ''' Support calculation is based on mins '''
+        delta = 0.01
+        uptrends = []
+        trend = pd.Series()
+        mins = self.FindMinPeaks(data, n)
+
+        i = 0
+        while (i < len(mins.values)):
+            return True
+#         # Find rising series. Start from end
+#         for point in mins.values:
+#             # If rising
+#             if (mins[i] <= mins[i + 1]):
+#                 trend = trend.append(
+#                     pd.Series(mins.values[i], index=[mins.index[i]]))
+#                 trend = trend.append(
+#                     pd.Series(mins.values[i + 1], index=[mins.index[i + 1]]))
+#             elif (trend.size > 0):
+#                 trend = trend.loc[~trend.index.duplicated()]
+#                 if (self.GetTrendDaysLength(trend) >= days):
+#                     uptrends.append(trend)
+#                 trend = pd.Series()
+#
+#         # Add last trend
+#         if (trend.size > 0):
+#             trend = trend.loc[~trend.index.duplicated()]
+#             if (self.GetTrendDaysLength(trend) >= days):
+#                 uptrends.append(trend)
 
         # Calculate regression line most fitting.
         # If some point is far away from line then drop it.

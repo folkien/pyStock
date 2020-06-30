@@ -328,6 +328,7 @@ plt.tick_params(axis='x', which='both', bottom=False,
                 top=False, labelbottom=False)
 # Plot trend lines
 upTrends = trend(stockData.GetData('Low'), 'rising')
+support = trend(stockData.GetData('Low'), 'support')
 downTrends = trend(stockData.GetData('High'), 'falling')
 upTrends.Plot('green', 'rising', 0.6, annotate=True)
 downTrends.Plot('red', 'falling', 0.6, annotate=True)
