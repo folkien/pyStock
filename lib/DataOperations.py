@@ -151,16 +151,19 @@ def FindIntersections(x, y):
     fromBottom = pd.DataFrame()
     fromTop = pd.DataFrame()
 
+    halfday = datetime.timedelta(hours=12)
     signs = numpy.sign(diffrence.values)
     for i in range(1, len(signs)):
+        # TODO :
+        # - calculate time/vaue of crossing - better plot position
         # Bottom crossing
         if (signs[i] == 1) and (signs[i - 1] == -1):
             fromBottom = fromBottom.append(pd.DataFrame(
-                {'value': x.values[i]}, index=[diffrence.index[i]]))
+                {'value': (x.values[i-1]+x.values[i])/2}, index=[diffrence.index[i-1]+halfday]))
         # Top crossing
         elif (signs[i] == -1) and (signs[i - 1] == 1):
             fromTop = fromTop.append(pd.DataFrame(
-                {'value': x.values[i]}, index=[diffrence.index[i]]))
+                {'value': (x.values[i-1]+x.values[i])/2}, index=[diffrence.index[i-1]+halfday]))
 
     return fromBottom, fromTop
 
