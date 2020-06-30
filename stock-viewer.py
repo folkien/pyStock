@@ -177,6 +177,8 @@ macd = CreateMACD(closePrice)
 rsi = CreateRSI(closePrice)
 cci = CreateCCI(stockData.GetData('High'), stockData.GetData(
     'Low'), stockData.GetData('Close'))
+stoch = CreateStoch(stockData.GetData('High'), stockData.GetData(
+    'Low'), stockData.GetData('Close'))
 bollinger = CreateBollinger(closePrice)
 atr = CreateATR(stockData.GetData('High'), stockData.GetData(
     'Low'), stockData.GetData('Close'))
@@ -193,6 +195,7 @@ alligator.ExportSignals(reportSignals)
 macd.ExportSignals(reportSignals)
 rsi.ExportSignals(reportSignals)
 cci.ExportSignals(reportSignals)
+stoch.ExportSignals(reportSignals)
 bollinger.ExportSignals(reportSignals)
 dmi.ExportSignals(reportSignals)
 if (stockData.hasVolume()):
@@ -202,6 +205,7 @@ if (stockData.hasVolume()):
 # Add momentum inidicators to stock data
 stockData.AddIndicator(rsi)
 stockData.AddIndicator(cci)
+stockData.AddIndicator(stoch)
 if (stockData.hasVolume()):
     stockData.AddIndicator(mfi)
 
@@ -223,13 +227,14 @@ if (stockData.hasVolume()):
 # PLOTS
 # #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
-Rows = 5
+Rows = 6
 Cols = 5
 gs = gridspec.GridSpec(Rows, Cols)
 
-# Price All - Plot
+# PLOT 1
 # #####################################################
-plot2 = plt.subplot(gs[0:2, 0:2])
+# #####################################################
+plot2 = plt.subplot(gs[0:2, :])
 stockData.PlotAll()
 stockData.PlotAllAssets()
 rect = CreateRect(datetime.datetime.strptime(start_date, '%Y-%m-%d'),
@@ -256,60 +261,68 @@ if (stockData.hasVolume()):
     plot2B.tick_params(axis='y', labelcolor='tab:red')
     plt.legend(loc='upper left')
 
-# #####################################################
 
-# Price - Plot
-# #####################################################
-plot1 = plt.subplot(gs[0:2, 2:5])
-alligator.Plot()
-stockData.Plot()
-stockData.PlotAssets()
-plt.ylabel('Price (%s)' % (info.GetCurrency()))
-plt.grid()
-plt.title('%s - Current' % stockData.GetStockCode())
-plt.legend(loc='upper left')
-
-# OBV
-if (stockData.hasVolume()):
-    plot1A = plot1.twinx()
-    plot1A.plot(obv.index, obv, '-.', linewidth=1.2, label='OBV', color='blue')
-    plot1A.legend(loc='upper left')
-    plot1A.tick_params(axis='y', labelcolor='tab:blue')
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
-
-# Money on market
-if (stockData.hasVolume()):
-    plot1B = plot1.twinx()
-    stockData.PlotMoneyOnMarket(plot1B)
-    plot1B.tick_params(axis='y', labelcolor='tab:red')
-    plt.legend(loc='upper left')
-
-# #####################################################
+# # Price close
+# plot1 = plt.subplot(gs[0:2, 4:5])
+# alligator.Plot()
+# stockData.Plot()
+# stockData.PlotAssets()
+# plt.ylabel('Price (%s)' % (info.GetCurrency()))
+# plt.grid()
+# plt.title('%s - Current' % stockData.GetStockCode())
+# plt.legend(loc='upper left')
+#
+# # OBV
+# if (stockData.hasVolume()):
+#     plot1A = plot1.twinx()
+#     plot1A.plot(obv.index, obv, '-.', linewidth=1.2, label='OBV', color='blue')
+#     plot1A.legend(loc='upper left')
+#     plot1A.tick_params(axis='y', labelcolor='tab:blue')
+#     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
+#
+# # Money on market
+# if (stockData.hasVolume()):
+#     plot1B = plot1.twinx()
+#     stockData.PlotMoneyOnMarket(plot1B)
+#     plot1B.tick_params(axis='y', labelcolor='tab:red')
+#     plt.legend(loc='upper left')
 
 
 period = 2
-upTrends = trend(closePrice)
-downTrends = trend(closePrice, 'falling')
-maxs = FindMaxPeaks(closePrice, period)
-mins = FindMinPeaks(closePrice, period)
+upTrends = trend(stockData.GetData('Low'), 'rising')
+downTrends = trend(stockData.GetData('High'), 'falling')
 
-# Price trends - Plot
-# #####################################################
+# Price OHLC
 plot3 = plt.subplot(gs[2:5, :])
-stockData.Plot()
-plt.plot(maxs.index, maxs, 'go', label='Maxs')
-plt.plot(mins.index, mins, 'ro', label='Mins')
-upTrends.Plot('green', 'rising', annotate=True)
-downTrends.Plot('red', 'falling', annotate=True)
+stockData.PlotCandle(plot3)
+stockData.PlotAssets()
+bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.legend(loc='upper left')
+# Plot trend lines
+upTrends.Plot('green', 'rising', annotate=True)
+downTrends.Plot('red', 'falling', annotate=True)
+# Add return rates axle
+stockData.AddReturnRatesAxle(plot3)
+
+# Stoch
+plot4 = plt.subplot(gs[5:6, :], sharex=plot3)
+stoch.Plot()
+plt.ylabel('Stoch')
+plt.grid()
+plt.legend(loc='upper left')
+plt.xticks(rotation=90)
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+plt.gca().xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
 
 # Plot to file
 if (args.plotToFile):
     PlotSave(fig)
 
-###
+# PLOT 2
+# #####################################################
+# #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
 Rows = 6
 gs = gridspec.GridSpec(Rows, 1)

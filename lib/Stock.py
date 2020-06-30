@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import copy
 from lib.rsi import *
 from lib.cci import *
+from lib.stoch import *
 from lib.macd import *
 from lib.atr import *
 from lib.dmi import *
