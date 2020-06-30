@@ -7,7 +7,7 @@ fi
 
  # commands install to linux /usr/bin/
  cd /usr/bin
- sudo ln -sf ${dir}/stock-viewer.py stock-viewer
+ sudo ln -sf ${dir}/scripts/stock-viewer.sh stock-viewer
  sudo ln -sf ${dir}/scripts/stock-manager.sh stock-manager
  sudo ln -sf ${dir}/stock-alarms.py stock-alarms
 
