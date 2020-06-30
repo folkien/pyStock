@@ -91,9 +91,9 @@ class Stoch(indicator):
                      label='Sell', color='#FF0000')
 
         # Plot trend lines
-#         upTrends = trend(self.k, 'rising')
-#         downTrends = trend(self.k, 'falling')
-#         upTrends.Plot('green', 'rising', 0.6)
-#         downTrends.Plot('red', 'falling', 0.6)
+        upTrends = trend(self.k, 'rising')
+        downTrends = trend(self.k, 'falling')
+        upTrends.Plot('green', 'rising', 0.6)
+        downTrends.Plot('red', 'falling', 0.6)
 
         plt.ylim(top=100, bottom=0)
