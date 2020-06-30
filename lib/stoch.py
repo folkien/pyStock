@@ -62,7 +62,7 @@ class Stoch(indicator):
         plt.plot(self.k.index, self.k, label='%K'
                  + str(self.n), linewidth=1.0, color='blue')
         plt.plot(self.d.index, self.d, label='%D'
-                 + str(self.n), linewidth=1.0, color='red')
+                 + str(self.d_n), linewidth=1.0, color='red')
         x_axis = self.k.index.get_level_values(0)
 
         # OverBought
