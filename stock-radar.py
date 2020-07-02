@@ -65,7 +65,16 @@ def BiznesRadarParse(content):
 
 def Filter(stocks):
     ''' Filter and sort stocks from pandas dataframe'''
-    stocks = stocks.sort_values(by=['Piotroski'], ascending=False)
+    ratings = []
+    # Add column with spasz value
+    for i in (range(len(stocks['Profil']))):
+        rating = stocks['ROE'][i]*1.5 +\
+            stocks['ROA'][i]*1.5 +\
+            (stocks['Piotroski'][i]*100)/9
+        ratings.append(rating)
+
+    stocks['Rating'] = ratings
+    stocks = stocks.sort_values(by=['Rating'], ascending=False)
     return stocks
 
 
