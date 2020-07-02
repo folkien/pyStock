@@ -38,7 +38,7 @@ def GetHTMLElement(content, element, elementClasses):
 def BiznesRadarParse(content):
     ''' Parse file HTML content to get stocks table '''
     table = GetHTMLElement(content, 'table', 'qTableFull')
-    DebugSave('table.html', table)
+    #DebugSave('table.html', table)
     data = pd.read_html(table, thousands=' ', decimal='.',
                         displayed_only=False)[0]
     # Remove separator lines
@@ -107,6 +107,8 @@ def Filter(stocks):
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', type=str,
                     required=True, help='Input HTML file')
+parser.add_argument('-o', '--output', type=str,
+                    required=False, help='Output xlsx file')
 parser.add_argument('-u', '--url', type=str,
                     required=False, help='URL to fetch. Not implemented!')
 parser.add_argument('-g', '--plotToFile', action='store_true',
@@ -125,4 +127,8 @@ if os.path.isfile(filepath):
         content = f.read()
         stocks = BiznesRadarParse(content)
         stocks = Filter(stocks)
+
+        # show data
         print(stocks)
+        if (args.output is not None):
+            stocks.to_excel(args.output)
