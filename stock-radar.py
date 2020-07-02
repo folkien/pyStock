@@ -71,6 +71,26 @@ def Filter(stocks):
         rating = stocks['ROE'][i]*1.5 +\
             stocks['ROA'][i]*1.5 +\
             (stocks['Piotroski'][i]*100)/9
+        # C/WK
+        c_wk = stocks['C/WK'][i]
+        if (c_wk < 1):
+            rating += 100 - 25*c_wk
+        elif (c_wk < 10):
+            rating += 80 - 5*c_wk
+        elif (c_wk < 100):
+            rating += 33.3 - 0.33*c_wk
+        else:
+            rating += 0
+        # Obrot
+        obrot = stocks['Obrot'][i]
+        if (obrot < 1000):
+            rating += 0
+        elif (obrot < 10000):
+            rating += 20
+        elif (obrot < 100000):
+            rating += 60
+        else:
+            rating += 100
         ratings.append(rating)
 
     stocks['Rating'] = ratings
