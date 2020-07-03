@@ -2,9 +2,9 @@ from flask_restful import Resource, Api, reqparse
 import json
 from waitress import serve
 from flask import Flask, Response
-from lib.Stock import *
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
+from lib.Stock import *
 
 app = Flask(__name__)
 api = Api(app)
