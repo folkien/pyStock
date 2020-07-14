@@ -53,10 +53,11 @@ def BiznesRadarParse(content):
                                 })
     # Convert string values to float/int values
     for i in (range(len(data['Profil']))):
-        data['ROE'][i] = float(data['ROE'][i].strip('%'))
-        data['ROA'][i] = float(data['ROA'][i].strip('%'))
+        data['ROE'][i] = float(data['ROE'][i].replace(' ', '').strip('%'))
+        data['ROA'][i] = float(data['ROA'][i].replace(' ', '').strip('%'))
         data['C/WK'][i] = float(data['C/WK'][i])
         data['C/P'][i] = float(data['C/P'][i])
+        data['C/Z'][i] = float(data['C/Z'][i])
         data['Kurs'][i] = float(data['Kurs'][i])
         data['Obrot'][i] = int(data['Obrot'][i])
         data['Piotroski'][i] = int(data['Piotroski'][i])
@@ -65,7 +66,16 @@ def BiznesRadarParse(content):
 
 
 def Filter(stocks):
-    ''' Filter and sort stocks from pandas dataframe'''
+    '''
+        Filter and sort stocks from pandas dataframe.
+
+        Each rating is scaled to 0..100% and sumed up.
+        Each commentary could be :
+        - worst,
+        - bad,
+        - good,
+        - great,
+    '''
     ratings = []
     comments = []
 
@@ -99,12 +109,16 @@ def Filter(stocks):
         if 'C/Z' in stocks:
             value = stocks['C/Z'][i]
             if (value < 1):
+                commentary += 'great C/Z,'
                 rating += 100 - 25*value
             elif (value < 10):
+                commentary += 'good C/Z,'
                 rating += 80 - 5*value
             elif (value < 100):
+                commentary += 'bad C/Z,'
                 rating += 33.3 - 0.33*value
             else:
+                commentary += 'worst C/Z,'
                 rating += 0
 
         # C/WK
@@ -123,19 +137,23 @@ def Filter(stocks):
         if 'Obrot' in stocks:
             obrot = stocks['Obrot'][i]
             if (obrot < 1000):
+                commentary += 'worst Obrot,'
                 rating += 0
             elif (obrot < 10000):
+                commentary += 'bad Obrot,'
                 rating += 20
             elif (obrot < 100000):
+                commentary += 'good Obrot,'
                 rating += 60
             else:
+                commentary += 'great Obrot,'
                 rating += 100
 
         ratings.append(rating)
         comments.append(commentary)
 
     stocks['Rating'] = ratings
-    stocks['Comments'] = commentary
+    stocks['Comments'] = comments
     stocks = stocks.sort_values(by=['Rating'], ascending=False)
     return stocks
 
