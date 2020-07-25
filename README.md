@@ -210,6 +210,77 @@ optional arguments:
   -W, --lastWeek        Last Week
 ```
 
+## Stock REST Client
+
+### Installation
+
+The simplest way is to install using Docker
+
+1. Intall Docker https://docs.docker.com/get-docker/
+
+2. Open terminal inside repository location and type:
+
+   ```
+    docker build -t example_docker_image_name .
+   ```
+
+   This command will create docker image with pyStock REST client.
+
+   You can change  example_docker_image_name with your own docker image name. The '.' at the end is important.
+
+3. Next type:
+
+   ```
+   docker run --rm -p 5000:5000 example_docker_image_name
+   ```
+
+   This will create and run container based on example_docker_image_name image.
+
+   The client will be listening on port 5000 on host machine.
+
+### REST API
+
+1. #### Get Stock Data
+
+   ##### Request
+
+   ```
+   GET /stockdata/<string:stock_code>/<string:stock_index>?begin_date=<example_begin_date>&end_date=<example_end_date>
+   //example http://localhost:5000/stockdata/AAPL.US/Close?begin_date=2016-01-01&end_date=2016-01-10
+   ```
+
+   stock_code - String with stock code for example AAPL.US (Apple stock code), ELZ (Elzab stock code)
+
+   stock_index - one of the following:
+
+   1. Close - Close price
+   2. High - Highest price
+   3. Low - Lowest price
+   4. Money - ?
+   5. OBV - On Balance Volume
+   6. Typical - typical price
+   7. Volume - trading volume
+   8. VolumeN - ?
+   9. VolumeP - ?
+
+   example_begin_date - begin date in ISO format YYYY-MM-DD
+
+   example_end_date - end date in ISO format YYYY-MM-DD
+
+   ##### Response
+
+   ```json
+   //example
+   {"Close":
+    {"2016-01-05T00:00:00.000Z":95.494,
+     "2016-01-06T00:00:00.000Z":93.624,
+     "2016-01-07T00:00:00.000Z":89.674,
+     "2016-01-08T00:00:00.000Z":90.148}
+   }
+   ```
+
+   
+
 # License
 
 MIT License
