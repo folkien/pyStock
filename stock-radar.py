@@ -50,6 +50,9 @@ def BiznesRadarParse(content):
                                 'Aktualny kurs': 'Kurs',
                                 'Średni obrót z 5 sesji [zł]': 'Obrot',
                                 'Piotroski F-Score': 'Piotroski',
+                                'Trend 6m': 'T6M',
+                                'Trend 12m': 'T12M',
+                                'Trend 24m': 'T24M',
                                 })
     # Convert string values to float/int values
     for i in (range(len(data['Profil']))):
@@ -85,9 +88,17 @@ def Filter(stocks):
         rating = 0
 
         if 'ROE' in stocks:
+            # Normalize
+            if (stocks['ROE'][i] > 100):
+                stocks['ROE'][i] = 100
+
             rating += stocks['ROE'][i]*1.5
 
         if 'ROA' in stocks:
+            # Normalize
+            if (stocks['ROA'][i] > 100):
+                stocks['ROA'][i] = 100
+
             rating += stocks['ROA'][i]*1.5
 
         if 'Piotroski' in stocks:
