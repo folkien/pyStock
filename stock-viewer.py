@@ -2,6 +2,7 @@
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import matplotlib.pyplot as plt
 import pandas as pd
+pd.core.common.is_list_like = pd.api.types.is_list_like
 import sys
 import os
 import argparse
