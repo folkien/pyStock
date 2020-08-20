@@ -53,6 +53,9 @@ def BiznesRadarParse(content):
                                 'Trend 6m': 'T6M',
                                 'Trend 12m': 'T12M',
                                 'Trend 24m': 'T24M',
+                                'Zmiana kursu 3m [%]': 'Z3',
+                                'Zmiana kursu 6m [%]': 'Z6',
+                                'Zmiana kursu 12m [%]': 'Z12'
                                 })
     # Convert string values to float/int values
     for i in (range(len(data['Profil']))):
@@ -64,6 +67,9 @@ def BiznesRadarParse(content):
         data['Kurs'][i] = float(data['Kurs'][i])
         data['Obrot'][i] = int(data['Obrot'][i])
         data['Piotroski'][i] = int(data['Piotroski'][i])
+        data['Z3'][i] = float(data['Z3'][i].replace(' ', '').strip('%'))
+        data['Z6'][i] = float(data['Z6'][i].replace(' ', '').strip('%'))
+        data['Z12'][i] = float(data['Z12'][i].replace(' ', '').strip('%'))
 
     return data
 
@@ -159,6 +165,23 @@ def Filter(stocks):
             else:
                 commentary += 'great Obrot,'
                 rating += 100
+
+        # Zmiany
+        if 'Z3' in stocks:
+            change = stocks['Z3'][i]
+            if (change > 100):
+                change = 100
+            rating += change * 0.33
+        if 'Z6' in stocks:
+            change = stocks['Z6'][i]
+            if (change > 100):
+                change = 100
+            rating += change * 0.33
+        if 'Z12' in stocks:
+            change = stocks['Z12'][i]
+            if (change > 100):
+                change = 100
+            rating += change * 0.33
 
         ratings.append(rating)
         comments.append(commentary)
