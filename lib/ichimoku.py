@@ -23,7 +23,34 @@ class Ichimoku:
         # Signals
         self.buy = None
         self.sell = None
-#         fromBottom, fromTop = FindIntersections(self.senkouSpanA, prices)
+
+        # Tenkan sen and kijun sen
+        fromBottom, fromTop = FindIntersections(self.tenkanSen, self.kijunSen)
+#         self.FilterSignalsByKumo(fromBottom)
+#         self.FilterSignalsByKumo(fromTop)
+        self.buy = fromBottom
+        self.sell = fromTop
+        # TODO checking Kumo > = <
+
+        # ClosePrice and kijun sen
+        fromBottom, fromTop = FindIntersections(close, self.kijunSen)
+        self.buy = self.buy.append(fromBottom)
+        self.sell = self.sell.append(fromTop)
+        # TODO checking Kumo > = <
+
+        # Kumo Breakout
+
+        # Senkou Span cross
+        fromBottom, fromTop = FindIntersections(
+            self.senkouSpanA, self.senkouSpanB)
+        self.buy = self.buy.append(fromBottom)
+        self.sell = self.sell.append(fromTop)
+
+        # Chikou Span cross
+        fromBottom, fromTop = FindIntersections(self.chikouSpan, close)
+        self.buy = self.buy.append(fromBottom)
+        self.sell = self.sell.append(fromTop)
+
 #         self.sell = fromBottom
 #         fromBottom, fromTop = FindIntersections(self.senkouSpanB, prices)
 #         self.buy = fromTop
@@ -32,7 +59,36 @@ class Ichimoku:
 #         self.variability = CreateSubsetByValues(
 #             self.absStd, self.variabilityLvl, 100)
 
+    def FilterSignalsByKumo(self, signals):
+        ''' Filter signals with position based on Kumo'''
+        low = pd.DataFrame()
+        middle = pd.DataFrame()
+        high = pd.DataFrame()
+
+        # Kumo range
+        rangeBeg = self.senkouSpanA.index[0]
+        rangeEnd = self.senkouSpanA.index[-1]
+
+        for i in range(len(signals)):
+            index = signals.index[i]
+            index_str = index.strftime('%Y-%m-%d')
+            value = signals.values[i]
+
+            # TODO
+            if (i >= rangeBeg) and (i <= rangeEnd):
+                if (value < self.senkouSpanA[i]) and (value < self.senkouSpanB):
+                    low = low.append(signals[i])
+                elif (value < self.senkouSpanA) and (value < self.senkouSpanB):
+                    middle = middle.append(signals[i])
+                else:
+                    high = high.append(signals[i])
+            else:
+                low = low.append(signals[i])
+
+        return low, middle, high
+
     # Set Ichimoku indicator
+
     def InitIchimoku(self, open, high, low, close):
         n9high = high.rolling(window=9, min_periods=0).max()
         n9low = low.rolling(window=9, min_periods=0).min()
@@ -56,9 +112,8 @@ class Ichimoku:
 
     # Export indicator signals to report
     def ExportSignals(self, reportSignals):
-        return
-#         reportSignals.AddDataframeSignals(self.buy, 'Ichimoku', 'buy')
-#         reportSignals.AddDataframeSignals(self.sell, 'Ichimoku', 'sell')
+        reportSignals.AddDataframeSignals(self.buy, 'Ichimoku', 'buy')
+        reportSignals.AddDataframeSignals(self.sell, 'Ichimoku', 'sell')
 
     # Plot method
     def Plot(self, ax):
