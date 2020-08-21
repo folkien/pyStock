@@ -16,6 +16,10 @@ class Ichimoku:
         self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.InitIchimoku(
             open, high, low, close)
 
+        # Range
+        self.pmax = close.max()
+        self.pmin = close.min()
+
         # Signals
         self.buy = None
         self.sell = None
@@ -60,22 +64,38 @@ class Ichimoku:
     def Plot(self, ax):
         # Lines
         plt.plot(self.tenkanSen.index, self.tenkanSen, linewidth=1.2,
-                 color='#FF0000', label=('TenkanSen'))
+                 color='#FF0000', label=('Tenkan(9d) - 1.Resistance'))
         plt.plot(self.kijunSen.index, self.kijunSen, linewidth=1.2,
-                 color='#0000FF', label=('KijunSen'))
+                 color='#0000FF', label=('Kijun(26d) - 2.Resistance'))
         plt.plot(self.chikouSpan.index, self.chikouSpan,  linewidth=2.0,
-                 color='#556B2F', label=('Chikou Span'))
+                 color='#556B2F', label=('Chikou'))
+
+        # Days before
+        line = CreateVerticalLine(
+            self.tenkanSen.index[-1], self.pmin, self.pmax)
+        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        line = CreateVerticalLine(
+            self.tenkanSen.index[-1-9], self.pmin, self.pmax)
+        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        line = CreateVerticalLine(
+            self.tenkanSen.index[-1-17], self.pmin, self.pmax)
+        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        line = CreateVerticalLine(
+            self.tenkanSen.index[-1-26], self.pmin, self.pmax)
+        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame
         x_axis = self.senkouSpanA.index.get_level_values(0)
-        # Plot shaded 21 Day Ichimoku Band for Facebook
+        # Plot between
         plt.fill_between(x_axis, self.senkouSpanA,
-                         self.senkouSpanB, color='#B0C4DE')
+                         self.senkouSpanB, where=self.senkouSpanA >= self.senkouSpanB, color='#b3ffb3')
+        plt.fill_between(x_axis, self.senkouSpanA,
+                         self.senkouSpanB, where=self.senkouSpanA < self.senkouSpanB, color='#ffb3b3')
         plt.plot(self.senkouSpanA.index, self.senkouSpanA,
                  linewidth=1.0, color='#80A4AE', label='Senkou A')
         plt.plot(self.senkouSpanB.index, self.senkouSpanB,
-                 linewidth=1.0, color='#91CC13', label='Senkou B')
+                 linewidth=1.0, color='#91CC13', label='Senkou B(52d)')
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):

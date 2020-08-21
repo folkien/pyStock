@@ -1,25 +1,25 @@
 #!/usr/bin/python3
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
-from lib.assets import *
-from lib.TimeInterval import *
-from lib.ReportSignals import *
-from lib.StockData import *
-from lib.Stock import *
-from lib.DataOperations import *
-from lib.CountryInfo import CountryInfo
-from matplotlib import gridspec
-from numpy import NaN
-from pandas_datareader import data
-from filelock import Timeout, FileLock
-import copy
-import numpy
-import datetime
-import argparse
-import os
-import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
+import sys
+import os
+import argparse
+import datetime
+import numpy
+import copy
+from filelock import Timeout, FileLock
+from pandas_datareader import data
+from numpy import NaN
+from matplotlib import gridspec
+from lib.CountryInfo import CountryInfo
+from lib.DataOperations import *
+from lib.Stock import *
+from lib.StockData import *
+from lib.ReportSignals import *
+from lib.TimeInterval import *
+from lib.assets import *
 
 # Create plot figures file
 
@@ -491,8 +491,6 @@ plt.legend(loc='upper left')
 plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both', color='k')
 plt.grid(b=True, which='minor', axis='both')
-plt.tick_params(axis='x', which='both', bottom=False,
-                top=False, labelbottom=False)
 # Add return rates axle
 stockData.AddReturnRatesAxle(plot9)
 
