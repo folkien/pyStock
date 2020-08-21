@@ -12,6 +12,7 @@ from lib.stoch import *
 from lib.macd import *
 from lib.atr import *
 from lib.dmi import *
+from lib.ichimoku import *
 from lib.moneyflowindex import *
 from lib.cmf import *
 from lib.bollinger import *
