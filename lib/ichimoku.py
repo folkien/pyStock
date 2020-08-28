@@ -26,17 +26,13 @@ class Ichimoku:
 
         # Tenkan sen and kijun sen
         fromBottom, fromTop = FindIntersections(self.tenkanSen, self.kijunSen)
-#         self.FilterSignalsByKumo(fromBottom)
-#         self.FilterSignalsByKumo(fromTop)
         self.buy = fromBottom
         self.sell = fromTop
-        # TODO checking Kumo > = <
 
         # ClosePrice and kijun sen
         fromBottom, fromTop = FindIntersections(close, self.kijunSen)
         self.buy = self.buy.append(fromBottom)
         self.sell = self.sell.append(fromTop)
-        # TODO checking Kumo > = <
 
         # Kumo Breakout
 
@@ -51,6 +47,10 @@ class Ichimoku:
         self.buy = self.buy.append(fromBottom)
         self.sell = self.sell.append(fromTop)
 
+        self.buyweak, self.buyneutral, self.buystrong = self.FilterSignalsByKumo(
+            self.buy)
+        self.sellweak, self.sellneutral, self.sellstrong = self.FilterSignalsByKumo(
+            self.sell)
 #         self.sell = fromBottom
 #         fromBottom, fromTop = FindIntersections(self.senkouSpanB, prices)
 #         self.buy = fromTop
@@ -74,22 +74,28 @@ class Ichimoku:
             index_str = index.strftime('%Y-%m-%d')
             value = signals.values[i]
 
-            # TODO
-            if (i >= rangeBeg) and (i <= rangeEnd):
-                if (value < self.senkouSpanA[i]) and (value < self.senkouSpanB):
-                    low = low.append(signals[i])
-                elif (value < self.senkouSpanA) and (value < self.senkouSpanB):
-                    middle = middle.append(signals[i])
+            # If signal time is in Kumo range
+            if (index >= rangeBeg) and (index <= rangeEnd):
+                # If signal is lower
+                if (value <= self.senkouSpanA[index_str]) and (value <= self.senkouSpanB[index_str]):
+                    low = low.append(pd.DataFrame(
+                        {'value': value}, index=[index]))
+                # If signal is upper
+                elif (value >= self.senkouSpanA[index_str]) and (value >= self.senkouSpanB[index_str]):
+                    high = high.append(pd.DataFrame(
+                        {'value': value}, index=[index]))
+                # else signal is inside
                 else:
-                    high = high.append(signals[i])
+                    middle = middle.append(pd.DataFrame(
+                        {'value': value}, index=[index]))
+            # Default lower
             else:
-                low = low.append(signals[i])
+                low = low.append(pd.DataFrame({'value': value}, index=[index]))
 
         return low, middle, high
 
-    # Set Ichimoku indicator
-
     def InitIchimoku(self, open, high, low, close):
+        ''' Create Ichimoku indicator '''
         n9high = high.rolling(window=9, min_periods=0).max()
         n9low = low.rolling(window=9, min_periods=0).min()
         n26high = high.rolling(window=26, min_periods=0).max()
@@ -104,9 +110,9 @@ class Ichimoku:
         # Chikou Span
         chikouSpan = close.shift(-26)
         # Senkou Span A
-        senkouSpanA = ((tenkanSen+kijunSen)/2).shift(26)
+        senkouSpanA = ((tenkanSen+kijunSen)/2).shift(26).dropna()
         # Senkou Span B
-        senkouSpanB = ((n52high+n52low)/2).shift(26)
+        senkouSpanB = ((n52high+n52low)/2).shift(26).dropna()
         # Kumo
         return tenkanSen, kijunSen, chikouSpan, senkouSpanA, senkouSpanB
 
@@ -128,16 +134,16 @@ class Ichimoku:
         # Days before
         line = CreateVerticalLine(
             self.tenkanSen.index[-1], self.pmin, self.pmax)
-        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
         line = CreateVerticalLine(
             self.tenkanSen.index[-1-9], self.pmin, self.pmax)
-        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
         line = CreateVerticalLine(
             self.tenkanSen.index[-1-17], self.pmin, self.pmax)
-        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
         line = CreateVerticalLine(
             self.tenkanSen.index[-1-26], self.pmin, self.pmax)
-        plt.plot(line.index, line, '--', linewidth=1.2, color='black')
+        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame
@@ -153,11 +159,34 @@ class Ichimoku:
                  linewidth=1.0, color='#91CC13', label='Senkou B(52d)')
 
         # Signals plottting
-        if (self.buy is not None and self.buy.size):
-            plt.plot(self.buy.index, self.buy, 'o', color='#000000', ms=8)
-            plt.plot(self.buy.index, self.buy, 'o',
-                     label='Horiz. Buy', color='#00FF00')
-        if (self.sell is not None and self.sell.size):
-            plt.plot(self.sell.index, self.sell, 'o', color='#000000', ms=8)
-            plt.plot(self.sell.index, self.sell, 'o',
-                     label='Horiz. Sell', color='#FF0000')
+        if (self.buyweak is not None and self.buyweak.size):
+            plt.plot(self.buyweak.index, self.buyweak,
+                     'o', color='#000000', ms=6)
+            plt.plot(self.buyweak.index, self.buyweak,
+                     'o', color='#00FF00', ms=4)
+        if (self.buyneutral is not None and self.buyneutral.size):
+            plt.plot(self.buyneutral.index, self.buyneutral,
+                     'd', color='#000000', ms=8)
+            plt.plot(self.buyneutral.index, self.buyneutral,
+                     'd', color='#00FF00', ms=6)
+        if (self.buystrong is not None and self.buystrong.size):
+            plt.plot(self.buystrong.index, self.buystrong,
+                     's', color='#000000', ms=12)
+            plt.plot(self.buystrong.index, self.buystrong,
+                     's', color='#00FF00', ms=10)
+
+        if (self.sellweak is not None and self.sellweak.size):
+            plt.plot(self.sellweak.index, self.sellweak,
+                     'o', color='#000000', ms=6)
+            plt.plot(self.sellweak.index, self.sellweak,
+                     'o', color='#FF0000', ms=4)
+        if (self.sellneutral is not None and self.sellneutral.size):
+            plt.plot(self.sellneutral.index, self.sellneutral,
+                     'd', color='#000000', ms=8)
+            plt.plot(self.sellneutral.index, self.sellneutral,
+                     'd', color='#FF0000', ms=6)
+        if (self.sellstrong is not None and self.sellstrong.size):
+            plt.plot(self.sellstrong.index, self.sellstrong,
+                     's', color='#000000', ms=12)
+            plt.plot(self.sellstrong.index, self.sellstrong,
+                     's', color='#FF0000', ms=10)
