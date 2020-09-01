@@ -163,30 +163,30 @@ class Ichimoku:
             plt.plot(self.buyweak.index, self.buyweak,
                      'o', color='#000000', ms=6)
             plt.plot(self.buyweak.index, self.buyweak,
-                     'o', color='#00FF00', ms=4)
+                     'o', color='#53ff4a', ms=4)
         if (self.buyneutral is not None and self.buyneutral.size):
             plt.plot(self.buyneutral.index, self.buyneutral,
-                     'd', color='#000000', ms=8)
+                     'o', color='#000000', ms=8)
             plt.plot(self.buyneutral.index, self.buyneutral,
-                     'd', color='#00FF00', ms=6)
+                     'o', color='#00FF00', ms=6)
         if (self.buystrong is not None and self.buystrong.size):
             plt.plot(self.buystrong.index, self.buystrong,
-                     's', color='#000000', ms=12)
+                     'o', color='#000000', ms=12)
             plt.plot(self.buystrong.index, self.buystrong,
-                     's', color='#00FF00', ms=10)
+                     'o', color='#006b07', ms=10)
 
         if (self.sellweak is not None and self.sellweak.size):
             plt.plot(self.sellweak.index, self.sellweak,
                      'o', color='#000000', ms=6)
             plt.plot(self.sellweak.index, self.sellweak,
-                     'o', color='#FF0000', ms=4)
+                     'o', color='#ff4a4a', ms=4)
         if (self.sellneutral is not None and self.sellneutral.size):
             plt.plot(self.sellneutral.index, self.sellneutral,
-                     'd', color='#000000', ms=8)
+                     'o', color='#000000', ms=8)
             plt.plot(self.sellneutral.index, self.sellneutral,
-                     'd', color='#FF0000', ms=6)
+                     'o', color='#FF0000', ms=6)
         if (self.sellstrong is not None and self.sellstrong.size):
             plt.plot(self.sellstrong.index, self.sellstrong,
-                     's', color='#000000', ms=12)
+                     'o', color='#000000', ms=12)
             plt.plot(self.sellstrong.index, self.sellstrong,
-                     's', color='#FF0000', ms=10)
+                     'o', color='#8f0000', ms=10)
