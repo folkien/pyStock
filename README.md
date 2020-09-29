@@ -83,6 +83,7 @@ Viewer/Plotter tool. Features :
     * ADX,
     * Williams alligator,
     * Bollinger,
+    * Ichimoku,
 * Save plots to files \*.svg
 * Generates daily/weekly report.md with some usefull informations,
 
@@ -117,6 +118,7 @@ Plot Apple last 6M to file
 ![image](doc/AAPL.US_2.svg)
 ![image](doc/AAPL.US_3.svg)
 ![image](doc/AAPL.US_4.svg)
+![image](doc/AAPL.US_5.svg)
 
 Plot BTC/USD last 6M to file (no volume indicators)
 ```bash
@@ -136,6 +138,7 @@ Last year of google with markdown reports into report.md
 ![image](doc/GOOG.US_2.svg)
 ![image](doc/GOOG.US_3.svg)
 ![image](doc/GOOG.US_4.svg)
+![image](doc/GOOG.US_5.svg)
 
 Markdown report
 ```markdown
@@ -165,6 +168,7 @@ Example CD Projekt Red plot
 ![CDPR image](doc/CDR.pl_2.svg)
 ![CDPR image](doc/CDR.pl_3.svg)
 ![CDPR image](doc/CDR.pl_4.svg)
+![CDPR image](doc/CDR.pl_5.svg)
 
 
 ## Stock manager
