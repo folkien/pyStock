@@ -20,6 +20,7 @@ from lib.WilliamsAlligator import *
 from lib.StockData import *
 from lib.DataOperations import *
 from lib.trend import *
+from lib.zigzag import ZigZag
 
 # Get DATA from URL
 # User pandas_reader.data.DataReader to load the desired data. As simple as that.

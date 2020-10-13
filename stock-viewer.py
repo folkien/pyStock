@@ -190,6 +190,11 @@ ichimoku = Ichimoku(stockData.GetData('Open'),
                     stockData.GetData('Low'),
                     stockData.GetData('Close')
                     )
+zigzag = ZigZag(stockData.GetData('Open'),
+                stockData.GetData('High'),
+                stockData.GetData('Low'),
+                stockData.GetData('Close')
+                )
 if (stockData.hasVolume()):
     mfi = CreateMoneyFlowIndex(stockData.GetData('High'), stockData.GetData(
         'Low'), stockData.GetData('Close'), stockData.GetData('Volume'), info)
@@ -485,6 +490,7 @@ plot9 = plt.subplot(1, 1, 1)
 stockData.PlotCandle(plot9)
 stockData.PlotAssets()
 ichimoku.Plot(plot9)
+zigzag.Plot(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
 plt.legend(loc='upper left')

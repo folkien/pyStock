@@ -10,9 +10,10 @@ from lib.indicator import indicator
 
 
 # Ichimoku object which creates Ichimoku data
-class Ichimoku:
+class Ichimoku(indicator):
 
     def __init__(self, open, high, low, close):
+        indicator.__init__(self, 'Ichimoku', 'momentum')
         self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.InitIchimoku(
             open, high, low, close)
 
