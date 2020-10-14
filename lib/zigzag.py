@@ -7,6 +7,7 @@ from lib.DataOperations import *
 from numpy.core.defchararray import lower
 from lib.ReportSignals import *
 from lib.indicator import indicator
+from helpers.algebra import PointInBetween
 
 
 def CreateZigZagPoints(dfSeries, minSegSize=1, sizeInDevs=0.5, slopes=[1, -1]):
@@ -49,7 +50,20 @@ class ZigZag(indicator):
         highPt = CreateZigZagPoints(high, slopes=[1])
         lowPt = CreateZigZagPoints(low, slopes=[-1])
         zigzag = highPt.append(lowPt).sort_index().drop(['Dir'], axis=1)
+        zigzag = self.__filterPointsInBetween(zigzag)
         return zigzag
+
+    def __filterPointsInBetween(self, zigzag):
+        ''' Remove points in between in zigzag.'''
+        result = pd.DataFrame(index=zigzag.index, columns=['Value'])
+        result.values[0] = zigzag.values[0]
+        # Copy only points that are not between surrounding points
+        for i in range(1, len(zigzag.index)-1):
+            if (not PointInBetween(zigzag.values[i-1], zigzag.values[i], zigzag.values[i+1])):
+                result.values[i] = zigzag.values[i]
+
+        result.values[-1] = zigzag.values[-1]
+        return result.dropna()
 
     def ExportSignals(self, reportSignals):
         ''' No indicators to Export.'''
