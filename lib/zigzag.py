@@ -10,25 +10,28 @@ from lib.indicator import indicator
 from helpers.algebra import PointInBetween
 
 
-def CreateZigZagPoints(dfSeries, minSegSize=1, sizeInDevs=0.5, slopes=[1, -1]):
+def CreateZigZagPoints(price, high, low, minSegSize=5, slopes=[1, -1]):
     ''' Creates ZigZag points'''
-    curVal = dfSeries[0]
-    curPos = dfSeries.index[0]
+    curVal = price[0]
+    curPos = price.index[0]
     curDir = 1
-    dfRes = pd.DataFrame(index=dfSeries.index, columns=['Dir', 'Value'])
-    for index in dfSeries.index:
-        if((dfSeries[index] - curVal)*curDir >= 0):
-            curVal = dfSeries[index]
+    dfRes = pd.DataFrame(index=price.index, columns=['Dir', 'Value'])
+    for index in price.index:
+        if((price[index] - curVal)*curDir >= 0):
+            curVal = price[index]
             curPos = index
         else:
-            diffrence = abs((dfSeries[index]-curVal)/curVal*100)
+            diffrence = abs((price[index]-curVal)/curVal*100)
             if(diffrence >= minSegSize):
                 # Store only given slopes
                 if (curDir in slopes):
-                    dfRes.loc[curPos, 'Value'] = curVal
+                    if(curDir == 1):
+                        dfRes.loc[curPos, 'Value'] = high[curPos]
+                    else:
+                        dfRes.loc[curPos, 'Value'] = low[curPos]
                     dfRes.loc[curPos, 'Dir'] = curDir
                 # Set new search
-                curVal = dfSeries[index]
+                curVal = price[index]
                 curPos = index
                 curDir = -1*curDir
 
@@ -43,27 +46,28 @@ class ZigZag(indicator):
     def __init__(self, open, high, low, close):
         ''' Constructor '''
         indicator.__init__(self, 'ZigZag', 'momentum')
-        self.zigzag = self.InitZigZag(open, high, low, close)
+        self.zigzag = self.__initZigZag(open, high, low, close)
 
-    def InitZigZag(self, open, high, low, close):
+    def __initZigZag(self, open, high, low, close):
         ''' Create ZigZag indicator '''
-        highPt = CreateZigZagPoints(high, slopes=[1])
-        lowPt = CreateZigZagPoints(low, slopes=[-1])
-        zigzag = highPt.append(lowPt).sort_index().drop(['Dir'], axis=1)
+#         highPt = CreateZigZagPoints(high, slopes=[1])
+#         lowPt = CreateZigZagPoints(low, slopes=[-1])
+#         zigzag = highPt.append(lowPt).sort_index().drop(['Dir'], axis=1)
+        zigzag = CreateZigZagPoints(close, high, low).drop(['Dir'], axis=1)
         zigzag = self.__filterPointsInBetween(zigzag)
         return zigzag
 
     def __filterPointsInBetween(self, zigzag):
         ''' Remove points in between in zigzag.'''
-        result = pd.DataFrame(index=zigzag.index, columns=['Value'])
-        result.values[0] = zigzag.values[0]
-        # Copy only points that are not between surrounding points
-        for i in range(1, len(zigzag.index)-1):
-            if (not PointInBetween(zigzag.values[i-1], zigzag.values[i], zigzag.values[i+1])):
-                result.values[i] = zigzag.values[i]
+        i = 1
+        while (i < (len(zigzag.index)-1)):
+            # If point b between a..c then remove it.
+            if (PointInBetween(zigzag.values[i-1], zigzag.values[i], zigzag.values[i+1])):
+                zigzag.drop([zigzag.index[i]], inplace=True)
+            else:
+                i += 1
 
-        result.values[-1] = zigzag.values[-1]
-        return result.dropna()
+        return zigzag
 
     def ExportSignals(self, reportSignals):
         ''' No indicators to Export.'''
