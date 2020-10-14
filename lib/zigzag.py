@@ -75,5 +75,5 @@ class ZigZag(indicator):
     def Plot(self, ax):
         ''' Plotting method.'''
         # Lines
-        plt.plot(self.zigzag.index, self.zigzag, linewidth=1.2,
-                 color='magenta', label=('ZigZag'))
+        plt.plot(self.zigzag.index, self.zigzag, '--', linewidth=1.0,
+                 color='#000000', label=('ZigZag'))
