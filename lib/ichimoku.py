@@ -37,8 +37,6 @@ class Ichimoku(indicator):
         self.buy = self.buy.append(fromBottom)
         self.sell = self.sell.append(fromTop)
 
-        # Kumo Breakout
-
         # Senkou Span cross
         fromBottom, fromTop = FindIntersections(
             self.senkouSpanA, self.senkouSpanB)
@@ -54,13 +52,15 @@ class Ichimoku(indicator):
             self.buy)
         self.sellweak, self.sellneutral, self.sellstrong = self.FilterSignalsByKumo(
             self.sell)
-#         self.sell = fromBottom
-#         fromBottom, fromTop = FindIntersections(self.senkouSpanB, prices)
-#         self.buy = fromTop
-#         self.consolidation = CreateSubsetByValues(
-#             self.absStd, 0, self.consolidationLvl)
-#         self.variability = CreateSubsetByValues(
-#             self.absStd, self.variabilityLvl, 100)
+
+        # Kumo Breakout
+        kumoTop = pd.concat([self.senkouSpanA, self.senkouSpanB]).max(level=0)
+        kumoBottom = pd.concat(
+            [self.senkouSpanA, self.senkouSpanB]).min(level=0)
+        fromBottom, fromTop = FindIntersections(close, kumoTop)
+        self.buyneutral = self.buyneutral.append(fromBottom)
+        fromBottom, fromTop = FindIntersections(close, kumoBottom)
+        self.sellneutral = self.buyneutral.append(fromTop)
 
     def FilterSignalsByKumo(self, signals):
         ''' Filter signals with position based on Kumo'''
