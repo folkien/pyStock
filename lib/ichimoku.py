@@ -7,6 +7,7 @@ from lib.DataOperations import *
 from numpy.core.defchararray import lower
 from lib.ReportSignals import *
 from lib.indicator import indicator
+import matplotlib.dates as mdates
 
 
 # Ichimoku object which creates Ichimoku data
@@ -123,6 +124,19 @@ class Ichimoku(indicator):
         reportSignals.AddDataframeSignals(self.buy, 'Ichimoku', 'buy')
         reportSignals.AddDataframeSignals(self.sell, 'Ichimoku', 'sell')
 
+    def PlotDayLine(self, ax, days):
+        '''
+         price - dataframe/series with price values and indexes,
+        '''
+        line = CreateVerticalLine(
+            self.tenkanSen.index[-1-days], self.pmin, self.low.values[-1-days])
+        ax.plot(line.index, line, '--', linewidth=1.0, color='black')
+
+        bbox_props = dict(boxstyle='larrow,pad=0.3',
+                          fc='w', ec='0.5', alpha=0.6)
+        ax.annotate('%d' % days, xy=(mdates.date2num(line.index[-1]), line.values[0]),
+                    xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
+
     # Plot method
     def Plot(self, ax):
         # Lines
@@ -137,15 +151,9 @@ class Ichimoku(indicator):
         line = CreateVerticalLine(
             self.tenkanSen.index[-1], self.pmin, self.low.values[-1])
         plt.plot(line.index, line, '--', linewidth=1.0, color='black')
-        line = CreateVerticalLine(
-            self.tenkanSen.index[-1-9], self.pmin, self.low.values[-1-9])
-        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
-        line = CreateVerticalLine(
-            self.tenkanSen.index[-1-26], self.pmin, self.low.values[-1-26])
-        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
-        line = CreateVerticalLine(
-            self.tenkanSen.index[-1-52], self.pmin, self.low.values[-1-52])
-        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
+        self.PlotDayLine(plt, 9)
+        self.PlotDayLine(plt, 26)
+        self.PlotDayLine(plt, 52)
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame
