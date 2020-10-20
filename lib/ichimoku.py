@@ -16,6 +16,7 @@ class Ichimoku(indicator):
         indicator.__init__(self, 'Ichimoku', 'momentum')
         self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.InitIchimoku(
             open, high, low, close)
+        self.low = low
 
         # Range
         self.pmax = close.max()
@@ -134,16 +135,16 @@ class Ichimoku(indicator):
 
         # Days before
         line = CreateVerticalLine(
-            self.tenkanSen.index[-1], self.pmin, self.pmax)
+            self.tenkanSen.index[-1], self.pmin, self.low.values[-1])
         plt.plot(line.index, line, '--', linewidth=1.0, color='black')
         line = CreateVerticalLine(
-            self.tenkanSen.index[-1-9], self.pmin, self.pmax)
+            self.tenkanSen.index[-1-9], self.pmin, self.low.values[-1-9])
         plt.plot(line.index, line, '--', linewidth=1.0, color='black')
         line = CreateVerticalLine(
-            self.tenkanSen.index[-1-17], self.pmin, self.pmax)
+            self.tenkanSen.index[-1-26], self.pmin, self.low.values[-1-26])
         plt.plot(line.index, line, '--', linewidth=1.0, color='black')
         line = CreateVerticalLine(
-            self.tenkanSen.index[-1-26], self.pmin, self.pmax)
+            self.tenkanSen.index[-1-52], self.pmin, self.low.values[-1-52])
         plt.plot(line.index, line, '--', linewidth=1.0, color='black')
 
         # Kumo
