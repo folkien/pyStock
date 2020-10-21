@@ -15,7 +15,7 @@ class Ichimoku(indicator):
 
     def __init__(self, open, high, low, close):
         indicator.__init__(self, 'Ichimoku', 'momentum')
-        self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.InitIchimoku(
+        self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.__initIchimoku(
             open, high, low, close)
         self.low = low
 
@@ -45,12 +45,19 @@ class Ichimoku(indicator):
 
         # Chikou Span cross
         fromBottom, fromTop = FindIntersections(self.chikouSpan, close)
+        # Store original signals positions
+        self.buyChikou = fromBottom
+        self.sellChikou = fromTop
+        # Shift signals back 26 days for chikou span
+        fromBottom = self.__shiftIndex(fromBottom, 26)
+        fromTop = self.__shiftIndex(fromTop, 26)
+        # Append to group
         self.buy = self.buy.append(fromBottom)
         self.sell = self.sell.append(fromTop)
 
-        self.buyweak, self.buyneutral, self.buystrong = self.FilterSignalsByKumo(
+        self.buyweak, self.buyneutral, self.buystrong = self.__filterSignalsByKumo(
             self.buy)
-        self.sellweak, self.sellneutral, self.sellstrong = self.FilterSignalsByKumo(
+        self.sellweak, self.sellneutral, self.sellstrong = self.__filterSignalsByKumo(
             self.sell)
 
         # Kumo Breakout
@@ -60,9 +67,15 @@ class Ichimoku(indicator):
         fromBottom, fromTop = FindIntersections(close, kumoTop)
         self.buyneutral = self.buyneutral.append(fromBottom)
         fromBottom, fromTop = FindIntersections(close, kumoBottom)
-        self.sellneutral = self.buyneutral.append(fromTop)
+        self.sellneutral = self.sellneutral.append(fromTop)
 
-    def FilterSignalsByKumo(self, signals):
+    def __shiftIndex(self, data, days=0):
+        ''' Shift dataframe index by days.'''
+        if (data is not None) and (len(data) > 0):
+            data.index = data.index.shift(days, freq='D')
+        return data
+
+    def __filterSignalsByKumo(self, signals):
         ''' Filter signals with position based on Kumo'''
         low = pd.DataFrame()
         middle = pd.DataFrame()
@@ -74,6 +87,12 @@ class Ichimoku(indicator):
 
         for i in range(len(signals)):
             index = signals.index[i]
+            # Saturday
+            if (index.weekday() == 5):
+                index += datetime.timedelta(days=-1)
+            # Sunday
+            if (index.weekday() == 6):
+                index += datetime.timedelta(days=-2)
             index_str = index.strftime('%Y-%m-%d')
             value = signals.values[i]
 
@@ -97,7 +116,7 @@ class Ichimoku(indicator):
 
         return low, middle, high
 
-    def InitIchimoku(self, open, high, low, close):
+    def __initIchimoku(self, open, high, low, close):
         ''' Create Ichimoku indicator '''
         n9high = high.rolling(window=9, min_periods=0).max()
         n9low = low.rolling(window=9, min_periods=0).min()
@@ -124,7 +143,7 @@ class Ichimoku(indicator):
         reportSignals.AddDataframeSignals(self.buy, 'Ichimoku', 'buy')
         reportSignals.AddDataframeSignals(self.sell, 'Ichimoku', 'sell')
 
-    def PlotDayLine(self, ax, days):
+    def __plotDayLine(self, ax, days):
         '''
          price - dataframe/series with price values and indexes,
         '''
@@ -151,9 +170,9 @@ class Ichimoku(indicator):
         line = CreateVerticalLine(
             self.tenkanSen.index[-1], self.pmin, self.low.values[-1])
         plt.plot(line.index, line, '--', linewidth=1.0, color='black')
-        self.PlotDayLine(plt, 9)
-        self.PlotDayLine(plt, 26)
-        self.PlotDayLine(plt, 52)
+        self.__plotDayLine(plt, 9)
+        self.__plotDayLine(plt, 26)
+        self.__plotDayLine(plt, 52)
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame
