@@ -3,14 +3,10 @@ Created on 5 lut 2020
 
 @author: spasz
 '''
-from pandas_datareader import data
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-# Need tot go to python 3
 import sys
-from mplfinance.original_flavor import candlestick_ohlc
-from mplfinance.original_flavor import candlestick2_ohlc
-import mplfinance as mpf
+from mplfinance import plot as mpfplot
 from lib.DataOperations import *
 from lib.assets import *
 from lib.database import *
@@ -387,7 +383,7 @@ class StockData:
     # Plot stock data
     def PlotCandle(self, ax):
         quotes = self.dataSubset
-        mpf.plot(quotes, type='candle', ax=ax)
+        mpfplot(quotes, type='candle', ax=ax, style='yahoo')
         # ax.xaxis.set_minor_formatter(dayFormatter)
 #         candlestick_ohlc(ax, zip(mdates.date2num(quotes.index.to_pydatetime()),
 #                                  quotes['Open'], quotes['High'],
