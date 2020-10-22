@@ -430,7 +430,7 @@ class StockData:
         data = CreateVerticalLine(index, minRRate, maxRRate)
         # Data display
         ax2 = ax.twinx()
-        ax2.plot(data.index, data, '_',
+        ax2.plot(range(data.shape[0]), data, '_',
                  color='#000000', linewidth=1.0, alpha=0.6)
         ax2.tick_params(axis='y', labelcolor='tab:red')
         plt.ylabel('%', color='red')

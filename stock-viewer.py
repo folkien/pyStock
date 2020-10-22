@@ -497,7 +497,7 @@ plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both', color='k')
 plt.grid(b=True, which='minor', axis='both')
 # Add return rates axle
-# stockData.AddReturnRatesAxle(plot9)
+stockData.AddReturnRatesAxle(plot9)
 
 
 # Plot to file or show
