@@ -487,9 +487,9 @@ fig = plt.figure(figsize=(16.0, 9.0))
 
 plot9 = plt.subplot(1, 1, 1)
 stockData.PlotCandle(plot9)
-stockData.PlotAssets()
-ichimoku.Plot(plot9)
-zigzag.Plot(plot9)
+# stockData.PlotAssets()
+# ichimoku.Plot(plot9)
+# zigzag.Plot(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
 plt.legend(loc='upper left')
@@ -497,7 +497,7 @@ plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both', color='k')
 plt.grid(b=True, which='minor', axis='both')
 # Add return rates axle
-stockData.AddReturnRatesAxle(plot9)
+# stockData.AddReturnRatesAxle(plot9)
 
 
 # Plot to file or show

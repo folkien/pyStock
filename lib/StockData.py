@@ -10,6 +10,7 @@ import matplotlib.dates as mdates
 import sys
 from mplfinance.original_flavor import candlestick_ohlc
 from mplfinance.original_flavor import candlestick2_ohlc
+import mplfinance as mpf
 from lib.DataOperations import *
 from lib.assets import *
 from lib.database import *
@@ -386,17 +387,17 @@ class StockData:
     # Plot stock data
     def PlotCandle(self, ax):
         quotes = self.dataSubset
-        ax.xaxis_date()
+        mpf.plot(quotes, type='candle', ax=ax)
         # ax.xaxis.set_minor_formatter(dayFormatter)
-        candlestick_ohlc(ax, zip(mdates.date2num(quotes.index.to_pydatetime()),
-                                 quotes['Open'], quotes['High'],
-                                 quotes['Low'], quotes['Close']),
-                         width=0.8,
-                         colorup='g',
-                         colordown='r',
-                         alpha=1)
-        ax.autoscale_view()
-        self.PlotPriceLine(ax, self.dataSubset['Close'])
+#         candlestick_ohlc(ax, zip(mdates.date2num(quotes.index.to_pydatetime()),
+#                                  quotes['Open'], quotes['High'],
+#                                  quotes['Low'], quotes['Close']),
+#                          width=0.8,
+#                          colorup='g',
+#                          colordown='r',
+#                          alpha=1)
+#         ax.autoscale_view()
+        #self.PlotPriceLine(ax, self.dataSubset['Close'])
 
     def PlotPriceLine(self, ax, price):
         '''
