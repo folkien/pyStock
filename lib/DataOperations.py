@@ -30,43 +30,29 @@ def CreateHorizontalLine(indexes, startValue, endValue, allIndexes=False):
                 index=[indexes[i]]))
     return data
 
-# Creates DataFrame line
-
 
 def CreateVerticalLine(index, startValue, endValue):
-    data = pd.DataFrame()
-    data = data.append(pd.DataFrame({'value': startValue}, index=[index]))
-    data = data.append(pd.DataFrame({'value': endValue}, index=[index]))
+    ''' Creates vertical series line.'''
+    data = pd.Series([startValue, endValue], index=[index, index])
     return data
-
-# Creates DataFrame rect
 
 
 def CreateRect(index1, value1, index2, value2):
-    data = pd.DataFrame()
-    data = data.append(pd.DataFrame({'value': value1}, index=[index1]))
-    data = data.append(pd.DataFrame({'value': value2}, index=[index1]))
-    data = data.append(pd.DataFrame({'value': value2}, index=[index2]))
-    data = data.append(pd.DataFrame({'value': value1}, index=[index2]))
-    data = data.append(pd.DataFrame({'value': value1}, index=[index1]))
-    return data
-
-# Creation of moving average with specific window and shift
+    '''Creates DataFrame rect'''
+    return pd.Series([value1, value2, value2, value1, value1], index=[index1, index1, index2, index2, index1])
 
 
 def CreateMovingAverage(data, window, shiftPeriods=0):
+    ''' Creation of moving average with specific window and shift'''
     average = data.rolling(window=int(window), min_periods=1).mean()
     average.shift(periods=shiftPeriods)
-
     return average
-
-# Creation of moving std with specific window and shift
 
 
 def CreateMovingStd(data, window, shiftPeriods=0):
+    ''' Creation of moving std with specific window and shift'''
     average = data.rolling(window=int(window), min_periods=1).std()
     average.shift(periods=shiftPeriods)
-
     return average
 
 # Create data subset by value
@@ -151,19 +137,16 @@ def FindIntersections(x, y):
     fromBottom = pd.DataFrame()
     fromTop = pd.DataFrame()
 
-    halfday = datetime.timedelta(hours=12)
     signs = numpy.sign(diffrence.values)
     for i in range(1, len(signs)):
-        # TODO :
-        # - calculate time/vaue of crossing - better plot position
         # Bottom crossing
         if (signs[i] == 1) and (signs[i - 1] == -1):
             fromBottom = fromBottom.append(pd.DataFrame(
-                {'value': (x.values[i-1]+x.values[i])/2}, index=[diffrence.index[i-1]+halfday]))
+                {'value': x.values[i]}, index=[diffrence.index[i]]))
         # Top crossing
         elif (signs[i] == -1) and (signs[i - 1] == 1):
             fromTop = fromTop.append(pd.DataFrame(
-                {'value': (x.values[i-1]+x.values[i])/2}, index=[diffrence.index[i-1]+halfday]))
+                {'value': x.values[i]}, index=[diffrence.index[i]]))
 
     return fromBottom, fromTop
 
