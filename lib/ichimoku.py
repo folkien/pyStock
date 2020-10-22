@@ -16,7 +16,7 @@ class Ichimoku(indicator):
 
     def __init__(self, open, high, low, close):
         indicator.__init__(self, 'Ichimoku', 'momentum',
-                           GetStartDateTime(close))
+                           close.index)
         self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.__initIchimoku(
             open, high, low, close)
         self.low = low
@@ -151,11 +151,12 @@ class Ichimoku(indicator):
         '''
         line = CreateVerticalLine(
             self.tenkanSen.index[-1-days], self.pmin, self.low.values[-1-days])
-        ax.plot(line.index, line, '--', linewidth=1.0, color='black')
+        ax.plot(self.toNumIndex(line), line, '--',
+                linewidth=1.0, color='black')
 
         bbox_props = dict(boxstyle='larrow,pad=0.3',
                           fc='w', ec='0.5', alpha=0.6)
-        ax.annotate('%d' % days, xy=(mdates.date2num(line.index[-1]), line.values[0]),
+        ax.annotate('%d' % days, xy=(self.toNumIndex(line)[0], line.values[0]),
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
 
     # Plot method
@@ -174,9 +175,9 @@ class Ichimoku(indicator):
             self.tenkanSen.index[-1], self.pmin, self.low.values[-1])
         plt.plot(self.toNumIndex(line), line, '--',
                  linewidth=1.0, color='black')
-#         self.__plotDayLine(plt, 9)
-#         self.__plotDayLine(plt, 26)
-#         self.__plotDayLine(plt, 52)
+        self.__plotDayLine(plt, 9)
+        self.__plotDayLine(plt, 26)
+        self.__plotDayLine(plt, 52)
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame

@@ -5,7 +5,6 @@ Created on 12 maj 2020
 @brief: Base indicator class for all indicators
 '''
 from builtins import type
-from helpers.data import toNumIndex
 
 
 class indicator(object):
@@ -13,7 +12,7 @@ class indicator(object):
     classdocs
     '''
 
-    def __init__(self, name, itype, baseDateTime=None):
+    def __init__(self, name, itype, index=None):
         '''
         Constructor
         '''
@@ -24,18 +23,15 @@ class indicator(object):
         # Set indicator name
         assert(len(name) > 0)
         self.name = name
-        # Set base datetime
-        self.baseDateTime = baseDateTime
-
-    def GetBaseDateTime(self):
-        ''' Return base date time.'''
-        return self.baseDateTime
+        # Set base datetime index
+        self.index = index
 
     def toNumIndex(self, dataframe):
         ''' Changed dataframe index to numbers index
             calculated from base DateTime
         '''
-        return toNumIndex(self.baseDateTime, dataframe)
+        result = [self.index.get_loc(i) for i in dataframe.index]
+        return result
 
     def GetName(self):
         '''
