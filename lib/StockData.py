@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 # Need tot go to python 3
 import sys
-from mpl_finance import candlestick2_ohlc
-from mpl_finance import candlestick_ohlc
+from mplfinance.original_flavor import candlestick_ohlc
+from mplfinance.original_flavor import candlestick2_ohlc
 from lib.DataOperations import *
 from lib.assets import *
 from lib.database import *
