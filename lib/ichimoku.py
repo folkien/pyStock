@@ -41,21 +41,19 @@ class Ichimoku(indicator):
 
         # Senkou Span cross
         fromBottom, fromTop = FindIntersections(
-            self.senkouSpanA, self.senkouSpanB)
-        self.buy = self.buy.append(fromBottom)
-        self.sell = self.sell.append(fromTop)
+            self.senkouSpanA, self.senkouSpanB, dropna=False)
+        self.buy = self.buy.append(fromBottom.shift(-26).dropna())
+        self.sell = self.sell.append(fromTop.shift(-26).dropna())
 
         # Chikou Span cross
-        fromBottom, fromTop = FindIntersections(self.chikouSpan, close)
+        fromBottom, fromTop = FindIntersections(
+            self.chikouSpan, close, dropna=False)
         # Store original signals positions
         self.buyChikou = fromBottom
         self.sellChikou = fromTop
-        # Shift signals back 26 days for chikou span
-        fromBottom = self.__shiftIndex(fromBottom, 26)
-        fromTop = self.__shiftIndex(fromTop, 26)
         # Append to group
-        self.buy = self.buy.append(fromBottom)
-        self.sell = self.sell.append(fromTop)
+        self.buy = self.buy.append(fromBottom.shift(26).dropna())
+        self.sell = self.sell.append(fromTop.shift(26).dropna())
 
         self.buyweak, self.buyneutral, self.buystrong = self.__filterSignalsByKumo(
             self.buy)
@@ -70,12 +68,6 @@ class Ichimoku(indicator):
         self.buyneutral = self.buyneutral.append(fromBottom)
         fromBottom, fromTop = FindIntersections(close, kumoBottom)
         self.sellneutral = self.sellneutral.append(fromTop)
-
-    def __shiftIndex(self, data, days=0):
-        ''' Shift dataframe index by days.'''
-        if (data is not None) and (len(data) > 0):
-            data.index = data.index.shift(days, freq='D')
-        return data
 
     def __filterSignalsByKumo(self, signals):
         ''' Filter signals with position based on Kumo'''

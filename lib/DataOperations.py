@@ -123,10 +123,9 @@ def FindZeroes(data):
 
     return zeroes
 
-# Find both signals intersections
 
-
-def FindIntersections(x, y):
+def FindIntersections(x, y, dropna=True):
+    ''' Gets crossing of two dataframe signals.'''
     # For dataframes
     if type(y) is pd.DataFrame:
         diffrence = x.subtract(y)
@@ -134,20 +133,20 @@ def FindIntersections(x, y):
     else:
         diffrence = x - y
 
-    fromBottom = pd.DataFrame()
-    fromTop = pd.DataFrame()
+    fromBottom = pd.DataFrame(NaN, index=diffrence.index, columns=['value'])
+    fromTop = pd.DataFrame(NaN, index=diffrence.index, columns=['value'])
 
     signs = numpy.sign(diffrence.values)
     for i in range(1, len(signs)):
         # Bottom crossing
         if (signs[i] == 1) and (signs[i - 1] == -1):
-            fromBottom = fromBottom.append(pd.DataFrame(
-                {'value': x.values[i]}, index=[diffrence.index[i]]))
+            fromBottom['value'][diffrence.index[i]] = x.values[i]
         # Top crossing
         elif (signs[i] == -1) and (signs[i - 1] == 1):
-            fromTop = fromTop.append(pd.DataFrame(
-                {'value': x.values[i]}, index=[diffrence.index[i]]))
+            fromTop['value'][diffrence.index[i]] = x.values[i]
 
+    if (dropna == True):
+        return fromBottom.dropna(), fromTop.dropna()
     return fromBottom, fromTop
 
 
