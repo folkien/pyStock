@@ -159,63 +159,64 @@ class Ichimoku(indicator):
     # Plot method
     def Plot(self, ax):
         # Lines
-        plt.plot(self.tenkanSen.index, self.tenkanSen, linewidth=1.2,
+        plt.plot(range(self.tenkanSen.shape[0]), self.tenkanSen, linewidth=1.2,
                  color='#FF0000', label=('Tenkan(9d) - 1.Resistance'))
-        plt.plot(self.kijunSen.index, self.kijunSen, linewidth=1.2,
+        plt.plot(range(self.kijunSen.shape[0]), self.kijunSen, linewidth=1.2,
                  color='#0000FF', label=('Kijun(26d) - 2.Resistance'))
-        plt.plot(self.chikouSpan.index, self.chikouSpan,  linewidth=2.0,
+        plt.plot(range(self.chikouSpan.shape[0]), self.chikouSpan,  linewidth=2.0,
                  color='#556B2F', label=('Chikou'))
 
         # Days before
         line = CreateVerticalLine(
             self.tenkanSen.index[-1], self.pmin, self.low.values[-1])
-        plt.plot(line.index, line, '--', linewidth=1.0, color='black')
-        self.__plotDayLine(plt, 9)
-        self.__plotDayLine(plt, 26)
-        self.__plotDayLine(plt, 52)
+        plt.plot(range(line.shape[0]), line, '--',
+                 linewidth=1.0, color='black')
+#         self.__plotDayLine(plt, 9)
+#         self.__plotDayLine(plt, 26)
+#         self.__plotDayLine(plt, 52)
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame
-        x_axis = self.senkouSpanA.index.get_level_values(0)
+        x_axis = range(self.senkouSpanA.shape[0])
         # Plot between
         plt.fill_between(x_axis, self.senkouSpanA,
                          self.senkouSpanB, where=self.senkouSpanA >= self.senkouSpanB, color='#b3ffb3')
         plt.fill_between(x_axis, self.senkouSpanA,
                          self.senkouSpanB, where=self.senkouSpanA < self.senkouSpanB, color='#ffb3b3')
-        plt.plot(self.senkouSpanA.index, self.senkouSpanA,
+        plt.plot(range(self.senkouSpanA.shape[0]), self.senkouSpanA,
                  linewidth=1.0, color='#80A4AE', label='Senkou A')
-        plt.plot(self.senkouSpanB.index, self.senkouSpanB,
+        plt.plot(range(self.senkouSpanB.shape[0]), self.senkouSpanB,
                  linewidth=1.0, color='#91CC13', label='Senkou B(52d)')
 
         # Signals plottting
         if (self.buyweak is not None and self.buyweak.size):
-            plt.plot(self.buyweak.index, self.buyweak,
+            plt.plot(range(self.buyweak.shape[0]), self.buyweak,
                      'o', color='#000000', ms=6)
-            plt.plot(self.buyweak.index, self.buyweak,
+            plt.plot(range(self.buyweak.shape[0]), self.buyweak,
                      'o', color='#53ff4a', ms=4)
         if (self.buyneutral is not None and self.buyneutral.size):
-            plt.plot(self.buyneutral.index, self.buyneutral,
+            plt.plot(range(self.buyneutral.shape[0]), self.buyneutral,
                      'o', color='#000000', ms=8)
-            plt.plot(self.buyneutral.index, self.buyneutral,
+            plt.plot(range(self.buyneutral.shape[0]), self.buyneutral,
                      'o', color='#00FF00', ms=6)
         if (self.buystrong is not None and self.buystrong.size):
-            plt.plot(self.buystrong.index, self.buystrong,
+            plt.plot(range(self.buystrong.shape[0]), self.buystrong,
                      'o', color='#000000', ms=12)
-            plt.plot(self.buystrong.index, self.buystrong,
+            plt.plot(range(self.buystrong.shape[0]), self.buystrong,
                      'o', color='#006b07', ms=10)
 
         if (self.sellweak is not None and self.sellweak.size):
-            plt.plot(self.sellweak.index, self.sellweak,
+            plt.plot(range(self.sellweak.shape[0]), self.sellweak,
                      'o', color='#000000', ms=6)
-            plt.plot(self.sellweak.index, self.sellweak,
+            plt.plot(range(self.sellweak.shape[0]), self.sellweak,
                      'o', color='#ff4a4a', ms=4)
         if (self.sellneutral is not None and self.sellneutral.size):
-            plt.plot(self.sellneutral.index, self.sellneutral,
+            plt.plot(range(self.sellneutral.shape[0]), self.sellneutral,
                      'o', color='#000000', ms=8)
-            plt.plot(self.sellneutral.index, self.sellneutral,
+            plt.plot(range(self.sellneutral.shape[0]), self.sellneutral,
                      'o', color='#FF0000', ms=6)
         if (self.sellstrong is not None and self.sellstrong.size):
-            plt.plot(self.sellstrong.index, self.sellstrong,
+            plt.plot(range(self.sellstrong.shape[0]), self.sellstrong,
                      'o', color='#000000', ms=12)
-            plt.plot(self.sellstrong.index, self.sellstrong,
+            plt.plot(range(self.sellstrong.shape[0]), self.sellstrong,
                      'o', color='#8f0000', ms=10)
