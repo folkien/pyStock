@@ -486,9 +486,9 @@ if (args.plotToFile):
 fig = plt.figure(figsize=(16.0, 9.0))
 
 plot9 = plt.subplot(1, 1, 1)
-stockData.PlotCandle(plot9)
 # stockData.PlotAssets()
 ichimoku.Plot(plot9)
+stockData.PlotCandle(plot9)
 # zigzag.Plot(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
