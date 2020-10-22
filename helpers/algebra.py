@@ -4,6 +4,8 @@ Created on 14 paź 2020
 @author: spasz
 '''
 
+import pytest
+
 
 def PointInBetween(a, b, c):
     ''' True if poin b is inside a and c.'''

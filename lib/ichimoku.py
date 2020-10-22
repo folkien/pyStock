@@ -8,13 +8,15 @@ from numpy.core.defchararray import lower
 from lib.ReportSignals import *
 from lib.indicator import indicator
 import matplotlib.dates as mdates
+from helpers.data import GetStartDateTime
 
 
 # Ichimoku object which creates Ichimoku data
 class Ichimoku(indicator):
 
     def __init__(self, open, high, low, close):
-        indicator.__init__(self, 'Ichimoku', 'momentum')
+        indicator.__init__(self, 'Ichimoku', 'momentum',
+                           GetStartDateTime(close))
         self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.__initIchimoku(
             open, high, low, close)
         self.low = low
@@ -157,19 +159,20 @@ class Ichimoku(indicator):
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
 
     # Plot method
+
     def Plot(self, ax):
         # Lines
-        plt.plot(range(self.tenkanSen.shape[0]), self.tenkanSen, linewidth=1.2,
+        plt.plot(self.toNumIndex(self.tenkanSen), self.tenkanSen, linewidth=1.2,
                  color='#FF0000', label=('Tenkan(9d) - 1.Resistance'))
-        plt.plot(range(self.kijunSen.shape[0]), self.kijunSen, linewidth=1.2,
+        plt.plot(self.toNumIndex(self.kijunSen), self.kijunSen, linewidth=1.2,
                  color='#0000FF', label=('Kijun(26d) - 2.Resistance'))
-        plt.plot(range(self.chikouSpan.shape[0]), self.chikouSpan,  linewidth=2.0,
+        plt.plot(self.toNumIndex(self.chikouSpan), self.chikouSpan,  linewidth=2.0,
                  color='#556B2F', label=('Chikou'))
 
         # Days before
         line = CreateVerticalLine(
             self.tenkanSen.index[-1], self.pmin, self.low.values[-1])
-        plt.plot(range(line.shape[0]), line, '--',
+        plt.plot(self.toNumIndex(line), line, '--',
                  linewidth=1.0, color='black')
 #         self.__plotDayLine(plt, 9)
 #         self.__plotDayLine(plt, 26)
@@ -177,46 +180,46 @@ class Ichimoku(indicator):
 
         # Kumo
         # Get index values for the X axis for facebook DataFrame
-        x_axis = range(self.senkouSpanA.shape[0])
+        x_axis = self.toNumIndex(self.senkouSpanA)
         # Plot between
         plt.fill_between(x_axis, self.senkouSpanA,
                          self.senkouSpanB, where=self.senkouSpanA >= self.senkouSpanB, color='#b3ffb3')
         plt.fill_between(x_axis, self.senkouSpanA,
                          self.senkouSpanB, where=self.senkouSpanA < self.senkouSpanB, color='#ffb3b3')
-        plt.plot(range(self.senkouSpanA.shape[0]), self.senkouSpanA,
+        plt.plot(self.toNumIndex(self.senkouSpanA), self.senkouSpanA,
                  linewidth=1.0, color='#80A4AE', label='Senkou A')
-        plt.plot(range(self.senkouSpanB.shape[0]), self.senkouSpanB,
+        plt.plot(self.toNumIndex(self.senkouSpanB), self.senkouSpanB,
                  linewidth=1.0, color='#91CC13', label='Senkou B(52d)')
 
         # Signals plottting
         if (self.buyweak is not None and self.buyweak.size):
-            plt.plot(range(self.buyweak.shape[0]), self.buyweak,
+            plt.plot(self.toNumIndex(self.buyweak), self.buyweak,
                      'o', color='#000000', ms=6)
-            plt.plot(range(self.buyweak.shape[0]), self.buyweak,
+            plt.plot(self.toNumIndex(self.buyweak), self.buyweak,
                      'o', color='#53ff4a', ms=4)
         if (self.buyneutral is not None and self.buyneutral.size):
-            plt.plot(range(self.buyneutral.shape[0]), self.buyneutral,
+            plt.plot(self.toNumIndex(self.buyneutral), self.buyneutral,
                      'o', color='#000000', ms=8)
-            plt.plot(range(self.buyneutral.shape[0]), self.buyneutral,
+            plt.plot(self.toNumIndex(self.buyneutral), self.buyneutral,
                      'o', color='#00FF00', ms=6)
         if (self.buystrong is not None and self.buystrong.size):
-            plt.plot(range(self.buystrong.shape[0]), self.buystrong,
+            plt.plot(self.toNumIndex(self.buystrong), self.buystrong,
                      'o', color='#000000', ms=12)
-            plt.plot(range(self.buystrong.shape[0]), self.buystrong,
+            plt.plot(self.toNumIndex(self.buystrong), self.buystrong,
                      'o', color='#006b07', ms=10)
 
         if (self.sellweak is not None and self.sellweak.size):
-            plt.plot(range(self.sellweak.shape[0]), self.sellweak,
+            plt.plot(self.toNumIndex(self.sellweak), self.sellweak,
                      'o', color='#000000', ms=6)
-            plt.plot(range(self.sellweak.shape[0]), self.sellweak,
+            plt.plot(self.toNumIndex(self.sellweak), self.sellweak,
                      'o', color='#ff4a4a', ms=4)
         if (self.sellneutral is not None and self.sellneutral.size):
-            plt.plot(range(self.sellneutral.shape[0]), self.sellneutral,
+            plt.plot(self.toNumIndex(self.sellneutral), self.sellneutral,
                      'o', color='#000000', ms=8)
-            plt.plot(range(self.sellneutral.shape[0]), self.sellneutral,
+            plt.plot(self.toNumIndex(self.sellneutral), self.sellneutral,
                      'o', color='#FF0000', ms=6)
         if (self.sellstrong is not None and self.sellstrong.size):
-            plt.plot(range(self.sellstrong.shape[0]), self.sellstrong,
+            plt.plot(self.toNumIndex(self.sellstrong), self.sellstrong,
                      'o', color='#000000', ms=12)
-            plt.plot(range(self.sellstrong.shape[0]), self.sellstrong,
+            plt.plot(self.toNumIndex(self.sellstrong), self.sellstrong,
                      'o', color='#8f0000', ms=10)
