@@ -83,6 +83,8 @@ parser.add_argument('-d', '--beginDate', type=str,
                     required=False, help='Begin date')
 parser.add_argument('-Y', '--lastYear', action='store_true',
                     required=False, help='Last Year')
+parser.add_argument('-9M', '--last9Months', action='store_true',
+                    required=False, help='Last 9 Months')
 parser.add_argument('-6M', '--last6Months', action='store_true',
                     required=False, help='Last 6 Months')
 parser.add_argument('-3M', '--last3Months', action='store_true',
@@ -120,11 +122,6 @@ if (args.plotToFile):
 
 # Dates
 today = datetime.datetime.now()
-lastYear = datetime.datetime.now() - datetime.timedelta(days=365)
-last6Months = datetime.datetime.now() - datetime.timedelta(days=30 * 6)
-lastMonth = datetime.datetime.now() - datetime.timedelta(days=30)
-last2Weeks = datetime.datetime.now() - datetime.timedelta(days=14)
-lastWeek = datetime.datetime.now() - datetime.timedelta(days=7)
 # End date
 end_date = today.strftime('%Y-%m-%d')
 # Start date
@@ -135,6 +132,10 @@ else:
 # Check last year
 if (args.lastYear):
     tmpDate = datetime.datetime.now() - datetime.timedelta(days=365)
+    start_date = tmpDate.strftime('%Y-%m-%d')
+# Check last 9 month
+if (args.last9Months):
+    tmpDate = datetime.datetime.now() - datetime.timedelta(days=30 * 9)
     start_date = tmpDate.strftime('%Y-%m-%d')
 # Check last 6 month
 if (args.last6Months):
