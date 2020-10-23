@@ -75,15 +75,21 @@ class StockData():
 
         return volumePositive, volumeNegative
 
-    # Returns value
+    # Returns value (float)
     def GetValue(self, column='Close', days=0):
-        return self.data[column][days]
+        if (column is self.data.columns) and (days < len(self.data.index)):
+            return self.data[column][days]
+        else:
+            return 0.0
 
     # Returns current close price
     def GetReturnRates(self, days=1, column='Close'):
-        startPrice = self.data[column][days]
-        endPrice = self.data[column][0]
-        return ((endPrice - startPrice) * 100) / startPrice
+        if (column is self.data.columns) and (days < len(self.data.index)):
+            startPrice = self.data[column][days]
+            endPrice = self.data[column][0]
+            return ((endPrice - startPrice) * 100) / startPrice
+        else:
+            return 0
 
     # Returns current close price
     def GetStockCode(self):

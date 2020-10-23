@@ -11,7 +11,8 @@ from lib.CountryInfo import CountryInfo
 from lib.DataOperations import *
 from lib.ReportSignals import *
 from lib.TimeInterval import *
-from lib.assets import *
+from lib.assets import StockAssets, ReportAsset
+from lib.StockData import StockData
 from helpers.data import toNumIndex
 import matplotlib.dates as mdates
 from lib.WilliamsAlligator import CreateWilliamsAlligator

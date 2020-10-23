@@ -6,7 +6,6 @@ import datetime
 import random
 from filelock import FileLock
 from lib.jsonModule import jsonRead, jsonWrite
-from lib.StockData import StockData
 
 
 def PlotAsset(ax, asset):
@@ -47,6 +46,7 @@ class Asset(object):
         self.isInitialized = False
 
     def Init(self):
+        from lib.StockData import StockData
         stock = StockData(self.data['code'])
         self.currentPrice = stock.GetValue()
         self.originalValue = self.data['price'] * self.data['number']
