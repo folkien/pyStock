@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -256,7 +257,8 @@ plt.legend(loc='upper left')
 # OBV - ALL
 if (stockData.hasVolume()):
     plot2A = plot2.twinx()
-    plot2A.plot(toNumIndex(obvTotal.index, obvTotal), obvTotal, label='OBV total')
+    plot2A.plot(toNumIndex(obvTotal.index, obvTotal),
+                obvTotal, label='OBV total')
     plot2A.legend(loc='upper left')
     plot2A.tick_params(axis='y', labelcolor='tab:blue')
 
