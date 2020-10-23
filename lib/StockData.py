@@ -13,6 +13,7 @@ from mplfinance import plot as mpfplot
 from lib.database import StockDatabase
 from helpers.data import toNumIndex
 from pandas_datareader import data
+from lib.assets import ReportAsset, PlotAsset
 
 # StockData object which creates StockData data
 
@@ -255,14 +256,14 @@ class StockData():
         if (name in self.data.columns):
             return self.data[name]
         else:
-            return CreateEmptyDataFrame()
+            return pd.DataFrame()
 
     # Get named data
     def GetData(self, name):
         if (name in self.dataSubset.columns):
             return self.dataSubset[name]
         else:
-            return CreateEmptyDataFrame()
+            return pd.DataFrame()
 
     # Get all assets
     def GetAllAssets(self):
