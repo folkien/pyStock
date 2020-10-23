@@ -1,13 +1,6 @@
 # Add import from parent directory possible
-import sys
-import pandas as pd
-import numpy
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from numpy.core.defchararray import lower
-from lib.ReportSignals import *
 from lib.indicator import indicator
-from helpers.algebra import PointInBetween
 
 
 class IchimokuWaves(indicator):

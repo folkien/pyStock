@@ -4,8 +4,6 @@ Created on 12 maj 2020
 @author: spasz
 @brief: Base indicator class for all indicators
 '''
-from builtins import type
-import pandas as pd
 from helpers.data import toNumIndex
 
 

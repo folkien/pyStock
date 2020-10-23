@@ -1,14 +1,10 @@
 #!/usr/bin/python3
 # Module with dataframe operations.
 # -
-# append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import pandas as pd
 from scipy import signal
 import numpy
 from numpy import NaN
-import matplotlib.pyplot as plt
-import datetime
-from scipy.stats import linregress
 
 
 # Creates DataFrame line

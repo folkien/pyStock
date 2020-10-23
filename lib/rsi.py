@@ -1,24 +1,10 @@
 # Add import from parent directory possible
-import sys
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy
-import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
+from lib.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
 from lib.indicator import indicator
-from lib.trend import *
-
-# Creates RSI object
-
-
-def CreateRSI(close, n=14):
-    return RSI(close, n)
-
-# Plots RSI object
-
-
-def PlotRSI(rsi):
-    rsi.Plot()
+from lib.trend import trend
 
 
 class RSI(indicator):

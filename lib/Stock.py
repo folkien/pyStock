@@ -3,42 +3,9 @@
  Stock object.
 """
 
-from pandas_datareader import data
-import matplotlib.pyplot as plt
-import copy
-from lib.rsi import *
-from lib.cci import *
-from lib.stoch import *
-from lib.macd import *
-from lib.atr import *
-from lib.dmi import *
-from lib.ichimoku import *
-from lib.moneyflowindex import *
-from lib.cmf import *
-from lib.bollinger import *
-from lib.WilliamsAlligator import *
-from lib.StockData import *
-from lib.DataOperations import *
-from lib.trend import *
-from lib.zigzag import ZigZag
-
-# Get DATA from URL
-# User pandas_reader.data.DataReader to load the desired data. As simple as that.
-
-
-def GetData(code, begin, end):
-    receivedData = data.DataReader(code, 'stooq', begin, end)
-
-    if len(receivedData) == 0:
-        print('No Stooq data for entry!')
-        sys.exit(1)
-
-    return receivedData
-
-# Change volumeTotal to neg/pos value
-
 
 def SetVolumeWithTrend(price, volumeTotal):
+    # Change volumeTotal to neg/pos value
     # Assert condition
     if (price.size != volumeTotal.size):
         return

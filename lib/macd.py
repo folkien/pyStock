@@ -1,12 +1,8 @@
 # Add import from parent directory possible
-import sys
-import pandas as pd
-import numpy
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
-from lib.indicator import *
-from lib.trend import *
+from lib.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
+from lib.indicator import indicator
+from lib.trend import trend
 
 # Creates MACD object
 

@@ -1,10 +1,6 @@
 # Add import from parent directory possible
-import sys
-import pandas as pd
-import numpy
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
+from lib.DataOperations import CreateMovingAverage, FindIntersections
 from lib.indicator import indicator
 
 # Creation of Williams for data
@@ -16,9 +12,10 @@ def CreateWilliamsAlligator(prices):
 # Object with williams alligator
 
 
-class WilliamsAlligator:
+class WilliamsAlligator(indicator):
 
     def __init__(self, prices):
+        indicator.__init__(self, 'Williams', 'trend', prices.index)
         self.jaw, self.teeth, self.lips = self.Init(prices)
         # Signals
         fromBottom, fromTop = FindIntersections(self.lips, self.jaw)

@@ -29,13 +29,8 @@
 # signals a stock price is likely to fall, given the increase in distribution.
 
 # Add import from parent directory possible
-import sys
-import pandas as pd
-import numpy
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
-from lib.Stock import *
+from lib.DataOperations import FindIntersections, CreateHorizontalLine
 from lib.indicator import indicator
 
 # Creates ChaikinMoneyFlow object

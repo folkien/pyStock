@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 'Fetcher gets url data and extracts specified HTML element with specified classes'
-
-import os
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse

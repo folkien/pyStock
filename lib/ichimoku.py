@@ -1,14 +1,10 @@
 # Add import from parent directory possible
-import sys
-import pandas as pd
-import numpy
+from helpers.data import TimeShift
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from numpy.core.defchararray import lower
-from lib.ReportSignals import *
+import pandas as pd
+from lib.DataOperations import FindIntersections, CreateVerticalLine
 from lib.indicator import indicator
-import matplotlib.dates as mdates
-from helpers.data import GetStartDateTime, TimeShift
+import datetime
 
 
 # Ichimoku object which creates Ichimoku data

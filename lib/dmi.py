@@ -1,10 +1,7 @@
 # Add import from parent directory possible
-import sys
-import pandas as pd
-import numpy
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
+import pandas as pd
+from lib.DataOperations import CreateMovingAverage, FindIntersections, CreateHorizontalLine
 from lib.indicator import indicator
 
 # Creates DMI object

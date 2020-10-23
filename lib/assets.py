@@ -2,14 +2,11 @@
 Created on 29 lut 2020
 @author: spasz
 '''
-import json
-import os
 import datetime
 import random
-from filelock import Timeout, FileLock
-from lib.jsonModule import *
-from lib.StockData import *
-from locale import currency
+from filelock import FileLock
+from lib.jsonModule import jsonRead, jsonWrite
+from lib.StockData import StockData
 
 
 def PlotAsset(ax, asset):

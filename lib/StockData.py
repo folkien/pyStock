@@ -4,14 +4,15 @@ Created on 5 lut 2020
 @author: spasz
 '''
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 import sys
+import datetime
+import pandas as pd
+import numpy
+from lib.DataOperations import SetReindex, CreateHorizontalLine, CreateVerticalLine
 from mplfinance import plot as mpfplot
-from lib.DataOperations import *
-from lib.assets import *
-from lib.database import *
-from lib.Stock import *
+from lib.database import StockDatabase
 from helpers.data import toNumIndex
+from pandas_datareader import data
 
 # StockData object which creates StockData data
 
@@ -46,9 +47,9 @@ class StockData():
         self.endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
         # Create place for indicators
         self.indicators = {}
-        
 
     # Change volumeTotal to neg/pos value
+
     def InitVolume(self, price, volume):
         # Assert condition
         if (price.size != volume.size):
@@ -285,18 +286,18 @@ class StockData():
     # Plot all stock data
 
     def PlotAll(self, ax):
-        mpfplot(self.dataSubset, ax=ax, type="line", linecolor='#000000' )
+        mpfplot(self.dataSubset, ax=ax, type='line', linecolor='#000000')
         self.PlotPriceLine(plt.gca(), self.data['Close'])
         return 0
 
     # Plot stock data
     def Plot(self):
         mpfplot(self.dataSubset['Close'].index,
-                 self.dataSubset['Close'], '#000000', label=self.stockCode)
+                self.dataSubset['Close'], '#000000', label=self.stockCode)
         self.PlotPriceLine(plt.gca(), self.dataSubset['Close'])
 
     # Plot assets
-    def PlotAllAssets(self,ax):
+    def PlotAllAssets(self, ax):
         for asset in self.assets:
             PlotAsset(ax, asset)
 
@@ -350,9 +351,11 @@ class StockData():
         '''
          price - dataframe/series with price values and indexes,
         '''
-        priceLine = CreateHorizontalLine(price.index, price.values[-1], price.values[-1])
-        xindex = toNumIndex(self.dataSubset.index,priceLine) 
-        ax.plot(xindex, priceLine, '--',color='#000000', linewidth=1.0, alpha=0.6)
+        priceLine = CreateHorizontalLine(
+            price.index, price.values[-1], price.values[-1])
+        xindex = toNumIndex(self.dataSubset.index, priceLine)
+        ax.plot(xindex, priceLine, '--', color='#000000',
+                linewidth=1.0, alpha=0.6)
         bbox_props = dict(boxstyle='larrow,pad=0.3',
                           fc='w', ec='0.5', alpha=0.6)
         ax.annotate('%2.2f' % priceLine.values[-1], xy=(xindex[0], priceLine.values[-1]),

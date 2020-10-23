@@ -7,7 +7,7 @@ import pickle
 import os
 import datetime
 import time
-from filelock import Timeout, FileLock
+from filelock import FileLock
 
 # Lock timeout is 5 minutes
 lockTimeout = 5 * 60

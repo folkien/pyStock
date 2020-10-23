@@ -1,26 +1,32 @@
 #!/usr/bin/env python3
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import matplotlib.pyplot as plt
-import pandas as pd
-pd.core.common.is_list_like = pd.api.types.is_list_like
 import sys
 import os
 import argparse
 import datetime
-import numpy
-import copy
 from filelock import Timeout, FileLock
-from pandas_datareader import data
-from numpy import NaN
 from matplotlib import gridspec
 from lib.CountryInfo import CountryInfo
 from lib.DataOperations import *
-from lib.Stock import *
-from lib.StockData import *
 from lib.ReportSignals import *
 from lib.TimeInterval import *
 from lib.assets import *
 from helpers.data import toNumIndex
+import matplotlib.dates as mdates
+from lib.WilliamsAlligator import CreateWilliamsAlligator
+from lib.macd import CreateMACD
+from lib.rsi import RSI
+from lib.cci import CreateCCI
+from lib.stoch import CreateStoch
+from lib.bollinger import CreateBollinger
+from lib.atr import CreateATR
+from lib.dmi import CreateDMI
+from lib.ichimoku import Ichimoku
+from lib.zigzag import ZigZag
+from lib.cmf import CreateChaikinMoneyFlow
+from lib.moneyflowindex import CreateMoneyFlowIndex
+from lib.trend import trend
 
 # Create plot figures file
 
@@ -176,7 +182,7 @@ closePriceTotal = stockData.GetAllData('Close')
 closePrice = stockData.GetData('Close')
 alligator = CreateWilliamsAlligator(closePrice)
 macd = CreateMACD(closePrice)
-rsi = CreateRSI(closePrice)
+rsi = RSI(closePrice)
 cci = CreateCCI(stockData.GetData('High'), stockData.GetData(
     'Low'), stockData.GetData('Close'))
 stoch = CreateStoch(stockData.GetData('High'), stockData.GetData(
@@ -340,7 +346,7 @@ plt.tick_params(axis='x', which='both', bottom=False,
 
 # RSI
 plot8 = plt.subplot(gs[Rows - 1], sharex=plot5)
-PlotRSI(rsi)
+rsi.Plot()
 plt.ylabel('RSI')
 plt.grid()
 plt.legend(loc='upper left')

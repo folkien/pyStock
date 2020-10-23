@@ -1,10 +1,8 @@
 # Add import from parent directory possible
-import pandas as pd
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
+from lib.DataOperations import FindIntersections, CreateHorizontalLine
 from lib.indicator import indicator
-from lib.trend import *
+from lib.trend import trend
 
 
 def CreateStoch(high, low, close, n=14, d_n=3):
