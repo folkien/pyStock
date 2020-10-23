@@ -8,7 +8,7 @@ from numpy.core.defchararray import lower
 from lib.ReportSignals import *
 from lib.indicator import indicator
 import matplotlib.dates as mdates
-from helpers.data import GetStartDateTime
+from helpers.data import GetStartDateTime, TimeShift
 
 
 # Ichimoku object which creates Ichimoku data
@@ -126,9 +126,9 @@ class Ichimoku(indicator):
         # Chikou Span
         chikouSpan = close.shift(-26)
         # Senkou Span A
-        senkouSpanA = ((tenkanSen+kijunSen)/2).shift(26).dropna()
+        senkouSpanA = TimeShift((tenkanSen+kijunSen)/2, 26)
         # Senkou Span B
-        senkouSpanB = ((n52high+n52low)/2).shift(26).dropna()
+        senkouSpanB = TimeShift((n52high+n52low)/2, 26)
         # Kumo
         return tenkanSen, kijunSen, chikouSpan, senkouSpanA, senkouSpanB
 

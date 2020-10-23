@@ -5,6 +5,7 @@ Created on 12 maj 2020
 @brief: Base indicator class for all indicators
 '''
 from builtins import type
+import pandas as pd
 
 
 class indicator(object):
@@ -26,11 +27,14 @@ class indicator(object):
         # Set base datetime index
         self.index = index
 
-    def toNumIndex(self, dataframe):
-        ''' Changed dataframe index to numbers index
+    def toNumIndex(self, df):
+        ''' Changed df index to numbers index
             calculated from base DateTime
         '''
-        result = [self.index.get_loc(i) for i in dataframe.index]
+        indexBegin = min(self.index.min(), df.index.min())
+        indexEnd = max(self.index.max(), df.index.max())
+        wideindex = pd.bdate_range(indexBegin, indexEnd)
+        result = [wideindex.get_loc(i) for i in df.index]
         return result
 
     def GetName(self):
