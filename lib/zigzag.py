@@ -45,7 +45,7 @@ class ZigZag(indicator):
 
     def __init__(self, open, high, low, close):
         ''' Constructor '''
-        indicator.__init__(self, 'ZigZag', 'momentum')
+        indicator.__init__(self, 'ZigZag', 'momentum', close.index)
         self.zigzag = self.__initZigZag(open, high, low, close)
 
     def __initZigZag(self, open, high, low, close):
@@ -75,5 +75,5 @@ class ZigZag(indicator):
     def Plot(self, ax):
         ''' Plotting method.'''
         # Lines
-        plt.plot(self.zigzag.index, self.zigzag, '--', linewidth=1.0,
+        plt.plot(self.toNumIndex(self.zigzag), self.zigzag, '--', linewidth=1.0,
                  color='#000000', label=('ZigZag'))

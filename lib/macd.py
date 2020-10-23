@@ -11,23 +11,15 @@ from lib.trend import *
 # Creates MACD object
 
 
-def CreateMACD(prices):
-    return MACD(prices)
-
-# Plots MACD object
-
-
-def PlotMACD(rsi):
-    rsi.Plot()
-
-# MACD object which creates MACD data
+def CreateMACD(close):
+    return MACD(close)
 
 
 class MACD(indicator):
 
-    def __init__(self, prices):
-        indicator.__init__(self, 'MACD', 'trend')
-        self.macd, self.signal = self.InitMACD(prices)
+    def __init__(self, close):
+        indicator.__init__(self, 'MACD', 'trend', close.index)
+        self.macd, self.signal = self.InitMACD(close)
         self.buy, self.sell = FindIntersections(self.macd, self.signal)
         # Create histogram
         histogram = self.macd.subtract(self.signal)
@@ -64,27 +56,29 @@ class MACD(indicator):
         zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
 
         # Plot backgrounds
-        x_axis = self.signal.index.get_level_values(0)
+        x_axis = self.toNumIndex(self.signal)
         plt.fill_between(x_axis, self.signal, self.macd,
                          where=self.signal < self.macd, color='#b3ffb3')
         plt.fill_between(x_axis, self.signal, self.macd,
                          where=self.signal >= self.macd, color='#ffb3b3')
 
         # Plot
-        plt.plot(zeroLine.index, zeroLine, '--', color='#777777')
-        plt.plot(self.macd.index, self.macd, label='AMD MACD',
+        plt.plot(self.toNumIndex(zeroLine), zeroLine, '--', color='#777777')
+        plt.plot(self.toNumIndex(self.macd), self.macd, label='AMD MACD',
                  linewidth=1.0, color='#FF0000')
-        plt.plot(self.signal.index, self.signal, label='Signal Line',
+        plt.plot(self.toNumIndex(self.signal), self.signal, label='Signal Line',
                  linewidth=1.0, color='#008800')
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):
-            plt.plot(self.buy.index, self.buy, 'o', color='#000000', ms=8)
-            plt.plot(self.buy.index, self.buy, 'o',
+            plt.plot(self.toNumIndex(self.buy), self.buy,
+                     'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.buy), self.buy, 'o',
                      label='Buy', color='#00FF00')
         if (self.sell is not None and self.sell.size):
-            plt.plot(self.sell.index, self.sell, 'o', color='#000000', ms=8)
-            plt.plot(self.sell.index, self.sell, 'o',
+            plt.plot(self.toNumIndex(self.sell),
+                     self.sell, 'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.sell), self.sell, 'o',
                      label='Sell', color='#FF0000')
 
         # Plot trend lines
@@ -97,7 +91,9 @@ class MACD(indicator):
     def Histogram(self):
         # Create ZeroLine
         zeroLine = CreateHorizontalLine(self.macd.index, 0, 0)
-        plt.plot(zeroLine.index, zeroLine, '--', color='#777777')
+        plt.plot(self.toNumIndex(zeroLine), zeroLine, '--', color='#777777')
 
-        plt.bar(self.hplus.index, self.hplus['value'], color='green')
-        plt.bar(self.hminus.index, self.hminus['value'], color='red')
+        plt.bar(self.toNumIndex(self.hplus),
+                self.hplus['value'], color='green')
+        plt.bar(self.toNumIndex(self.hminus),
+                self.hminus['value'], color='red')

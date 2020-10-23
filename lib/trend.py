@@ -16,7 +16,7 @@ from lib.indicator import indicator
 class trend(indicator):
 
     def __init__(self, data, type='rising'):
-        indicator.__init__(self, 'Trend', 'trend')
+        indicator.__init__(self, 'Trend', 'trend', data.index)
         self.type = type
         self.trends = self.Init(data)
 
@@ -138,7 +138,7 @@ class trend(indicator):
             # For only two dots plot direct line
             if (trend.size == 2):
                 trend = self.ExtendedTrendForward(trend)
-                plt.plot(trend.index, trend, '--', color=tColor)
+                plt.plot(self.toNumIndex(trend), trend, '--', color=tColor)
                 # Calculate slope
                 t = []
                 deltas = (trend.index.date - trend.index.date.min())
@@ -194,14 +194,15 @@ class trend(indicator):
                 trend = self.ExtendedTrendForward(trend)
 
                 # Plot trend line on graph
-                plt.plot(trend.index, trend, '--',
+                plt.plot(self.toNumIndex(trend), trend, '--',
                          color=tColor, linewidth=tLinewidth)
 
             # Add annotations
             if (iterator >= lastIterator) and (annotate == True):
                 # Calc coordinates of annotation
-                x = (mdates.date2num(
-                    trend.index[-1])+mdates.date2num(trend.index[0]))/2
+                x = self.toNumIndex(trend)[int(len(trend.index)/2)]
+#                 x = (mdates.date2num(
+#                     trend.index[-1])+mdates.date2num(trend.index[0]))/2
                 y = (trend.values[-1]+trend.values[0])/2
                 # week slope converted to int with rounding 2 decimal places
                 weekSlope = int((a*7)*100)

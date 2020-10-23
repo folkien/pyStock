@@ -40,3 +40,19 @@ def TimeShift(df, days):
             df.index.min()+dt.timedelta(days=day_range), df.index.max())
         df_new = df.reindex(wideindex)
         return df_new.shift(days).dropna()
+    
+def toNumIndex(index, df):
+    ''' Changed df index to numbers index
+        calculated from base DateTime
+    '''
+    indexBegin = min(index.min(), df.index.min())
+    indexEnd = max(index.max(), df.index.max())
+    wideindex = pd.bdate_range(indexBegin, indexEnd)
+    result = [wideindex.get_loc(i) for i in df.index]
+    # subtract beginging offset
+    if (index.min() > indexBegin):
+        offset = len(pd.bdate_range(indexBegin, index.min())) - 1
+        result = [(r - offset) for r in result]
+    return result
+  
+    

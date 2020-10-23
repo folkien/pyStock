@@ -29,7 +29,7 @@ class Stoch(indicator):
     """
 
     def __init__(self, high, low, close, n=14, d_n=3):
-        indicator.__init__(self, 'Stoch%u' % n, 'momentum')
+        indicator.__init__(self, 'Stoch%u' % n, 'momentum', close.index)
         self.n = n
         self.d_n = n
         self.overBoughtLvl = 80
@@ -59,35 +59,37 @@ class Stoch(indicator):
     # Plot method
     def Plot(self):
         # Stoch %K and %D
-        plt.plot(self.k.index, self.k, label='%K'
+        plt.plot(self.toNumIndex(self.k), self.k, label='%K'
                  + str(self.n), linewidth=1.0, color='blue')
-        plt.plot(self.d.index, self.d, label='%D'
+        plt.plot(self.toNumIndex(self.d), self.d, label='%D'
                  + str(self.d_n), linewidth=1.0, color='red')
-        x_axis = self.k.index.get_level_values(0)
+        x_axis = self.toNumIndex(self.k)
 
         # OverBought
         overBought = CreateHorizontalLine(
             self.k.index, self.overBoughtLvl, self.overBoughtLvl, True)
-        plt.plot(overBought.index, overBought, '--',
+        plt.plot(self.toNumIndex(overBought), overBought, '--',
                  label='Overbought', color='#940006')
         plt.fill_between(x_axis, self.k, overBought['value'],
                          where=self.k >= overBought['value'], color='#ffb3b3')
         # OverSold
         overSold = CreateHorizontalLine(
             self.k.index, self.overSellLvl, self.overSellLvl, True)
-        plt.plot(overSold.index, overSold, '--',
+        plt.plot(self.toNumIndex(overSold), overSold, '--',
                  label='Oversold', color='#169400')
         plt.fill_between(x_axis, self.k, overSold['value'],
                          where=self.k <= overSold['value'], color='#b3ffb3')
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):
-            plt.plot(self.buy.index, self.buy, 'o', color='#000000', ms=8)
-            plt.plot(self.buy.index, self.buy, 'o',
+            plt.plot(self.toNumIndex(self.buy), self.buy,
+                     'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.buy), self.buy, 'o',
                      label='Buy', color='#00FF00')
         if (self.sell is not None and self.sell.size):
-            plt.plot(self.sell.index, self.sell, 'o', color='#000000', ms=8)
-            plt.plot(self.sell.index, self.sell, 'o',
+            plt.plot(self.toNumIndex(self.sell),
+                     self.sell, 'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.sell), self.sell, 'o',
                      label='Sell', color='#FF0000')
 
         # Plot trend lines

@@ -18,7 +18,7 @@ def CreateCCI(high, low, close, n=20):
 class CCI(indicator):
 
     def __init__(self, high, low, close, n=14):
-        indicator.__init__(self, 'CCI%u' % n, 'momentum')
+        indicator.__init__(self, 'CCI%u' % n, 'momentum', close.index)
         self.n = n
         self.factor = 0.015
         self.cci = self.InitCCI(high, low, close)
@@ -53,36 +53,38 @@ class CCI(indicator):
     # Plot method
     def Plot(self):
         # CCI
-        plt.plot(self.cci.index, self.cci, label='CCI'
+        plt.plot(self.toNumIndex(self.cci), self.cci, label='CCI'
                  + str(self.n), linewidth=1.0, color='#000000')
-#             plt.plot(self.cciSignal.index, self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
-        x_axis = self.cci.index.get_level_values(0)
+#             plt.plot(self.toNumIndex(self.cciSignal), self.cciSignal, label='signal', linewidth=1.0, color = '#FF0000')
+        x_axis = self.toNumIndex(self.cci)
 
         # Historic average
         hAverage = CreateHorizontalLine(self.cci.index, 0, 0)
-        plt.plot(hAverage.index, hAverage, '--',
+        plt.plot(self.toNumIndex(hAverage), hAverage, '--',
                  linewidth=1.0, color='#333333')
         # OverBought
         overBought = CreateHorizontalLine(self.cci.index, 100, 100, True)
-        plt.plot(overBought.index, overBought, '--',
+        plt.plot(self.toNumIndex(overBought), overBought, '--',
                  label='Overbought', linewidth=1.0, color='#940006')
         plt.fill_between(x_axis, self.cci, overBought['value'],
                          where=self.cci > overBought['value'], color='#ffb3b3')
         # OverSold
         overSold = CreateHorizontalLine(self.cci.index, -100, -100, True)
-        plt.plot(overSold.index, overSold, '--',
+        plt.plot(self.toNumIndex(overSold), overSold, '--',
                  label='Oversold', linewidth=1.0, color='#169400')
         plt.fill_between(x_axis, self.cci, overSold['value'],
                          where=self.cci < overSold['value'], color='#b3ffb3')
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):
-            plt.plot(self.buy.index, self.buy, 'o', color='#000000', ms=8)
-            plt.plot(self.buy.index, self.buy, 'o',
+            plt.plot(self.toNumIndex(self.buy), self.buy,
+                     'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.buy), self.buy, 'o',
                      label='Buy', color='#00FF00')
         if (self.sell is not None and self.sell.size):
-            plt.plot(self.sell.index, self.sell, 'o', color='#000000', ms=8)
-            plt.plot(self.sell.index, self.sell, 'o',
+            plt.plot(self.toNumIndex(self.sell),
+                     self.sell, 'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.sell), self.sell, 'o',
                      label='Sell', color='#FF0000')
 
         # Limits of plot

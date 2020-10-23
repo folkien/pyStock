@@ -6,6 +6,7 @@ Created on 12 maj 2020
 '''
 from builtins import type
 import pandas as pd
+from helpers.data import toNumIndex
 
 
 class indicator(object):
@@ -31,15 +32,7 @@ class indicator(object):
         ''' Changed df index to numbers index
             calculated from base DateTime
         '''
-        indexBegin = min(self.index.min(), df.index.min())
-        indexEnd = max(self.index.max(), df.index.max())
-        wideindex = pd.bdate_range(indexBegin, indexEnd)
-        result = [wideindex.get_loc(i) for i in df.index]
-        # subtract beginging offset
-        if (self.index.min() > indexBegin):
-            offset = len(pd.bdate_range(indexBegin, self.index.min())) - 1
-            result = [(r - offset) for r in result]
-        return result
+        return toNumIndex(self.index, df)
 
     def GetName(self):
         '''

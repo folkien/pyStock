@@ -11,11 +11,12 @@ from lib.DataOperations import *
 from lib.assets import *
 from lib.database import *
 from lib.Stock import *
+from helpers.data import toNumIndex
 
 # StockData object which creates StockData data
 
 
-class StockData:
+class StockData():
 
     def __init__(self, stockCode, beginDate='1990-01-01', endDate=datetime.datetime.now().strftime('%Y-%m-%d')):
         self.assets = []
@@ -45,6 +46,7 @@ class StockData:
         self.endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
         # Create place for indicators
         self.indicators = {}
+        
 
     # Change volumeTotal to neg/pos value
     def InitVolume(self, price, volume):
@@ -282,22 +284,21 @@ class StockData:
 
     # Plot all stock data
 
-    def PlotAll(self):
-        plt.plot(self.data['Close'].index, self.data['Close'],
-                 '#000000', label=self.stockCode)
+    def PlotAll(self, ax):
+        mpfplot(self.dataSubset, ax=ax, type="line", linecolor='#000000' )
         self.PlotPriceLine(plt.gca(), self.data['Close'])
         return 0
 
     # Plot stock data
     def Plot(self):
-        plt.plot(self.dataSubset['Close'].index,
+        mpfplot(self.dataSubset['Close'].index,
                  self.dataSubset['Close'], '#000000', label=self.stockCode)
         self.PlotPriceLine(plt.gca(), self.dataSubset['Close'])
 
     # Plot assets
-    def PlotAllAssets(self):
+    def PlotAllAssets(self,ax):
         for asset in self.assets:
-            PlotAsset(plt, asset)
+            PlotAsset(ax, asset)
 
     # Plot assets
     def PlotAssets(self):
@@ -332,80 +333,29 @@ class StockData:
 
     # Plot money on the market
     def PlotMoneyOnMarket(self, ax):
-        ax.plot(self.dataSubset['Money'].index, self.dataSubset['Money'], '-.',
+        ax.plot(toNumIndex(self.dataSubset.index, self.dataSubset['Money']), self.dataSubset['Money'], '-.',
                 label='Money on market', linewidth=1.2, color='#FF0000')
 
     # Plot money on the market
     def PlotMoneyOnMarketAll(self, ax):
-        ax.plot(self.data['Money'].index, self.data['Money'], '-.',
+        ax.plot(toNumIndex(self.dataSubset.index, self.data['Money']), self.data['Money'], '-.',
                 label='Money on market', linewidth=1.2, color='#FF0000')
-
-    # Plot all stock data
-    def PlotCandleAll(self):
-        candlestick2_ohlc(ax,
-                          self.data['Open'].values,
-                          self.data['High'].values,
-                          self.data['Low'].values,
-                          self.data['Close'].values,
-                          width=0.6,
-                          colorup='g',
-                          colordown='r',
-                          alpha=1)
-
-    def PlotCandle2(self, ax):
-        # TODO fix missing values
-        widthBackground = 1.5
-        widthOpenClose = 1
-        widthHighLow = 0.2
-        minHeight = 0.1
-
-        pricesup = self.dataSubset[self.dataSubset['Close']
-                                   > self.dataSubset['Open']]
-        pricesdown = self.dataSubset[self.dataSubset['Close']
-                                     <= self.dataSubset['Open']]
-
-        # line with close price
-        plt.plot(self.dataSubset['Close'].index, self.dataSubset['Close'],
-                 '--', color='#777777', label=self.stockCode, linewidth=0.6)
-
-        # Rising(Close>Open) - Green bars,
-        plt.bar(pricesup.index, pricesup['Close'] - pricesup['Open'],
-                widthOpenClose, bottom=pricesup['Open'], color='g', edgecolor='k')
-        plt.bar(pricesup.index, pricesup['High'] - pricesup['Low'],
-                widthHighLow, bottom=pricesup['Low'], color='g')
-
-        # Falling(Close<=Open) - Red bars
-        plt.bar(pricesdown.index, pricesdown['Open'] - pricesdown['Close'],
-                widthOpenClose, bottom=pricesdown['Close'], color='r', edgecolor='k')
-        plt.bar(pricesdown.index, pricesdown['High'] - pricesdown['Low'],
-                widthHighLow, bottom=pricesdown['Low'], color='r')
 
     # Plot stock data
     def PlotCandle(self, ax):
         quotes = self.dataSubset
         mpfplot(quotes, type='candle', ax=ax, style='yahoo')
-        # ax.xaxis.set_minor_formatter(dayFormatter)
-#         candlestick_ohlc(ax, zip(mdates.date2num(quotes.index.to_pydatetime()),
-#                                  quotes['Open'], quotes['High'],
-#                                  quotes['Low'], quotes['Close']),
-#                          width=0.8,
-#                          colorup='g',
-#                          colordown='r',
-#                          alpha=1)
-#         ax.autoscale_view()
-        #self.PlotPriceLine(ax, self.dataSubset['Close'])
 
     def PlotPriceLine(self, ax, price):
         '''
          price - dataframe/series with price values and indexes,
         '''
-        priceLine = CreateHorizontalLine(
-            price.index, price.values[-1], price.values[-1])
-        ax.plot(priceLine.index, priceLine, '--',
-                color='#000000', linewidth=1.0, alpha=0.6)
+        priceLine = CreateHorizontalLine(price.index, price.values[-1], price.values[-1])
+        xindex = toNumIndex(self.dataSubset.index,priceLine) 
+        ax.plot(xindex, priceLine, '--',color='#000000', linewidth=1.0, alpha=0.6)
         bbox_props = dict(boxstyle='larrow,pad=0.3',
                           fc='w', ec='0.5', alpha=0.6)
-        ax.annotate('%2.2f' % priceLine.values[-1], xy=(mdates.date2num(priceLine.index[-1]), priceLine.values[-1]),
+        ax.annotate('%2.2f' % priceLine.values[-1], xy=(xindex[0], priceLine.values[-1]),
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
 
     def AddReturnRatesAxle(self, ax, data=None):

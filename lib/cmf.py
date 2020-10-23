@@ -49,7 +49,7 @@ def CreateChaikinMoneyFlow(high, low, close, volume, info, n=21):
 class ChaikinMoneyFlow(indicator):
 
     def __init__(self, high, low, close, volume, info, n=21):
-        indicator.__init__(self, 'CMF%u' % n, 'trend')
+        indicator.__init__(self, 'CMF%u' % n, 'trend', close.index)
         self.n = n
         self.info = info
         self.cmf, self.cosc = self.Init(high, low, close, volume, n)
@@ -92,9 +92,9 @@ class ChaikinMoneyFlow(indicator):
 
     # Plot Chaikin money flow
     def PlotChaikinMoneyFlow(self):
-        plt.plot(self.cmf.index, self.cmf, label='CMF'
+        plt.plot(self.toNumIndex(self.cmf), self.cmf, label='CMF'
                  + str(self.n), linewidth=1.0, color='#000000')
-        x_axis = self.cmf.index.get_level_values(0)
+        x_axis = self.toNumIndex(self.cmf)
 
         # over > 0 is rising/bullish
         lineZero = CreateHorizontalLine(self.cmf.index, 0, 0, True)
@@ -107,17 +107,17 @@ class ChaikinMoneyFlow(indicator):
 
 # #             # Signals plottting
 #             if (self.buy is not None and self.buy.size):
-#                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
+#                 plt.plot(self.toNumIndex(self.buy), self.buy, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.buy), self.buy, 'o', label='Buy', color = '#00FF00')
 #             if (self.buyStrong is not None and self.buyStrong.size):
-#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', color = '#000000', ms=8)
-#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
+#                 plt.plot(self.toNumIndex(self.buyStrong), self.buyStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.buyStrong), self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
 #             if (self.sell is not None and self.sell.size):
-#                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
+#                 plt.plot(self.toNumIndex(self.sell), self.sell, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.sell), self.sell, 'o', label='Sell', color = '#FF0000')
 #             if (self.sellStrong is not None and self.sellStrong.size):
-#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', color = '#000000', ms=8)
-#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', label='SellStrong', color = '#FF0000')
+#                 plt.plot(self.toNumIndex(self.sellStrong), self.sellStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.sellStrong), self.sellStrong, 's', label='SellStrong', color = '#FF0000')
 
         # Limits of plot
         plt.ylim(top=1, bottom=-1)
@@ -125,9 +125,9 @@ class ChaikinMoneyFlow(indicator):
     # Plot chaikin oscillator
     def PlotChaikinOscillator(self):
         #
-        plt.plot(self.cosc.index, self.cosc, label='CHAIKIN'
+        plt.plot(self.toNumIndex(self.cosc), self.cosc, label='CHAIKIN'
                  + str(self.n), linewidth=1.0, color='#000000')
-        x_axis = self.cosc.index.get_level_values(0)
+        x_axis = self.toNumIndex(self.cosc)
 
         # over > 0 is rising/bullish
         lineZero = CreateHorizontalLine(self.cosc.index, 0, 0, True)
@@ -135,9 +135,9 @@ class ChaikinMoneyFlow(indicator):
                          where=self.cosc > 0, color='#b3ffb3')
         # Crossings trend change, to Rise
         if (self.toRise.size):
-            plt.plot(self.toRise.index, self.toRise,
+            plt.plot(self.toNumIndex(self.toRise), self.toRise,
                      's', color='#000000', ms=8)
-            plt.plot(self.toRise.index, self.toRise, 's',
+            plt.plot(self.toNumIndex(self.toRise), self.toRise, 's',
                      label='ToRise', color='#00ff00')
 
         # under < 0 is falling/bearish
@@ -145,25 +145,25 @@ class ChaikinMoneyFlow(indicator):
                          where=self.cosc < 0, color='#ffb3b3')
         # Crossings trend change, to Fall
         if (self.toFall.size):
-            plt.plot(self.toFall.index, self.toFall,
+            plt.plot(self.toNumIndex(self.toFall), self.toFall,
                      's', color='#000000', ms=8)
-            plt.plot(self.toFall.index, self.toFall, 's',
+            plt.plot(self.toNumIndex(self.toFall), self.toFall, 's',
                      label='ToFall', color='#ff0000')
 
 
 #             # Signals plottting
 #             if (self.buy is not None and self.buy.size):
-#                 plt.plot(self.buy.index, self.buy, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.buy.index, self.buy, 'o', label='Buy', color = '#00FF00')
+#                 plt.plot(self.toNumIndex(self.buy), self.buy, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.buy), self.buy, 'o', label='Buy', color = '#00FF00')
 #             if (self.buyStrong is not None and self.buyStrong.size):
-#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', color = '#000000', ms=8)
-#                 plt.plot(self.buyStrong.index, self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
+#                 plt.plot(self.toNumIndex(self.buyStrong), self.buyStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.buyStrong), self.buyStrong, 's', label='BuyStrong', color = '#00FF00')
 #             if (self.sell is not None and self.sell.size):
-#                 plt.plot(self.sell.index, self.sell, 'o', color = '#000000', ms=8)
-#                 plt.plot(self.sell.index, self.sell, 'o', label='Sell', color = '#FF0000')
+#                 plt.plot(self.toNumIndex(self.sell), self.sell, 'o', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.sell), self.sell, 'o', label='Sell', color = '#FF0000')
 #             if (self.sellStrong is not None and self.sellStrong.size):
-#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', color = '#000000', ms=8)
-#                 plt.plot(self.sellStrong.index, self.sellStrong, 's', label='SellStrong', color = '#FF0000')
+#                 plt.plot(self.toNumIndex(self.sellStrong), self.sellStrong, 's', color = '#000000', ms=8)
+#                 plt.plot(self.toNumIndex(self.sellStrong), self.sellStrong, 's', label='SellStrong', color = '#FF0000')
 
         # Limits of plot
 #             plt.ylim(top=100,bottom=0)

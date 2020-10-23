@@ -19,6 +19,7 @@ from lib.StockData import *
 from lib.ReportSignals import *
 from lib.TimeInterval import *
 from lib.assets import *
+from helpers.data import toNumIndex
 
 # Create plot figures file
 
@@ -245,13 +246,8 @@ gs = gridspec.GridSpec(Rows, Cols)
 # #####################################################
 # #####################################################
 plot2 = plt.subplot(gs[0:2, :])
-stockData.PlotAll()
-stockData.PlotAllAssets()
-rect = CreateRect(datetime.datetime.strptime(start_date, '%Y-%m-%d'),
-                  stockData.GetAllData('Close').max(),
-                  datetime.datetime.strptime(end_date, '%Y-%m-%d'),
-                  stockData.GetAllData('Close').min())
-plt.plot(rect.index, rect, '--', linewidth=1.2, color='#FF0000')
+stockData.PlotAll(plot2)
+stockData.PlotAllAssets(plot2)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.title('%s - History' % stockData.GetStockCode())
@@ -260,7 +256,7 @@ plt.legend(loc='upper left')
 # OBV - ALL
 if (stockData.hasVolume()):
     plot2A = plot2.twinx()
-    plot2A.plot(obvTotal.index, obvTotal, label='OBV total')
+    plot2A.plot(toNumIndex(obvTotal.index, obvTotal), obvTotal, label='OBV total')
     plot2A.legend(loc='upper left')
     plot2A.tick_params(axis='y', labelcolor='tab:blue')
 
@@ -272,41 +268,15 @@ if (stockData.hasVolume()):
     plt.legend(loc='upper left')
 
 
-# # Price close
-# plot1 = plt.subplot(gs[0:2, 4:5])
-# alligator.Plot()
-# stockData.Plot()
-# stockData.PlotAssets()
-# plt.ylabel('Price (%s)' % (info.GetCurrency()))
-# plt.grid()
-# plt.title('%s - Current' % stockData.GetStockCode())
-# plt.legend(loc='upper left')
-#
-# # OBV
-# if (stockData.hasVolume()):
-#     plot1A = plot1.twinx()
-#     plot1A.plot(obv.index, obv, '-.', linewidth=1.2, label='OBV', color='blue')
-#     plot1A.legend(loc='upper left')
-#     plot1A.tick_params(axis='y', labelcolor='tab:blue')
-#     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%Y'))
-#
-# # Money on market
-# if (stockData.hasVolume()):
-#     plot1B = plot1.twinx()
-#     stockData.PlotMoneyOnMarket(plot1B)
-#     plot1B.tick_params(axis='y', labelcolor='tab:red')
-#     plt.legend(loc='upper left')
-
-
 period = 2
 upTrends = trend(stockData.GetData('Low'), 'rising')
 downTrends = trend(stockData.GetData('High'), 'falling')
 
 # Price OHLC
 plot3 = plt.subplot(gs[2:5, :])
+bollinger.Plot()
 stockData.PlotCandle(plot3)
 stockData.PlotAssets()
-bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.grid()
 plt.legend(loc='upper left')
@@ -339,9 +309,9 @@ gs = gridspec.GridSpec(Rows, 1)
 
 # Total close price
 plot5 = plt.subplot(gs[0:4])
-stockData.PlotCandle(plot5)
-stockData.PlotAssets()
 bollinger.Plot()
+stockData.PlotCandle(plot5)
+# stockData.PlotAssets()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 1' % stockData.GetStockCode())
 plt.legend(loc='upper left')
@@ -389,9 +359,9 @@ fig = plt.figure(figsize=(16.0, 9.0))
 Rows = 6
 gs = gridspec.GridSpec(Rows, 1)
 plot9 = plt.subplot(gs[0:4])
+bollinger.Plot()
 stockData.PlotCandle(plot9)
 stockData.PlotAssets()
-bollinger.Plot()
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
 plt.legend(loc='upper left')
@@ -444,9 +414,9 @@ if (stockData.hasVolume()):
     gs = gridspec.GridSpec(Rows, 1)
     plot9 = plt.subplot(gs[0:4])
     # Bollinger with candleplot
+    bollinger.Plot()
     stockData.PlotCandle(plot9)
     stockData.PlotAssets()
-    bollinger.Plot()
     plt.ylabel('Price (%s)' % (info.GetCurrency()))
     plt.title('%s - page 3' % stockData.GetStockCode())
     plt.legend(loc='upper left')
@@ -455,6 +425,7 @@ if (stockData.hasVolume()):
     plt.grid(b=True, which='minor', axis='both')
     plt.tick_params(axis='x', which='both', bottom=False,
                     top=False, labelbottom=False)
+    # MoM
     plot9A = plot9.twinx()
     stockData.PlotMoneyOnMarket(plot9A)
     plot9.tick_params(axis='y', labelcolor='tab:red')

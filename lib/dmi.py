@@ -18,7 +18,7 @@ def CreateDMI(high, low, atr, n=14):
 class DMI(indicator):
 
     def __init__(self, high, low, atr, n=14):
-        indicator.__init__(self, 'DMI%u' % n, 'trend')
+        indicator.__init__(self, 'DMI%u' % n, 'trend', low.index)
         self.n = n
         self.dip, self.din, self.adx = self.InitDMI(high, low, atr)
 
@@ -73,11 +73,11 @@ class DMI(indicator):
     def Plot(self):
         # Strong trend line ADX > 20
         line20 = CreateHorizontalLine(self.adx.index, 25, 25, True)
-        plt.plot(line20.index, line20, '--', label='ADX>20',
+        plt.plot(self.toNumIndex(line20), line20, '--', label='ADX>20',
                  linewidth=1.0, color='#333333')
 
         # Plot backgrounds
-        x_axis = self.dip.index.get_level_values(0)
+        x_axis = self.toNumIndex(self.dip)
         plt.fill_between(x_axis, self.adx['value'], line20['value'],
                          where=self.adx['value'] > line20['value'], color='#b3b3ff')
         plt.fill_between(x_axis, self.dip['value'], self.din['value'],
@@ -86,24 +86,26 @@ class DMI(indicator):
                          where=self.dip['value'] <= self.din['value'], color='#ffb3b3')
 
         # DI+ DI- and ADX
-        plt.plot(self.dip.index, self.dip,
+        plt.plot(self.toNumIndex(self.dip), self.dip,
                  label='DI+' + str(self.n),
                  linewidth=1.0, color='green')
-        plt.plot(self.din.index, self.din,
+        plt.plot(self.toNumIndex(self.din), self.din,
                  label='DI-' + str(self.n),
                  linewidth=1.0, color='red')
-        plt.plot(self.adx.index, self.adx,
+        plt.plot(self.toNumIndex(self.adx), self.adx,
                  label='ADX' + str(self.n),
                  linewidth=1.0, color='blue')
 
         # Signals plottting
         if (self.buy is not None and self.buy.size):
-            plt.plot(self.buy.index, self.buy, 'o', color='#000000', ms=8)
-            plt.plot(self.buy.index, self.buy, 'o',
+            plt.plot(self.toNumIndex(self.buy), self.buy,
+                     'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.buy), self.buy, 'o',
                      label='Buy/Uptrend', color='#00FF00')
         if (self.sell is not None and self.sell.size):
-            plt.plot(self.sell.index, self.sell, 'o', color='#000000', ms=8)
-            plt.plot(self.sell.index, self.sell, 'o',
+            plt.plot(self.toNumIndex(self.sell),
+                     self.sell, 'o', color='#000000', ms=8)
+            plt.plot(self.toNumIndex(self.sell), self.sell, 'o',
                      label='Sell/Downtrend', color='#FF0000')
 
         # Limits of plot

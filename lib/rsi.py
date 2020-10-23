@@ -11,8 +11,8 @@ from lib.trend import *
 # Creates RSI object
 
 
-def CreateRSI(prices, n=14):
-    return RSI(prices, n)
+def CreateRSI(close, n=14):
+    return RSI(close, n)
 
 # Plots RSI object
 
@@ -24,13 +24,13 @@ def PlotRSI(rsi):
 class RSI(indicator):
     # RSI object which creates RSI data
 
-    def __init__(self, prices, n=14):
-        indicator.__init__(self, 'RSI%u' % n, 'momentum')
+    def __init__(self, close, n=14):
+        indicator.__init__(self, 'RSI%u' % n, 'momentum', close.index)
         self.n = n
         self.overBoughtLvl = 70
         self.overSellLvl = 30
         self.hystersis = 5
-        self.rsi = self.InitRSI(prices, self.n)
+        self.rsi = self.InitRSI(close, self.n)
         self.notSellSignal = CreateSubsetByValues(self.rsi, 0, 30)
         self.notBuySignal = CreateSubsetByValues(self.rsi, 70, 100)
         self.trendToFall = CreateSubsetByValues(
@@ -80,34 +80,35 @@ class RSI(indicator):
     def Plot(self):
         # Base 50% line
         line50 = CreateHorizontalLine(self.rsi.index, 50, 50)
-        plt.plot(line50.index, line50, '-.', linewidth=1.0, color='#333333')
+        plt.plot(self.toNumIndex(line50), line50,
+                 '-.', linewidth=1.0, color='#333333')
         # RSI
-        plt.plot(self.rsi.index, self.rsi, label='RSI'
+        plt.plot(self.toNumIndex(self.rsi), self.rsi, label='RSI'
                  + str(self.n), linewidth=1.0, color='#000000')
-        x_axis = self.rsi.index.get_level_values(0)
+        x_axis = self.toNumIndex(self.rsi)
         # OverBought
         overBought = CreateHorizontalLine(self.rsi.index, 70, 70, True)
-        plt.plot(overBought.index, overBought, '--',
+        plt.plot(self.toNumIndex(overBought), overBought, '--',
                  label='Overbought', color='#940006')
         plt.fill_between(x_axis, self.rsi, overBought['value'],
                          where=self.rsi >= overBought['value'], color='#ffb3b3')
         # OverSold
         overSold = CreateHorizontalLine(self.rsi.index, 30, 30, True)
-        plt.plot(overSold.index, overSold, '--',
+        plt.plot(self.toNumIndex(overSold), overSold, '--',
                  label='Oversold', color='#169400')
         plt.fill_between(x_axis, self.rsi, overSold['value'],
                          where=self.rsi <= overSold['value'], color='#b3ffb3')
         # Trend to Fall
         if (self.trendToFall.size):
-            plt.plot(self.trendToFall.index, self.trendToFall,
+            plt.plot(self.toNumIndex(self.trendToFall), self.trendToFall,
                      '*', label='ToFall', color='#FFFF00')
         # Trend to Rise
         if (self.trendToRise.size):
-            plt.plot(self.trendToRise.index, self.trendToRise,
+            plt.plot(self.toNumIndex(self.trendToRise), self.trendToRise,
                      '*', label='ToRise', color='#00FFFF')
         # May buy 50
         if (self.fromBottom50.size):
-            plt.plot(self.fromBottom50.index,
+            plt.plot(self.toNumIndex(self.fromBottom50),
                      self.fromBottom50, 'go', label='MayBuy')
 
         # Plot trend lines
