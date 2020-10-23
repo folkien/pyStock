@@ -6,7 +6,7 @@ Created on 22 paź 2020
 
 import pytest
 import pandas as pd
-import datetime
+import datetime as dt
 from math import ceil
 
 
@@ -26,13 +26,17 @@ def GetEndDateTime(dataframe):
 
 def TimeShift(df, days):
     ''' Shift dataframe in time.'''
+    # Shift right - positive
     if (days > 0):
-        wideindex = pd.bdate_range(df.index.min(), df.index.max(
-        )+datetime.timedelta(days=days+ceil(days/7)*2+1))
+        day_range = days+2*ceil(abs(days)/5+1)
+        wideindex = pd.bdate_range(
+            df.index.min(), df.index.max()+dt.timedelta(days=day_range))
         df_new = df.reindex(wideindex)
         return df_new.shift(days).dropna()
+    # Shift left - negative
     else:
+        day_range = days-2*ceil(abs(days)/5+1)
         wideindex = pd.bdate_range(
-            df.index.min()+datetime.timedelta(days=days+ceil(days/7)*2+1), df.index.max())
+            df.index.min()+dt.timedelta(days=day_range), df.index.max())
         df_new = df.reindex(wideindex)
         return df_new.shift(days).dropna()
