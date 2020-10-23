@@ -124,7 +124,7 @@ class Ichimoku(indicator):
         #  Kijun sen line
         kijunSen = (n26high+n26low)/2
         # Chikou Span
-        chikouSpan = TimeShift(chikouSpan, -26)
+        chikouSpan = TimeShift(close, -26)
         # Senkou Span A
         senkouSpanA = TimeShift((tenkanSen+kijunSen)/2, 26)
         # Senkou Span B
