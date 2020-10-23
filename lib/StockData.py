@@ -353,19 +353,23 @@ class StockData():
     def PlotCandle(self, ax):
         quotes = self.dataSubset
         mpfplot(quotes, type='candle', ax=ax, style='yahoo')
+        self.PlotPriceLine(ax, self.dataSubset['Close'])
 
     def PlotPriceLine(self, ax, price):
         '''
          price - dataframe/series with price values and indexes,
         '''
+        pos = price.index.get_loc(price.index.max())
+        # Draw line
         priceLine = CreateHorizontalLine(
-            price.index, price.values[-1], price.values[-1])
-        xindex = toNumIndex(self.dataSubset.index, priceLine)
+            price.index, price.values[pos], price.values[pos])
+        xindex = toNumIndex(price.index, priceLine)
         ax.plot(xindex, priceLine, '--', color='#000000',
                 linewidth=1.0, alpha=0.6)
+        # Draw annotation
         bbox_props = dict(boxstyle='larrow,pad=0.3',
                           fc='w', ec='0.5', alpha=0.6)
-        ax.annotate('%2.2f' % priceLine.values[-1], xy=(xindex[0], priceLine.values[-1]),
+        ax.annotate('%2.2f' % price.values[pos], xy=(pos, price.values[pos]),
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
 
     def AddReturnRatesAxle(self, ax, data=None):
