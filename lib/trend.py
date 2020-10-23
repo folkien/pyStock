@@ -200,9 +200,7 @@ class trend(indicator):
             # Add annotations
             if (iterator >= lastIterator) and (annotate == True):
                 # Calc coordinates of annotation
-                x = self.toNumIndex(trend)[int(len(trend.index)/2)]
-#                 x = (mdates.date2num(
-#                     trend.index[-1])+mdates.date2num(trend.index[0]))/2
+                x = (self.toNumIndex(trend)[-1]+self.toNumIndex(trend)[0])/2
                 y = (trend.values[-1]+trend.values[0])/2
                 # week slope converted to int with rounding 2 decimal places
                 weekSlope = int((a*7)*100)
