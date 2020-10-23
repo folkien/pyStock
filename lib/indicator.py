@@ -35,6 +35,10 @@ class indicator(object):
         indexEnd = max(self.index.max(), df.index.max())
         wideindex = pd.bdate_range(indexBegin, indexEnd)
         result = [wideindex.get_loc(i) for i in df.index]
+        # subtract beginging offset
+        if (self.index.min() > indexBegin):
+            offset = len(pd.bdate_range(indexBegin, self.index.min())) - 1
+            result = [(r - offset) for r in result]
         return result
 
     def GetName(self):
