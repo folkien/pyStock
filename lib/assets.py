@@ -8,16 +8,15 @@ from filelock import FileLock
 from lib.jsonModule import jsonRead, jsonWrite
 
 
-def PlotAsset(ax, asset):
-    dt = datetime.datetime.strptime(asset['date'], '%d-%m-%Y')
+def PlotAsset(ax, xpos, asset):
     if (asset['operation'] == 'buy'):
-        ax.plot_date(dt, asset['price'], 'o', color='k', ms=10)
-        ax.plot_date(dt, asset['price'], 'o', color='w', ms=8)
-        ax.plot_date(dt, asset['price'], 'v', color='g', label='Asset in')
+        ax.plot(xpos, asset['price'], 'o', color='k', ms=10)
+        ax.plot(xpos, asset['price'], 'o', color='w', ms=8)
+        ax.plot(xpos, asset['price'], 'v', color='g', label='Asset in')
     else:
-        ax.plot_date(dt, asset['price'], 's', color='k', ms=10)
-        ax.plot_date(dt, asset['price'], 's', color='w', ms=8)
-        ax.plot_date(dt, asset['price'], '^', color='r', label='Asset out')
+        ax.plot(xpos, asset['price'], 's', color='k', ms=10)
+        ax.plot(xpos, asset['price'], 's', color='w', ms=8)
+        ax.plot(xpos, asset['price'], '^', color='r', label='Asset out')
 
 
 def ReportAsset(file, asset, currentClosePrice, currencySymbol):
