@@ -228,23 +228,25 @@ class StockData():
         f.write('\n')
 
         # Stock momentum indicators
-        f.write(
-            '## Momentum indicators.\nIf price is oversold or overbought. Range -100 to 100.\n\n')
-        for indicator in self.indicators['momentum']:
-            f.write('* %s %u %s.\n' % (indicator.GetName(),
-                                       indicator.GetUnifiedValue(),
-                                       self.FormatUnifiedIndicator(indicator.GetUnifiedValue(), True)))
+        if ('momentum' in self.indicators):
+            f.write(
+                '## Momentum indicators.\nIf price is oversold or overbought. Range -100 to 100.\n\n')
+            for indicator in self.indicators['momentum']:
+                f.write('* %s %u %s.\n' % (indicator.GetName(),
+                                           indicator.GetUnifiedValue(),
+                                           self.FormatUnifiedIndicator(indicator.GetUnifiedValue(), True)))
 
-        f.write('\n')
+            f.write('\n')
 
         # Stock trend indicators
-        f.write(
-            '## Trend indicators.\nIf trend is rising or falling, strong or weak.\n\n')
-        for indicator in self.indicators['trend']:
-            f.write('* %s %u %s.\n' % (indicator.GetName(), indicator.GetUnifiedValue(),
-                                       self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
+        if ('trend' in self.indicators):
+            f.write(
+                '## Trend indicators.\nIf trend is rising or falling, strong or weak.\n\n')
+            for indicator in self.indicators['trend']:
+                f.write('* %s %u %s.\n' % (indicator.GetName(), indicator.GetUnifiedValue(),
+                                           self.FormatUnifiedIndicator(indicator.GetUnifiedValue())))
 
-        f.write('\n')
+            f.write('\n')
 
     # Report current assets
     def ReportAssets(self, file):
