@@ -306,8 +306,10 @@ class StockData():
     # Plot assets
     def PlotAllAssets(self, ax):
         for asset in self.assets:
-            xpos = self.data['Close'].index.get_loc(asset['date'])
-            PlotAsset(ax, xpos, asset)
+            dt = datetime.datetime.strptime(asset['date'], '%d-%M-%Y')
+            if ((dt >= self.beginDate) and (dt <= self.endDate)):
+                xpos = self.data['Close'].index.get_loc(asset['date'])
+                PlotAsset(ax, xpos, asset)
 
     # Plot assets
     def PlotAssets(self):
