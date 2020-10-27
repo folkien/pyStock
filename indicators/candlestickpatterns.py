@@ -15,12 +15,12 @@ class CandlestickPatterns(indicator):
 
     def __init(self, dataframe):
         ''' Create CandlestickPatterns indicator '''
-#         self.patterns.append(candlestick.bearish_engulfing(
-#             dataframe, target='result'))
+        self.patterns.append(candlestick.bearish_engulfing(
+            dataframe, target='result'))
         self.patterns.append(candlestick.bearish_harami(
             dataframe, target='result'))
-#         self.patterns.append(candlestick.bullish_engulfing(
-#             dataframe, target='result'))
+        self.patterns.append(candlestick.bullish_engulfing(
+            dataframe, target='result'))
         self.patterns.append(candlestick.bullish_harami(
             dataframe, target='result'))
         self.patterns.append(candlestick.dark_cloud_cover(
