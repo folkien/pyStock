@@ -11,7 +11,7 @@ import numpy
 from helpers.DataOperations import SetReindex, CreateHorizontalLine, CreateVerticalLine
 from mplfinance import plot as mpfplot
 from core.database import StockDatabase
-from helpers.data import toNumIndex
+from helpers.data import toNumIndex, GenerateOHLCSawFunction
 from pandas_datareader import data
 from core.assets import ReportAsset, PlotAsset
 
@@ -21,6 +21,7 @@ from core.assets import ReportAsset, PlotAsset
 class StockData():
 
     def __init__(self, stockCode, beginDate='1990-01-01', endDate=datetime.datetime.now().strftime('%Y-%m-%d')):
+        self.specialStockCodes = ['#saw']
         self.assets = []
         self.symbol = 'zł'
         self.stockCode = stockCode
@@ -114,6 +115,10 @@ class StockData():
     def FetchData(self, stockCode, beginDate, endDate):
         rxData = ''
 
+        # Check special codes
+        if (self.__isSpecialStockCode(stockCode)):
+            rxData = self.__getSpecialStock(stockCode, beginDate, endDate)
+
         # Read from database if exists today file
         if (len(rxData) == 0) and (self.cache.IsOfTodaySession(stockCode) == True):
             print('Restoring today cache...')
@@ -138,6 +143,17 @@ class StockData():
         self.cache.Save(stockCode, rxData)
 
         return rxData
+
+    def __isSpecialStockCode(self, stockCode):
+        ''' Checks special code. '''
+        return (stockCode in self.specialStockCodes)
+
+    def __getSpecialStock(self, stockCode, beginDate, endDate):
+        ''' Checks special code. '''
+        if (stockCode == '#saw'):
+            return GenerateOHLCSawFunction(pd.bdate_range(beginDate, endDate))
+        else:
+            return None
 
     def Colorify(self, value):
         if type(value) in (float, numpy.float64):

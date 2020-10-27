@@ -40,7 +40,8 @@ def TimeShift(df, days):
             df.index.min()+dt.timedelta(days=day_range), df.index.max())
         df_new = df.reindex(wideindex)
         return df_new.shift(days).dropna()
-    
+
+
 def toNumIndex(index, df):
     ''' Changed df index to numbers index
         calculated from base DateTime
@@ -54,5 +55,36 @@ def toNumIndex(index, df):
         offset = len(pd.bdate_range(indexBegin, index.min())) - 1
         result = [(r - offset) for r in result]
     return result
-  
-    
+
+
+def GenerateOHLCSawFunction(index, period=26):
+    ''' Generates dataframe with OHLC saw function.'''
+    direction = 1
+    value = 0
+
+    open = []
+    high = []
+    low = []
+    close = []
+    volume = []
+
+    for i in range(len(index)):
+        # Generate data
+        if (direction == 1):
+            low.append(value)
+            open.append(value+1)
+            close.append(value+2)
+            high.append(value+3)
+        else:
+            low.append(value)
+            open.append(value+2)
+            close.append(value+1)
+            high.append(value+3)
+        volume.append(1)
+
+        # increment
+        value += direction
+        if (i % period == 0):
+            direction *= -1
+
+    return pd.DataFrame(list(zip(open, high, low, close, volume)), columns=['Open', 'High', 'Low', 'Close', 'Volume']).set_index(index)
