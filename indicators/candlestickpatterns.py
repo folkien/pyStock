@@ -15,12 +15,12 @@ class CandlestickPatterns(indicator):
 
     def __init(self, dataframe):
         ''' Create CandlestickPatterns indicator '''
-        self.patterns.append(candlestick.bearish_engulfing(
-            dataframe, target='result'))
+#         self.patterns.append(candlestick.bearish_engulfing(
+#             dataframe, target='result'))
         self.patterns.append(candlestick.bearish_harami(
             dataframe, target='result'))
-        self.patterns.append(candlestick.bullish_engulfing(
-            dataframe, target='result'))
+#         self.patterns.append(candlestick.bullish_engulfing(
+#             dataframe, target='result'))
         self.patterns.append(candlestick.bullish_harami(
             dataframe, target='result'))
         self.patterns.append(candlestick.dark_cloud_cover(
@@ -29,8 +29,10 @@ class CandlestickPatterns(indicator):
         self.patterns.append(candlestick.doji(dataframe, target='result'))
         self.patterns.append(candlestick.dragonfly_doji(
             dataframe, target='result'))
-#         self.patterns.append(candlestick.evening_star_doji(dataframe, target='result'))
-#         self.patterns.append(candlestick.evening_star(dataframe, target='result'))
+        self.patterns.append(candlestick.evening_star_doji(
+            dataframe, target='result'))
+        self.patterns.append(candlestick.evening_star(
+            dataframe, target='result'))
         self.patterns.append(candlestick.gravestone_doji(
             dataframe, target='result'))
         self.patterns.append(candlestick.hammer(dataframe, target='result'))
@@ -64,14 +66,14 @@ class CandlestickPatterns(indicator):
             color = 'r'
         # Set position
         x = self.toNumIndex(dt)
-        y = value
+        y = value - 0.1*value
         # Set text
-        text = '%s.%s' % (ptype, pname)
+        text = '%s' % (pname)
         # Draw
         bbox_props = dict(boxstyle='larrow,pad=0.3',
-                          fc=color, ec='0.5', alpha=0.6)
+                          fc=color, ec='0.5', alpha=0.3)
         plt.annotate(text, xy=(x, y), xytext=(
-            0, -30), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=-90)
+            0, 0), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=-90)
 
     def Plot(self, ax):
         ''' Plotting method.'''

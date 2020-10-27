@@ -8,6 +8,7 @@ class BullishHarami(CandlestickFinder):
     def logic(self, idx):
         candle = self.data.iloc[idx]
         prev_candle = self.data.iloc[idx + 1 * self.multi_coeff]
+        next_candle = self.data.iloc[idx - 1 * self.multi_coeff]
 
         close = candle[self.close_column]
         open = candle[self.open_column]
@@ -19,6 +20,8 @@ class BullishHarami(CandlestickFinder):
         prev_high = prev_candle[self.high_column]
         prev_low = prev_candle[self.low_column]
 
+        next_low = next_candle[self.low_column]
+
         # return (prev_close < prev_open and
         #        abs(prev_close - prev_open) / (prev_high - prev_low) >= 0.7
         #        and 0.3 > abs(close - open) / (high - low) >= 0.1
@@ -27,4 +30,4 @@ class BullishHarami(CandlestickFinder):
 
         return (prev_open > prev_close and
                 prev_close <= open < close <= prev_open and
-                close - open < prev_open - prev_close)
+                close - open < prev_open - prev_close) and (next_low > low)

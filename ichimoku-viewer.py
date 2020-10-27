@@ -198,9 +198,9 @@ candlepatterns.Plot(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
 plt.legend(loc='upper left')
-plt.minorticks_on()
+# plt.minorticks_on()
 plt.grid(b=True, which='major', axis='both', color='k')
-plt.grid(b=True, which='minor', axis='both')
+# plt.grid(b=True, which='minor', axis='both')
 # Add return rates axle
 stockData.AddReturnRatesAxle(plot9)
 
