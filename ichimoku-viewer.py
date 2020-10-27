@@ -83,6 +83,8 @@ parser.add_argument('-M', '--lastMonth', action='store_true',
                     required=False, help='Last Month')
 parser.add_argument('-W', '--lastWeek', action='store_true',
                     required=False, help='Last Week')
+parser.add_argument('-p', '--patterns', action='store_true',
+                    required=False, help='Find price action patterns')
 parser.add_argument('-g', '--plotToFile', action='store_true',
                     required=False, help='Plot to file')
 parser.add_argument('-r', '--reports', action='store_true',
@@ -182,7 +184,8 @@ zigzag = ZigZag(stockData.GetData('Open'),
                 stockData.GetData('Low'),
                 stockData.GetData('Close')
                 )
-candlepatterns = CandlestickPatterns(stockData.GetData())
+if (args.patterns):
+    candlepatterns = CandlestickPatterns(stockData.GetData())
 
 # PLOT 5
 # #####################################################
@@ -193,7 +196,8 @@ plot9 = plt.subplot(1, 1, 1)
 stockData.PlotAssets()
 ichimoku.Plot(plot9)
 stockData.PlotCandle(plot9)
-candlepatterns.Plot(plot9)
+if (args.patterns):
+    candlepatterns.Plot(plot9)
 # zigzag.Plot(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
