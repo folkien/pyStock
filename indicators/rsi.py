@@ -4,7 +4,7 @@ import pandas as pd
 import numpy
 from helpers.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
 from core.indicator import indicator
-from lib.trend import trend
+from indicators.trend import trend
 
 
 class RSI(indicator):

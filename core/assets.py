@@ -45,7 +45,7 @@ class Asset(object):
         self.isInitialized = False
 
     def Init(self):
-        from lib.StockData import StockData
+        from indicators.StockData import StockData
         stock = StockData(self.data['code'])
         self.currentPrice = stock.GetValue()
         self.originalValue = self.data['price'] * self.data['number']

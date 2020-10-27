@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 from helpers.DataOperations import FindIntersections, CreateHorizontalLine
 from core.indicator import indicator
-from lib.trend import trend
+from indicators.trend import trend
 
 
 def CreateStoch(high, low, close, n=14, d_n=3):

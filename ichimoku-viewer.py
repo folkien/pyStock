@@ -12,11 +12,11 @@ from helpers.DataOperations import *
 from core.ReportSignals import *
 from core.TimeInterval import *
 from core.assets import StockAssets, ReportAsset
-from lib.StockData import StockData
+from indicators.StockData import StockData
 from helpers.data import toNumIndex
 import matplotlib.dates as mdates
-from lib.ichimoku import Ichimoku
-from lib.zigzag import ZigZag
+from indicators.ichimoku import Ichimoku
+from indicators.zigzag import ZigZag
 
 # Create plot figures file
 

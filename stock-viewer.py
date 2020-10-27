@@ -12,22 +12,22 @@ from helpers.DataOperations import *
 from core.ReportSignals import *
 from core.TimeInterval import *
 from core.assets import StockAssets, ReportAsset
-from lib.StockData import StockData
+from indicators.StockData import StockData
 from helpers.data import toNumIndex
 import matplotlib.dates as mdates
-from lib.WilliamsAlligator import CreateWilliamsAlligator
-from lib.macd import CreateMACD
-from lib.rsi import RSI
-from lib.cci import CreateCCI
-from lib.stoch import CreateStoch
-from lib.bollinger import CreateBollinger
-from lib.atr import CreateATR
-from lib.dmi import CreateDMI
-from lib.ichimoku import Ichimoku
-from lib.zigzag import ZigZag
-from lib.cmf import CreateChaikinMoneyFlow
-from lib.moneyflowindex import CreateMoneyFlowIndex
-from lib.trend import trend
+from indicators.WilliamsAlligator import CreateWilliamsAlligator
+from indicators.macd import CreateMACD
+from indicators.rsi import RSI
+from indicators.cci import CreateCCI
+from indicators.stoch import CreateStoch
+from indicators.bollinger import CreateBollinger
+from indicators.atr import CreateATR
+from indicators.dmi import CreateDMI
+from indicators.ichimoku import Ichimoku
+from indicators.zigzag import ZigZag
+from indicators.cmf import CreateChaikinMoneyFlow
+from indicators.moneyflowindex import CreateMoneyFlowIndex
+from indicators.trend import trend
 
 # Create plot figures file
 

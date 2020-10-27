@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 from helpers.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
 from core.indicator import indicator
-from lib.trend import trend
+from indicators.trend import trend
 
 # Creates MACD object
 
