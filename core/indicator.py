@@ -30,7 +30,11 @@ class indicator(object):
         ''' Changed df index to numbers index
             calculated from base DateTime
         '''
-        return toNumIndex(self.index, df)
+        import pandas as pd
+        if (type(df) == pd.DataFrame) or (type(df) == pd.Series):
+            return toNumIndex(self.index, df)
+        else:
+            return self.index.get_loc(df)
 
     def GetName(self):
         '''
