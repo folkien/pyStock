@@ -3,7 +3,7 @@ from indicators.candlestick.patterns.candlestick_finder import CandlestickFinder
 
 class InvertedHammer(CandlestickFinder):
     def __init__(self, target=None):
-        super().__init__(self.get_class_name(), 1, target=target)
+        super().__init__(self.get_class_name(), 1, target=target, type='buy')
 
     def logic(self, idx):
         candle = self.data.iloc[idx]

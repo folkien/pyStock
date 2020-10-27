@@ -56,11 +56,20 @@ class CandlestickPatterns(indicator):
 
     def __plotPattern(self, pname, ptype, dt, value):
         ''' Plot pattern.'''
+        # Set color
+        color = 'w'
+        if (ptype == 'buy'):
+            color = 'g'
+        elif (ptype == 'sell'):
+            color = 'r'
+        # Set position
         x = self.toNumIndex(dt)
         y = value
+        # Set text
         text = '%s.%s' % (ptype, pname)
+        # Draw
         bbox_props = dict(boxstyle='larrow,pad=0.3',
-                          fc='w', ec='0.5', alpha=0.6)
+                          fc=color, ec='0.5', alpha=0.6)
         plt.annotate(text, xy=(x, y), xytext=(
             0, -30), textcoords='offset points', fontsize=8, bbox=bbox_props, rotation=-90)
 
