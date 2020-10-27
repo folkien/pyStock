@@ -16,7 +16,7 @@ executionIntervals = ['weekly', 'daily']
 configFile = 'config/viewer.json'
 recipientsFile = 'config/recipients.json'
 # report file path
-reportFile = 'plots/report.md'
+reportFile = 'output/report.md'
 # Size of report file with no data or header data
 reportFileEmptySize = 0
 entries = []
@@ -122,8 +122,8 @@ def ReportsAppend(filepath, data):
 def ReportsClean(filepath):
     global reportFileEmptySize
     with FileLock(filepath + '.lock', timeout=lockTimeout):
-        os.system('rm -rf plots/report.md*')
-        os.system('rm -rf plots/*.svg')
+        os.system('rm -rf output/report.md*')
+        os.system('rm -rf output/*.svg')
 
         # Create file for reports with header
         with open(filepath, 'w') as f:
@@ -147,11 +147,11 @@ def ReportsIsAnyting(filepath):
 
 
 def ReportsToHTML(filepath):
-    os.system('make -C plots/ html')
+    os.system('make -C output/ html')
 
 
 def ReportsToPDF(filepath):
-    os.system('make -C plots/ htmltopdf')
+    os.system('make -C output/ htmltopdf')
 
 
 def ReportsMail(recipient, filepath):
@@ -159,7 +159,7 @@ def ReportsMail(recipient, filepath):
     print('Mail %s to %s.' % (filepath, recipient))
     currentDate = datetime.date.today()
     # Send email with attamchents through mutt smtp
-    os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report %s for %s' -a plots/report.pdf -- %s < %s" %
+    os.system("mutt -e 'set content_type=text/html' -s '[Stock] Report %s for %s' -a output/report.pdf -- %s < %s" %
               (args.execute, currentDate.strftime('%d/%m/%Y'), recipient, filepath))
 
 

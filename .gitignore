@@ -110,5 +110,6 @@ venv.bak/
 .mypy_cache/
 
 plots/*
+output/*
 config/*
 .settings/

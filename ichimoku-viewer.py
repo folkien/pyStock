@@ -56,8 +56,8 @@ def ReportGraphs(f):
 # #####################################################
 lockTimeout = 5 * 60
 executionIntervals = ['monthly', 'weekly', 'daily']
-reportFile = 'plots/report.md'
-plotsPath = 'plots/'
+reportFile = 'output/report.md'
+plotsPath = 'output/'
 outputExtension = '.svg'
 
 # Varaables

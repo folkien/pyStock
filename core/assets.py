@@ -98,7 +98,7 @@ class Asset(object):
 # Stock Assets class
 class StockAssets(object):
 
-    def __init__(self, filepath='config/assets.json', extraReportFile='plots/assets.md'):
+    def __init__(self, filepath='config/assets.json', extraReportFile='output/assets.md'):
         self.assets = []
         self.lockTimeout = 5 * 60
         self.isModified = False
