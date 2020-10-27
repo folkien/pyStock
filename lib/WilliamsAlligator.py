@@ -1,7 +1,7 @@
 # Add import from parent directory possible
 import matplotlib.pyplot as plt
-from lib.DataOperations import CreateMovingAverage, FindIntersections
-from lib.indicator import indicator
+from helpers.DataOperations import CreateMovingAverage, FindIntersections
+from core.indicator import indicator
 
 # Creation of Williams for data
 

@@ -1,8 +1,8 @@
 # Add import from parent directory possible
 import matplotlib.pyplot as plt
 import pandas as pd
-from lib.DataOperations import CreateMovingAverage, CreateMovingStd, FindIntersections, CreateHorizontalLine
-from lib.indicator import indicator
+from helpers.DataOperations import CreateMovingAverage, CreateMovingStd, FindIntersections, CreateHorizontalLine
+from core.indicator import indicator
 # Creates CCI object
 
 

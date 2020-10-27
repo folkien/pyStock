@@ -5,7 +5,7 @@ Created on 29 lut 2020
 import datetime
 import random
 from filelock import FileLock
-from lib.jsonModule import jsonRead, jsonWrite
+from helpers.jsonModule import jsonRead, jsonWrite
 
 
 def PlotAsset(ax, xpos, asset):

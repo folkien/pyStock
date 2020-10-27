@@ -1,7 +1,7 @@
 # Add import from parent directory possible
 import matplotlib.pyplot as plt
-from lib.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
-from lib.indicator import indicator
+from helpers.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
+from core.indicator import indicator
 from lib.trend import trend
 
 # Creates MACD object

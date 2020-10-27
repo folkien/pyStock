@@ -3,10 +3,10 @@ import sys
 import pandas as pd
 import numpy
 import matplotlib.pyplot as plt
-from lib.DataOperations import *
-from lib.ReportSignals import *
-from lib.Stock import *
-from lib.indicator import indicator
+from helpers.DataOperations import *
+from core.ReportSignals import *
+from helpers.Stock import *
+from core.indicator import indicator
 
 # Creates MoneyFlowIndex object
 

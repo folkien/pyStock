@@ -30,8 +30,8 @@
 
 # Add import from parent directory possible
 import matplotlib.pyplot as plt
-from lib.DataOperations import FindIntersections, CreateHorizontalLine
-from lib.indicator import indicator
+from helpers.DataOperations import FindIntersections, CreateHorizontalLine
+from core.indicator import indicator
 
 # Creates ChaikinMoneyFlow object
 

@@ -2,8 +2,8 @@
 from helpers.data import TimeShift
 import matplotlib.pyplot as plt
 import pandas as pd
-from lib.DataOperations import FindIntersections, CreateVerticalLine
-from lib.indicator import indicator
+from helpers.DataOperations import FindIntersections, CreateVerticalLine
+from core.indicator import indicator
 import datetime
 
 

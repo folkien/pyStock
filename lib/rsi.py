@@ -2,8 +2,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy
-from lib.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
-from lib.indicator import indicator
+from helpers.DataOperations import CreateSubsetByValues, FindIntersections, CreateHorizontalLine
+from core.indicator import indicator
 from lib.trend import trend
 
 

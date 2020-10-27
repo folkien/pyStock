@@ -1,6 +1,6 @@
 # Add import from parent directory possible
 import matplotlib.pyplot as plt
-from lib.indicator import indicator
+from core.indicator import indicator
 
 
 class IchimokuWaves(indicator):

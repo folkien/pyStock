@@ -10,7 +10,7 @@ import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from lib.indicator import indicator
+from core.indicator import indicator
 
 
 class trend(indicator):

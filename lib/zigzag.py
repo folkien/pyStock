@@ -2,7 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from helpers.algebra import PointInBetween
-from lib.indicator import indicator
+from core.indicator import indicator
 
 
 def CreateZigZagPoints(price, high, low, minSegSize=5, slopes=[1, -1]):

@@ -6,9 +6,9 @@ import datetime
 import json
 import os
 from filelock import Timeout, FileLock
-from lib.jsonModule import *
-from lib.htmlModule import *
-from lib.assets import *
+from helpers.jsonModule import *
+from helpers.htmlModule import *
+from core.assets import *
 
 # Lock timeout is 5 minutes
 lockTimeout = 5 * 60

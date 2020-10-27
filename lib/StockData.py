@@ -8,12 +8,12 @@ import sys
 import datetime
 import pandas as pd
 import numpy
-from lib.DataOperations import SetReindex, CreateHorizontalLine, CreateVerticalLine
+from helpers.DataOperations import SetReindex, CreateHorizontalLine, CreateVerticalLine
 from mplfinance import plot as mpfplot
-from lib.database import StockDatabase
+from core.database import StockDatabase
 from helpers.data import toNumIndex
 from pandas_datareader import data
-from lib.assets import ReportAsset, PlotAsset
+from core.assets import ReportAsset, PlotAsset
 
 # StockData object which creates StockData data
 

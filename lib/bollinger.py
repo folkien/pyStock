@@ -1,7 +1,7 @@
 # Add import from parent directory possible
 import matplotlib.pyplot as plt
-from lib.DataOperations import FindIntersections, CreateSubsetByValues
-from lib.indicator import indicator
+from helpers.DataOperations import FindIntersections, CreateSubsetByValues
+from core.indicator import indicator
 # Creates  object
 
 
