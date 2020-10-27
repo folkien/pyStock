@@ -3,8 +3,9 @@ from pandas.api.types import is_numeric_dtype
 
 
 class CandlestickFinder(object):
-    def __init__(self, name, required_count, target=None):
+    def __init__(self, name, required_count, target=None, type=''):
         self.name = name
+        self.type = type
         self.required_count = required_count
         self.close_column = 'close'
         self.open_column = 'open'
@@ -49,18 +50,14 @@ class CandlestickFinder(object):
 
             else:
                 self.multi_coeff = -1
-
                 for row in range(0, rows_len, 1):
-
                     if row >= self.required_count - 1:
-                        results.append([idxs[row], self.logic(row)])
-                    else:
-                        results.append([idxs[row], None])
+                        if (self.logic(row) == True):
+                            results.append([idxs[row], candles_df['Low'][row]])
 
-            candles_df = candles_df.join(pd.DataFrame(results, columns=['row', self.target]).set_index('row'),
-                                         how='outer')
-
-            return candles_df
+            return {'name': self.name,
+                    'type': self.type,
+                    'data': pd.DataFrame(results, columns=['row', self.target]).set_index('row')}
         else:
             raise Exception('Data is not prepared to detect patterns')
 

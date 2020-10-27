@@ -267,11 +267,11 @@ class StockData():
             return pd.DataFrame()
 
     # Get named data
-    def GetData(self, name):
+    def GetData(self, name=None):
         if (name in self.dataSubset.columns):
             return self.dataSubset[name]
         else:
-            return pd.DataFrame()
+            return self.dataSubset
 
     # Get all assets
     def GetAllAssets(self):

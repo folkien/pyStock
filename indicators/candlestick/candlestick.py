@@ -1,7 +1,7 @@
 import re
 
 __builders = dict()
-__default_ohlc = ['open', 'high', 'low', 'close']
+__default_ohlc = ['Open', 'High', 'Low', 'Close']
 
 
 def __get_file_name(class_name):
@@ -21,7 +21,7 @@ def __load_module(module_path):
 
 def __get_class_by_name(class_name):
     file_name = __get_file_name(class_name)
-    mod_name = 'candlestick.patterns.' + file_name
+    mod_name = 'indicators.candlestick.patterns.' + file_name
 
     if mod_name not in __builders:
         module = __load_module(mod_name)

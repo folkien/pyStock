@@ -1,4 +1,4 @@
-from candlestick.patterns.candlestick_finder import CandlestickFinder
+from indicators.candlestick.patterns.candlestick_finder import CandlestickFinder
 
 
 class MorningStarDoji(CandlestickFinder):

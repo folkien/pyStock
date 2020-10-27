@@ -16,6 +16,7 @@ from indicators.StockData import StockData
 from helpers.data import toNumIndex
 import matplotlib.dates as mdates
 from indicators.ichimoku import Ichimoku
+from indicators.candlestickpatterns import CandlestickPatterns
 from indicators.zigzag import ZigZag
 
 # Create plot figures file
@@ -181,6 +182,7 @@ zigzag = ZigZag(stockData.GetData('Open'),
                 stockData.GetData('Low'),
                 stockData.GetData('Close')
                 )
+candlepatterns = CandlestickPatterns(stockData.GetData())
 
 # PLOT 5
 # #####################################################
@@ -191,6 +193,7 @@ plot9 = plt.subplot(1, 1, 1)
 stockData.PlotAssets()
 ichimoku.Plot(plot9)
 stockData.PlotCandle(plot9)
+candlepatterns.Plot(plot9)
 # zigzag.Plot(plot9)
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
