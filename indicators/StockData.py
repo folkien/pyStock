@@ -11,7 +11,7 @@ import numpy
 from helpers.DataOperations import SetReindex, CreateHorizontalLine, CreateVerticalLine
 from mplfinance import plot as mpfplot
 from core.database import StockDatabase
-from helpers.data import toNumIndex, GenerateOHLCSawFunction
+from helpers.data import toNumIndex, GenerateOHLCSawFunction, GenerateOHLCTrapezeFunction
 from pandas_datareader import data
 from core.assets import ReportAsset, PlotAsset
 
@@ -21,7 +21,7 @@ from core.assets import ReportAsset, PlotAsset
 class StockData():
 
     def __init__(self, stockCode, beginDate='1990-01-01', endDate=datetime.datetime.now().strftime('%Y-%m-%d')):
-        self.specialStockCodes = ['#saw']
+        self.specialStockCodes = ['#saw', '#trapeze']
         self.assets = []
         self.symbol = 'zł'
         self.stockCode = stockCode
@@ -152,6 +152,8 @@ class StockData():
         ''' Checks special code. '''
         if (stockCode == '#saw'):
             return GenerateOHLCSawFunction(pd.bdate_range(beginDate, endDate))
+        elif (stockCode == '#trapeze'):
+            return GenerateOHLCTrapezeFunction(pd.bdate_range(beginDate, endDate))
         else:
             return None
 

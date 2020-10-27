@@ -88,3 +88,46 @@ def GenerateOHLCSawFunction(index, period=26):
             direction *= -1
 
     return pd.DataFrame(list(zip(open, high, low, close, volume)), columns=['Open', 'High', 'Low', 'Close', 'Volume']).set_index(index)
+
+
+def GenerateOHLCTrapezeFunction(index, period=26):
+    ''' Generates dataframe with OHLC saw function.'''
+    direction = 1
+    value = 0
+
+    open = []
+    high = []
+    low = []
+    close = []
+    volume = []
+
+    for i in range(len(index)):
+        # Generate data
+        if (direction == 1):
+            low.append(value)
+            open.append(value+1)
+            close.append(value+2)
+            high.append(value+3)
+        elif (direction == -1):
+            low.append(value)
+            open.append(value+2)
+            close.append(value+1)
+            high.append(value+3)
+        else:
+            low.append(value)
+            open.append(value+1)
+            close.append(value+2)
+            high.append(value+3)
+        volume.append(1)
+
+        # increment
+        value += direction
+        if (i % period == 0):
+            if (direction == -1):
+                direction = 0
+            elif direction == 0:
+                direction = 1
+            elif direction == 1:
+                direction = -1
+
+    return pd.DataFrame(list(zip(open, high, low, close, volume)), columns=['Open', 'High', 'Low', 'Close', 'Volume']).set_index(index)
