@@ -135,10 +135,10 @@ def FindIntersections(x, y, dropna=True):
     signs = numpy.sign(diffrence.values)
     for i in range(1, len(signs)):
         # Bottom crossing
-        if (signs[i] == 1) and (signs[i - 1] == -1):
+        if (signs[i] == 1) and (signs[i - 1] != 1):
             fromBottom['value'][diffrence.index[i]] = x.values[i]
         # Top crossing
-        elif (signs[i] == -1) and (signs[i - 1] == 1):
+        elif (signs[i] == -1) and (signs[i - 1] != -1):
             fromTop['value'][diffrence.index[i]] = x.values[i]
 
     if (dropna == True):
