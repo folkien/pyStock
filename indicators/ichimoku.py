@@ -16,6 +16,7 @@ class Ichimoku(indicator):
         self.tenkanSen, self.kijunSen, self.chikouSpan, self.senkouSpanA, self.senkouSpanB = self.__initIchimoku(
             open, high, low, close)
         self.low = low
+        self.signals = pd.DataFrame(columns=['value', 'type', 'name'])
 
         # Range
         self.pmax = close.max()
@@ -27,43 +28,38 @@ class Ichimoku(indicator):
 
         # Tenkan sen and kijun sen
         fromBottom, fromTop = FindIntersections(self.tenkanSen, self.kijunSen)
-        self.buy = fromBottom
-        self.sell = fromTop
+        self.__filterAppendSignals('TK', fromBottom, fromTop)
 
         # ClosePrice and kijun sen
         fromBottom, fromTop = FindIntersections(close, self.kijunSen)
-        self.buy = self.buy.append(fromBottom)
-        self.sell = self.sell.append(fromTop)
+        self.__filterAppendSignals('cK', fromBottom, fromTop)
 
         # Senkou Span cross
         fromBottom, fromTop = FindIntersections(
             self.senkouSpanA, self.senkouSpanB, dropna=False)
-        self.buy = self.buy.append(fromBottom.shift(-26).dropna())
-        self.sell = self.sell.append(fromTop.shift(-26).dropna())
+        self.__filterAppendSignals(
+            'ss', fromBottom.shift(-26).dropna(), fromTop.shift(-26).dropna())
 
         # Chikou Span cross
         fromBottom, fromTop = FindIntersections(
             self.chikouSpan, close, dropna=False)
-        # Store original signals positions
-        self.buyChikou = fromBottom
-        self.sellChikou = fromTop
-        # Append to group
-        self.buy = self.buy.append(fromBottom.shift(26).dropna())
-        self.sell = self.sell.append(fromTop.shift(26).dropna())
-
-        self.buyweak, self.buyneutral, self.buystrong = self.__filterSignalsByKumo(
-            self.buy)
-        self.sellweak, self.sellneutral, self.sellstrong = self.__filterSignalsByKumo(
-            self.sell)
+        self.__filterAppendSignals('Cc', fromBottom.shift(
+            26).dropna(), fromTop.shift(26).dropna())
 
         # Kumo Breakout
         kumoTop = pd.concat([self.senkouSpanA, self.senkouSpanB]).max(level=0)
         kumoBottom = pd.concat(
             [self.senkouSpanA, self.senkouSpanB]).min(level=0)
         fromBottom, fromTop = FindIntersections(close, kumoTop)
-        self.buyneutral = self.buyneutral.append(fromBottom)
+        self.__appendSignals('KB', 'buy', fromBottom)
         fromBottom, fromTop = FindIntersections(close, kumoBottom)
-        self.sellneutral = self.sellneutral.append(fromTop)
+        self.__appendSignals('KB', 'sell', fromTop)
+
+    def __appendSignals(self, name, type, df):
+        ''' Append signals to self signals dataframe.'''
+        df['type'] = type
+        df['name'] = name
+        self.signals = self.signals.append(df)
 
     def __filterSignalsByKumo(self, signals):
         ''' Filter signals with position based on Kumo'''
@@ -105,6 +101,17 @@ class Ichimoku(indicator):
                 low = low.append(pd.DataFrame({'value': value}, index=[index]))
 
         return low, middle, high
+
+    def __filterAppendSignals(self, name, sigbuy, sigsell):
+        ''' Append signals to self signals dataframe.'''
+        buyweak, buy, buystrong = self.__filterSignalsByKumo(sigbuy)
+        self.__appendSignals(name, 'buyweak', buyweak)
+        self.__appendSignals(name, 'buy', buy)
+        self.__appendSignals(name, 'buystrong', buystrong)
+        sellweak, sell, sellstrong = self.__filterSignalsByKumo(sigsell)
+        self.__appendSignals(name, 'sellweak', sellweak)
+        self.__appendSignals(name, 'sell', sell)
+        self.__appendSignals(name, 'sellstrong', sellstrong)
 
     def __initIchimoku(self, open, high, low, close):
         ''' Create Ichimoku indicator '''
