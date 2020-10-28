@@ -59,7 +59,7 @@ def toNumIndex(index, df):
 
 def GenerateOHLCSawFunction(index, period=26):
     ''' Generates dataframe with OHLC saw function.'''
-    direction = 1
+    direction = -1
     value = 0
 
     open = []
@@ -92,7 +92,7 @@ def GenerateOHLCSawFunction(index, period=26):
 
 def GenerateOHLCTrapezeFunction(index, period=26):
     ''' Generates dataframe with OHLC saw function.'''
-    direction = 1
+    direction = -1
     value = 0
 
     open = []
