@@ -28,22 +28,22 @@ class Ichimoku(indicator):
 
         # Tenkan sen and kijun sen
         fromBottom, fromTop = FindIntersections(self.tenkanSen, self.kijunSen)
-        self.__filterAppendSignals('TK', fromBottom, fromTop)
+        self.__filterAppendSignals('TenKij', fromBottom, fromTop)
 
         # ClosePrice and kijun sen
         fromBottom, fromTop = FindIntersections(close, self.kijunSen)
-        self.__filterAppendSignals('cK', fromBottom, fromTop)
+        self.__filterAppendSignals('CloseKij', fromBottom, fromTop)
 
         # Senkou Span cross
         fromBottom, fromTop = FindIntersections(
             self.senkouSpanA, self.senkouSpanB, dropna=False)
         self.__filterAppendSignals(
-            'ss', fromBottom.shift(-26).dropna(), fromTop.shift(-26).dropna())
+            'KumoChg', fromBottom.shift(-26).dropna(), fromTop.shift(-26).dropna())
 
         # Chikou Span cross
         fromBottom, fromTop = FindIntersections(
             self.chikouSpan, close, dropna=False)
-        self.__filterAppendSignals('Cc', fromBottom.shift(
+        self.__filterAppendSignals('ChiClose', fromBottom.shift(
             26).dropna(), fromTop.shift(26).dropna())
 
         # Kumo Breakout
@@ -51,9 +51,9 @@ class Ichimoku(indicator):
         kumoBottom = pd.concat(
             [self.senkouSpanA, self.senkouSpanB]).min(level=0)
         fromBottom, fromTop = FindIntersections(close, kumoTop)
-        self.__appendSignals('KB', 'buy', fromBottom)
+        self.__appendSignals('KumoBr', 'buy', fromBottom)
         fromBottom, fromTop = FindIntersections(close, kumoBottom)
-        self.__appendSignals('KB', 'sell', fromTop)
+        self.__appendSignals('KumoBr', 'sell', fromTop)
 
     def __appendSignals(self, name, type, df):
         ''' Append signals to self signals dataframe.'''
@@ -154,9 +154,43 @@ class Ichimoku(indicator):
         ax.annotate('%d' % days, xy=(self.toNumIndex(line)[0], line.values[0]),
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
 
-    # Plot method
+    def __plotSignal(self, pname, ptype, dt, value):
+        ''' Plot pattern.'''
+        # Set color
+        color = 'w'
+        alpha = 0.3
+        if (ptype == 'buyweak'):
+            color = 'g'
+            alpha = 0.3
+        elif (ptype == 'buy'):
+            color = 'g'
+            alpha = 0.6
+        elif (ptype == 'buystrong'):
+            color = 'g'
+            alpha = 1
+        elif (ptype == 'sellweak'):
+            color = 'r'
+            alpha = 0.3
+        elif (ptype == 'sell'):
+            color = 'r'
+            alpha = 0.6
+        elif (ptype == 'sellstrong'):
+            color = 'r'
+            alpha = 1
+        # Set position
+        x = self.toNumIndex(dt)
+        y = value
+        # Set text
+        text = '%s' % (pname)
+        # Draw
+        bbox_props = dict(boxstyle='circle,pad=0.3',
+                          fc=color, ec='0.1', alpha=alpha)
+        plt.annotate(text, xy=(x, y), xycoords='data', xytext=(
+            0, 0), textcoords='offset points', fontsize=4,
+            bbox=bbox_props, rotation=0)
 
     def Plot(self, ax):
+        ''' Plot method.'''
         # Lines
         plt.plot(self.toNumIndex(self.tenkanSen), self.tenkanSen, linewidth=1.2,
                  color='#FF0000', label=('Tenkan(9d) - 1.Resistance'))
@@ -188,34 +222,8 @@ class Ichimoku(indicator):
                  linewidth=1.0, color='#91CC13', label='Senkou B(52d)')
 
         # Signals plottting
-        if (self.buyweak is not None and self.buyweak.size):
-            plt.plot(self.toNumIndex(self.buyweak), self.buyweak,
-                     'o', color='#000000', ms=6)
-            plt.plot(self.toNumIndex(self.buyweak), self.buyweak,
-                     'o', color='#53ff4a', ms=4)
-        if (self.buyneutral is not None and self.buyneutral.size):
-            plt.plot(self.toNumIndex(self.buyneutral), self.buyneutral,
-                     'o', color='#000000', ms=8)
-            plt.plot(self.toNumIndex(self.buyneutral), self.buyneutral,
-                     'o', color='#00FF00', ms=6)
-        if (self.buystrong is not None and self.buystrong.size):
-            plt.plot(self.toNumIndex(self.buystrong), self.buystrong,
-                     'o', color='#000000', ms=12)
-            plt.plot(self.toNumIndex(self.buystrong), self.buystrong,
-                     'o', color='#006b07', ms=10)
-
-        if (self.sellweak is not None and self.sellweak.size):
-            plt.plot(self.toNumIndex(self.sellweak), self.sellweak,
-                     'o', color='#000000', ms=6)
-            plt.plot(self.toNumIndex(self.sellweak), self.sellweak,
-                     'o', color='#ff4a4a', ms=4)
-        if (self.sellneutral is not None and self.sellneutral.size):
-            plt.plot(self.toNumIndex(self.sellneutral), self.sellneutral,
-                     'o', color='#000000', ms=8)
-            plt.plot(self.toNumIndex(self.sellneutral), self.sellneutral,
-                     'o', color='#FF0000', ms=6)
-        if (self.sellstrong is not None and self.sellstrong.size):
-            plt.plot(self.toNumIndex(self.sellstrong), self.sellstrong,
-                     'o', color='#000000', ms=12)
-            plt.plot(self.toNumIndex(self.sellstrong), self.sellstrong,
-                     'o', color='#8f0000', ms=10)
+        for i in range(len(self.signals)):
+            self.__plotSignal(self.signals['name'][i],
+                              self.signals['type'][i],
+                              self.signals.index[i],
+                              self.signals['value'][i])

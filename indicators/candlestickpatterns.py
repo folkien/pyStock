@@ -56,7 +56,7 @@ class CandlestickPatterns(indicator):
     def ExportSignals(self, reportSignals):
         ''' No indicators to Export.'''
 
-    def __plotPattern(self, pname, ptype, dt, value):
+    def __plotSignal(self, pname, ptype, dt, value):
         ''' Plot pattern.'''
         # Set color
         color = 'w'
@@ -79,5 +79,5 @@ class CandlestickPatterns(indicator):
         ''' Plotting method.'''
         for pattern in self.patterns:
             for i in range(len(pattern['data'])):
-                self.__plotPattern(
+                self.__plotSignal(
                     pattern['name'], pattern['type'], pattern['data'].index[i], pattern['data'].values[i])
