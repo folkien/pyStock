@@ -184,14 +184,20 @@ class Ichimoku(indicator):
         y_low = self.tenkanSen.values.min()
         # Set text
         text = '%s' % (pname)
-        # Draw
+
+        # Draw bubble with number
         bbox_props = dict(boxstyle='circle,pad=0.3',
                           fc=color, ec='0.1', alpha=alpha)
         plt.annotate('%u' % level, xy=(x, y), xycoords='data',
                      xytext=(0, 0), textcoords='offset points', fontsize=8,
                      bbox=bbox_props, rotation=0)
-        plt.axvline(x=x, ymax=0.3, color=color, alpha=alpha, linewidth=1)
 
+        # Draw line between bubble and text
+        line = CreateVerticalLine(x, y_low, y)
+        plt.plot(line.index, line, '--',
+                 linewidth=.5, color=color, alpha=alpha)
+
+        # Draw descritption text
         bbox_props = dict(boxstyle='round,pad=0.1',
                           fc=color, ec='0.1', alpha=alpha)
         plt.annotate(text, xy=(x, y_low), xycoords='data',
