@@ -28,22 +28,22 @@ class Ichimoku(indicator):
 
         # Tenkan sen and kijun sen
         fromBottom, fromTop = FindIntersections(self.tenkanSen, self.kijunSen)
-        self.__filterAppendSignals('TenKij', fromBottom, fromTop)
+        self.__filterAppendSignals('TenKij', 1, fromBottom, fromTop)
 
         # ClosePrice and kijun sen
         fromBottom, fromTop = FindIntersections(close, self.kijunSen)
-        self.__filterAppendSignals('CloseKij', fromBottom, fromTop)
+        self.__filterAppendSignals('CloseKij', 0, fromBottom, fromTop)
 
         # Senkou Span cross
         fromBottom, fromTop = FindIntersections(
             self.senkouSpanA, self.senkouSpanB, dropna=False)
         self.__filterAppendSignals(
-            'KumoChg', fromBottom.shift(-26).dropna(), fromTop.shift(-26).dropna())
+            'KumoChg', 4, fromBottom.shift(-26).dropna(), fromTop.shift(-26).dropna())
 
         # Chikou Span cross
         fromBottom, fromTop = FindIntersections(
             self.chikouSpan, close, dropna=False)
-        self.__filterAppendSignals('ChiClose', fromBottom.shift(
+        self.__filterAppendSignals('ChiClose', 2, fromBottom.shift(
             26).dropna(), fromTop.shift(26).dropna())
 
         # Kumo Breakout
@@ -51,14 +51,15 @@ class Ichimoku(indicator):
         kumoBottom = pd.concat(
             [self.senkouSpanA, self.senkouSpanB]).min(level=0)
         fromBottom, fromTop = FindIntersections(close, kumoTop)
-        self.__appendSignals('KumoBr', 'buy', fromBottom)
+        self.__appendSignals('KumoBr', 'buy', 3, fromBottom)
         fromBottom, fromTop = FindIntersections(close, kumoBottom)
-        self.__appendSignals('KumoBr', 'sell', fromTop)
+        self.__appendSignals('KumoBr', 'sell', 3, fromTop)
 
-    def __appendSignals(self, name, type, df):
+    def __appendSignals(self, name, type, level, df):
         ''' Append signals to self signals dataframe.'''
         df['type'] = type
         df['name'] = name
+        df['level'] = level
         self.signals = self.signals.append(df)
 
     def __filterSignalsByKumo(self, signals):
@@ -102,16 +103,16 @@ class Ichimoku(indicator):
 
         return low, middle, high
 
-    def __filterAppendSignals(self, name, sigbuy, sigsell):
+    def __filterAppendSignals(self, name, level, sigbuy, sigsell):
         ''' Append signals to self signals dataframe.'''
         buyweak, buy, buystrong = self.__filterSignalsByKumo(sigbuy)
-        self.__appendSignals(name, 'buyweak', buyweak)
-        self.__appendSignals(name, 'buy', buy)
-        self.__appendSignals(name, 'buystrong', buystrong)
+        self.__appendSignals(name, 'buyweak', level, buyweak)
+        self.__appendSignals(name, 'buy', level,  buy)
+        self.__appendSignals(name, 'buystrong', level,  buystrong)
         sellweak, sell, sellstrong = self.__filterSignalsByKumo(sigsell)
-        self.__appendSignals(name, 'sellweak', sellweak)
-        self.__appendSignals(name, 'sell', sell)
-        self.__appendSignals(name, 'sellstrong', sellstrong)
+        self.__appendSignals(name, 'sellweak', level,  sellweak)
+        self.__appendSignals(name, 'sell', level,  sell)
+        self.__appendSignals(name, 'sellstrong', level,  sellstrong)
 
     def __initIchimoku(self, open, high, low, close):
         ''' Create Ichimoku indicator '''
@@ -154,7 +155,7 @@ class Ichimoku(indicator):
         ax.annotate('%d' % days, xy=(self.toNumIndex(line)[0], line.values[0]),
                     xytext=(15, -3), textcoords='offset points', bbox=bbox_props)
 
-    def __plotSignal(self, pname, ptype, dt, value):
+    def __plotSignal(self, pname, ptype, level, dt, value):
         ''' Plot pattern.'''
         # Set color
         color = 'w'
@@ -186,7 +187,7 @@ class Ichimoku(indicator):
         # Draw
         bbox_props = dict(boxstyle='circle,pad=0.3',
                           fc=color, ec='0.1', alpha=alpha)
-        plt.annotate(' ', xy=(x, y), xycoords='data',
+        plt.annotate('%u' % level, xy=(x, y), xycoords='data',
                      xytext=(0, 0), textcoords='offset points', fontsize=8,
                      bbox=bbox_props, rotation=0)
         plt.axvline(x=x, ymax=0.3, color=color, alpha=alpha, linewidth=1)
@@ -233,5 +234,6 @@ class Ichimoku(indicator):
         for i in range(len(self.signals)):
             self.__plotSignal(self.signals['name'][i],
                               self.signals['type'][i],
+                              self.signals['level'][i],
                               self.signals.index[i],
                               self.signals['value'][i])
