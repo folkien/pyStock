@@ -180,14 +180,22 @@ class Ichimoku(indicator):
         # Set position
         x = self.toNumIndex(dt)
         y = value
+        y_low = self.tenkanSen.values.min()
         # Set text
         text = '%s' % (pname)
         # Draw
         bbox_props = dict(boxstyle='circle,pad=0.3',
                           fc=color, ec='0.1', alpha=alpha)
-        plt.annotate(text, xy=(x, y), xycoords='data', xytext=(
-            0, 0), textcoords='offset points', fontsize=4,
-            bbox=bbox_props, rotation=0)
+        plt.annotate(' ', xy=(x, y), xycoords='data',
+                     xytext=(0, 0), textcoords='offset points', fontsize=8,
+                     bbox=bbox_props, rotation=0)
+        plt.axvline(x=x, ymax=0.3, color=color, alpha=alpha, linewidth=1)
+
+        bbox_props = dict(boxstyle='round,pad=0.1',
+                          fc=color, ec='0.1', alpha=alpha)
+        plt.annotate(text, xy=(x, y_low), xycoords='data',
+                     xytext=(0, 0), textcoords='offset points', fontsize=8,
+                     bbox=bbox_props, rotation=-90)
 
     def Plot(self, ax):
         ''' Plot method.'''
