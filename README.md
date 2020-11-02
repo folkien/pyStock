@@ -1,4 +1,4 @@
-![image](doc/GOOG.US_2.svg)
+![image](doc/title.png)
 
 [![Build Status](https://travis-ci.com/folkien/pyStock.svg?branch=master)](https://travis-ci.com/folkien/pyStock)
 ![License](https://img.shields.io/github/license/folkien/pyStock)
@@ -285,7 +285,7 @@ The simplest way is to install using Docker
    }
    ```
 
-   
+
 
 # License
 
