@@ -1,3 +1,5 @@
+![image](doc/GOOG.US_2.svg)
+
 [![Build Status](https://travis-ci.com/folkien/pyStock.svg?branch=master)](https://travis-ci.com/folkien/pyStock)
 ![License](https://img.shields.io/github/license/folkien/pyStock)
 ![Size](https://img.shields.io/github/repo-size/folkien/pyStock)
