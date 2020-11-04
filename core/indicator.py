@@ -33,8 +33,7 @@ class indicator(object):
         import pandas as pd
         if (type(df) == pd.DataFrame) or (type(df) == pd.Series):
             return toNumIndex(self.index, df)
-        else:
-            return self.index.get_loc(df)
+        return self.index.get_loc(df)
 
     def GetName(self):
         '''

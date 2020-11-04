@@ -24,8 +24,7 @@ class trend(indicator):
         '''Init trend based on given data'''
         if (self.type == 'rising'):
             return self.FindUptrends(data)
-        else:
-            return self.FindDowntrends(data)
+        return self.FindDowntrends(data)
 
     @staticmethod
     def FindMaxPeaks(data, n=7):

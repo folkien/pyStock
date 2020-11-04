@@ -60,7 +60,6 @@ class StockDatabase(object):
                 # if session ended then check if file is after session
                 if (currentHour >= 18):
                     return (fileHour >= 18)
-                else:
-                    return True
+                return True
 
         return False

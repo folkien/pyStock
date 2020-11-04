@@ -62,9 +62,7 @@ class DMI(indicator):
         # If trend rising is stronger
         if (self.dip.values[-1] >= self.din.values[-1]):
             return (self.dip.values[-1] * self.adx.values[-1]) / 1000
-        # else if falling trend is stronger
-        else:
-            return (self.din.values[-1] * self.adx.values[-1]) / 1000
+        return (self.din.values[-1] * self.adx.values[-1]) / 1000
 
     # Plot method
     def Plot(self):
