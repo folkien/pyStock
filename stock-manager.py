@@ -232,15 +232,15 @@ for i in range(len(entries)):
         entryPrint(entry)
 
     if (args.execute is not None):
-        if (entryExecute(entry, args.execute) != True):
+        if (entryExecute(entry, args.execute) is True):
             ForceExit('Execution failed!')
 
 # 4. Write entries if were changed
 # #####################################################33
-if (dataIsChanged == True):
+if (dataIsChanged is True):
     jsonWrite(configFile, entries)
 
-if (recipientsIsChanged == True):
+if (recipientsIsChanged is True):
     jsonWrite(recipientsFile, recipients)
 
 # 5. Finish execution

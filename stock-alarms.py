@@ -161,7 +161,7 @@ for i in range(len(alarms)):
             close = panel_data['Close']
             price = close[-1]
 
-            if (alarmCheck(price, alarm) == True):
+            if (alarmCheck(price, alarm) is True):
                 alarmsIsChanged = True
         else:
             print('No Stooq data for entry!')
@@ -169,5 +169,5 @@ for i in range(len(alarms)):
 
 # 4. Write alarms if were changed
 # #####################################################33
-if (alarmsIsChanged == True):
+if (alarmsIsChanged is True):
     alarmsWrite()

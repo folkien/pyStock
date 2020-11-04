@@ -76,7 +76,7 @@ class htmlFetcher:
 
     def Process(self):
         'Do all work and return extracted selection'
-        if (self.fetchHtmlData() == True):
+        if (self.fetchHtmlData() is True):
             selection = self.getSelection()
             self.clean()
             return selection

@@ -198,7 +198,7 @@ class trend(indicator):
                          color=tColor, linewidth=tLinewidth)
 
             # Add annotations
-            if (iterator >= lastIterator) and (annotate == True):
+            if (iterator >= lastIterator) and (annotate is True):
                 # Calc coordinates of annotation
                 x = (self.toNumIndex(trend)[-1]+self.toNumIndex(trend)[0])/2
                 y = (trend.values[-1]+trend.values[0])/2
