@@ -31,7 +31,7 @@ class indicator(object):
             calculated from base DateTime
         '''
         import pandas as pd
-        if (type(df) == pd.DataFrame) or (type(df) == pd.Series):
+        if (type(df) is pd.DataFrame) or (type(df) is pd.Series):
             return toNumIndex(self.index, df)
         return self.index.get_loc(df)
 

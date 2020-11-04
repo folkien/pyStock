@@ -33,7 +33,7 @@ class ReportSignals():
 
     # set begin timestamp
     def SetBeginTimestamp(self, timestamp):
-        if (type(timestamp) == datetime.datetime):
+        if (type(timestamp) is datetime.datetime):
             self.beginTimestamp = timestamp
 
     # set stock Code for report
