@@ -4,7 +4,7 @@
 '''
 
 
-class CountryInfo(object):
+class CountryInfo():
 
     def __init__(self, stockCode):
         defaultCountry = 'pl'

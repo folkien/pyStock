@@ -7,7 +7,7 @@ Created on 12 maj 2020
 from helpers.data import toNumIndex
 
 
-class indicator(object):
+class indicator():
     '''
     classdocs
     '''

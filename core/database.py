@@ -13,7 +13,7 @@ from filelock import FileLock
 lockTimeout = 5 * 60
 
 
-class StockDatabase(object):
+class StockDatabase():
 
     def __init__(self):
         self.directory = 'database/'
