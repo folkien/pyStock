@@ -1,7 +1,5 @@
 # Add import from parent directory possible
-import sys
 import pandas as pd
-import numpy
 import matplotlib.pyplot as plt
 from helpers.DataOperations import *
 from core.ReportSignals import *

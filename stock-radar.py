@@ -2,15 +2,9 @@
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import matplotlib.pyplot as plt
 import pandas as pd
-import sys
 import os
 import argparse
-import datetime
-import numpy
-from filelock import Timeout, FileLock
-from pandas_datareader import data
-from numpy import NaN
-from matplotlib import gridspec
+from filelock import FileLock
 from bs4 import BeautifulSoup
 
 # Lock timeout is 5 minutes

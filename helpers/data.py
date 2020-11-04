@@ -3,8 +3,6 @@ Created on 22 paź 2020
 
 @author: spasz
 '''
-
-import pytest
 import pandas as pd
 import datetime as dt
 from math import ceil

@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-import pandas as pd
 import sys
 import argparse
 import datetime
-import json
 import os
-from filelock import Timeout, FileLock
+from filelock import FileLock
 from helpers.jsonModule import *
 from helpers.htmlModule import *
 from core.assets import *
