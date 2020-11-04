@@ -5,15 +5,12 @@ import sys
 import os
 import argparse
 import datetime
-from filelock import Timeout, FileLock
-from matplotlib import gridspec
 from core.CountryInfo import CountryInfo
 from helpers.DataOperations import *
 from core.ReportSignals import *
 from core.TimeInterval import *
-from core.assets import StockAssets, ReportAsset
+from core.assets import StockAssets
 from indicators.StockData import StockData
-from helpers.data import toNumIndex
 import matplotlib.dates as mdates
 from indicators.ichimoku import Ichimoku
 from indicators.candlestickpatterns import CandlestickPatterns

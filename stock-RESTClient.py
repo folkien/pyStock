@@ -1,6 +1,5 @@
 from helpers.Stock import *
 from flask_restful import Resource, Api, reqparse
-import json
 from waitress import serve
 from flask import Flask, Response
 import pandas as pd
