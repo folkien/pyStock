@@ -5,8 +5,10 @@ from helpers.algebra import PointInBetween
 from core.indicator import indicator
 
 
-def CreateZigZagPoints(price, high, low, minSegSize=5, slopes=[1, -1]):
+def CreateZigZagPoints(price, high, low, minSegSize=5, slopes=None):
     ''' Creates ZigZag points'''
+    if slopes is None:
+        slopes = [1, -1]
     curVal = price[0]
     curPos = price.index[0]
     curDir = 1
