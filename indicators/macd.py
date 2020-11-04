@@ -23,7 +23,8 @@ class MACD(indicator):
         self.hminus = CreateSubsetByValues(histogram, -100, 0)
 
     # Initializes MACD
-    def InitMACD(self, price):
+    @staticmethod
+    def InitMACD(price):
         exp1 = price.ewm(span=12, adjust=False).mean()
         exp2 = price.ewm(span=26, adjust=False).mean()
 

@@ -15,7 +15,8 @@ parser.add_argument('end_date', type=str, required=True, help='End date')
 
 
 class StockDataEP(Resource):
-    def get(self, stock_code, stock_index):
+    @staticmethod
+    def get(stock_code, stock_index):
         args = parser.parse_args()
         stockdata = StockData(stock_code, args['begin_date'], args['end_date'])
         d = {stock_index: stockdata.GetData(stock_index)}

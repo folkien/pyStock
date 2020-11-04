@@ -52,7 +52,8 @@ class StockData():
 
     # Change volumeTotal to neg/pos value
 
-    def InitVolume(self, price, volume):
+    @staticmethod
+    def InitVolume(price, volume):
         # Assert condition
         if (price.size != volume.size):
             return
@@ -148,7 +149,8 @@ class StockData():
         ''' Checks special code. '''
         return (stockCode in self.specialStockCodes)
 
-    def __getSpecialStock(self, stockCode, beginDate, endDate):
+    @staticmethod
+    def __getSpecialStock(stockCode, beginDate, endDate):
         ''' Checks special code. '''
         if (stockCode == '#saw'):
             return GenerateOHLCSawFunction(pd.bdate_range(beginDate, endDate))
@@ -157,7 +159,8 @@ class StockData():
         else:
             return None
 
-    def Colorify(self, value):
+    @staticmethod
+    def Colorify(value):
         if type(value) in (float, numpy.float64):
             if (value >= 0):
                 return "<span style='color:green'>**+%2.2f**</span>" % (value)
@@ -169,7 +172,8 @@ class StockData():
             else:
                 return "<span style='color:red'>**%u**</span>" % (value)
 
-    def FormatNumInt(self, value):
+    @staticmethod
+    def FormatNumInt(value):
         if (value >= 1000000):
             return ('%2.3fmln' % (value/1000000))
         elif (value >= 1000):
@@ -177,7 +181,8 @@ class StockData():
         else:
             return ('%u' % value)
 
-    def FormatUnifiedIndicator(self, value, inverted=False):
+    @staticmethod
+    def FormatUnifiedIndicator(value, inverted=False):
         if ((inverted == True) and (value < 0)) or ((inverted == False) and (value > 0)):
             return "<div style='border:1px solid black;float:left;'><div style='width:100px;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='background:green;width:%upx;height:20px;float:left'></div><div style='width:%upx;height:20px;float:left'></div></div><div style='clear:both'></div>" % (abs(value), 100-abs(value))
         else:
@@ -379,7 +384,8 @@ class StockData():
         mpfplot(quotes, type='candle', ax=ax, style='yahoo')
         self.PlotPriceLine(ax, self.dataSubset['Close'])
 
-    def PlotPriceLine(self, ax, price):
+    @staticmethod
+    def PlotPriceLine(ax, price):
         '''
          price - dataframe/series with price values and indexes,
         '''

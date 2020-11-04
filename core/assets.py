@@ -116,7 +116,8 @@ class StockAssets(object):
             jsonWrite(self.filepath, self.data)
             self.isModified = False
 
-    def GetRandomHash(self):
+    @staticmethod
+    def GetRandomHash():
         hash = random.getrandbits(128)
         hash_str = '%032x' % hash
         return hash_str

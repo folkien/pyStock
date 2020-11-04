@@ -51,11 +51,13 @@ class ReportSignals():
                 self.AddSignal(data.index[i], parentName, signalName)
 
     # Returns Allowed signals for no assets stock
-    def GetAllSignalTypes(self):
+    @staticmethod
+    def GetAllSignalTypes():
         return ['buy', 'NotSell', 'MayBuy', 'NotBuy', 'sell']
 
     # Returns Allowed signals for no assets stock
-    def GetBuySignalTypes(self):
+    @staticmethod
+    def GetBuySignalTypes():
         return ['buy', 'NotSell', 'MayBuy']
 
     # Report to file

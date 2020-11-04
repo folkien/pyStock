@@ -25,7 +25,8 @@ class RSI(indicator):
         self.fromBottom50, self.fromTop50 = FindIntersections(self.rsi, 50)
 
     # Set RSI indicator
-    def InitRSI(self, prices, n):
+    @staticmethod
+    def InitRSI(prices, n):
         deltas = numpy.diff(prices)
         seed = deltas[:n + 1]
         up = seed[seed >= 0].sum() / n

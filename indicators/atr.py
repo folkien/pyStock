@@ -48,7 +48,8 @@ class ATR(indicator):
         return tr, atr
 
     # Export indicator signals to report
-    def ExportSignals(self, reportSignals):
+    @staticmethod
+    def ExportSignals(reportSignals):
         return 0
 #             reportSignals.AddDataframeSignals(self.buy,"ATR","buy")
 #             reportSignals.AddDataframeSignals(self.sell,"ATR","sell")

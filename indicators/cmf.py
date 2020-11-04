@@ -53,7 +53,8 @@ class ChaikinMoneyFlow(indicator):
         self.toRise, self.toFall = FindIntersections(self.cosc, 0)
 
     # Set Chaikin MoneyFlow and Chaikin oscillator
-    def Init(self, high, low, close, volume, n):
+    @staticmethod
+    def Init(high, low, close, volume, n):
         # Money flow Volume
         N = ((close - low) - (high - close)) / (high - low)
         M = N * abs(volume)
@@ -73,7 +74,8 @@ class ChaikinMoneyFlow(indicator):
         return cmf, cosc
 
     # Export indicator signals to report
-    def ExportSignals(self, reportSignals):
+    @staticmethod
+    def ExportSignals(reportSignals):
         return 0
 #             reportSignals.AddDataframeSignals(self.buy, "MFI","buy")
 #             reportSignals.AddDataframeSignals(self.sell,"MFI","sell")

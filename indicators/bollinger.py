@@ -35,7 +35,8 @@ class Bollinger(indicator):
             self.absStd, self.variabilityLvl, 100)
 
     # Set Bollinger indicator
-    def InitBollinger(self, prices, n=20, k=2):
+    @staticmethod
+    def InitBollinger(prices, n=20, k=2):
         mavg = prices.rolling(window=n, min_periods=1).mean()
         std = prices.rolling(window=n, min_periods=1).std()
         upperBand = mavg + (std * 2)

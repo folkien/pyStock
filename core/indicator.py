@@ -48,7 +48,8 @@ class indicator(object):
         '''
         return self.type
 
-    def GetUnifiedValue(self):
+    @staticmethod
+    def GetUnifiedValue():
         '''
          Returns unified indicator value.
          To implement in indicator.

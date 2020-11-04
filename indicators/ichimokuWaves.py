@@ -10,7 +10,8 @@ class IchimokuWaves(indicator):
         indicator.__init__(self, 'IchimokuWaves', 'momentum')
         self.zigzag = self.__initIchimokuWaves(open, zigzag)
 
-    def __initIchimokuWaves(self, zigzag):
+    @staticmethod
+    def __initIchimokuWaves(zigzag):
         ''' Create IchimokuWaves indicator '''
 #         highPt = CreateIchimokuWavesPoints(high, slopes=[1])
 #         lowPt = CreateIchimokuWavesPoints(low, slopes=[-1])
