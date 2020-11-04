@@ -497,7 +497,7 @@ if (args.reports):
         reportSignals.Report(reportFile, reportAllSignalTypes)
 
         # If signals reported
-        if (reportSignals.reportedAnything == True) or (True):
+        if (reportSignals.reportedAnything is True) or (True):
             with open(reportFile, 'a+') as f:
                 stockData.Report(f, executionInterval)
                 stockData.ReportAssets(f)

@@ -51,7 +51,7 @@ class CandlestickFinder(object):
             else:
                 self.multi_coeff = -1
                 for row in range(self.required_count-1, rows_len-1):
-                    if (self.logic(row) == True):
+                    if (self.logic(row) is True):
                         results.append([idxs[row], candles_df['Low'][row]])
 
             return {'name': self.name,

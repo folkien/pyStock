@@ -63,7 +63,7 @@ class ReportSignals():
     # Report to file
     def Report(self, filepath, allSignalTypes=True):
         # Get allowed signals
-        if (allSignalTypes == True):
+        if (allSignalTypes is True):
             signalTypes = self.GetAllSignalTypes()
         else:
             signalTypes = self.GetBuySignalTypes()

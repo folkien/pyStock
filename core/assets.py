@@ -57,7 +57,7 @@ class Asset(object):
 
     #
     def IsReportable(self):
-        if (self.data['opened'] == False) and (self.data['operation'] == 'buy'):
+        if (self.data['opened'] is False) and (self.data['operation'] == 'buy'):
             return False
         return True
 
@@ -142,14 +142,14 @@ class StockAssets(object):
         # TODO Find sells
 
         # Save changes
-        if (self.isModified == True):
+        if (self.isModified is True):
             self.WriteAssets()
 
     def GetAssetsForStockCode(self, stockCode, onlyOpened=False, onlyBuy=False, onlySell=False):
         findAssets = []
         for entry in self.data:
             if ((entry['code'] == stockCode)
-                and ((onlyOpened == False) or (onlyOpened == True) and (entry['opened'] == True))
+                and ((onlyOpened is False) or (onlyOpened == True) and (entry['opened'] == True))
                 and ((onlyBuy == False) or (onlyBuy == True) and (entry['operation'] == 'buy'))
                     and ((onlySell == False) or (onlySell == True) and (entry['operation'] == 'sell'))):
                 findAssets.append(entry)

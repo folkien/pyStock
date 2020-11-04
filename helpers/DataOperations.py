@@ -11,7 +11,7 @@ from numpy import NaN
 def CreateHorizontalLine(indexes, startValue, endValue, allIndexes=False):
     data = pd.DataFrame()
     # Only start and begin
-    if (allIndexes == False):
+    if (allIndexes is False):
         data = data.append(pd.DataFrame(
             {'value': startValue}, index=[indexes[0]]))
         data = data.append(pd.DataFrame(
@@ -91,7 +91,7 @@ def SetReindex(data, start_date, end_date, fillna=True):
     # Reindexing will insert missing values (NaN) for the dates that were not present
     # in the original set. To cope with this, we can fill the missing by replacing them
     # with the latest available price for each instrument.
-    if (fillna == True):
+    if (fillna is True):
         data = data.fillna(method='ffill')
         data = data.dropna()
 
@@ -141,7 +141,7 @@ def FindIntersections(x, y, dropna=True):
         elif (signs[i] == -1) and (signs[i - 1] != -1):
             fromTop['value'][diffrence.index[i]] = x.values[i]
 
-    if (dropna == True):
+    if (dropna is True):
         return fromBottom.dropna(), fromTop.dropna()
     return fromBottom, fromTop
 
@@ -189,7 +189,7 @@ def FindPeaks(data, delta):
                 last_min = current
                 last_min_pos = i
 
-            if (search_max == True):
+            if (search_max is True):
                 # Save last max value
                 if (current < (last_max - delta)):
                     maxs = maxs.append(pd.DataFrame(
