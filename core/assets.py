@@ -149,7 +149,7 @@ class StockAssets(object):
         findAssets = []
         for entry in self.data:
             if ((entry['code'] == stockCode)
-                and ((onlyOpened is False) or (onlyOpened == True) and (entry['opened'] == True))
+                and ((onlyOpened is False) or (onlyOpened is True) and (entry['opened'] == True))
                 and ((onlyBuy == False) or (onlyBuy == True) and (entry['operation'] == 'buy'))
                     and ((onlySell == False) or (onlySell == True) and (entry['operation'] == 'sell'))):
                 findAssets.append(entry)

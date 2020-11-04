@@ -177,7 +177,7 @@ class StockData():
 
     @staticmethod
     def FormatUnifiedIndicator(value, inverted=False):
-        if ((inverted is True) and (value < 0)) or ((inverted == False) and (value > 0)):
+        if ((inverted is True) and (value < 0)) or ((inverted is False) and (value > 0)):
             return "<div style='border:1px solid black;float:left;'><div style='width:100px;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='background:green;width:%upx;height:20px;float:left'></div><div style='width:%upx;height:20px;float:left'></div></div><div style='clear:both'></div>" % (abs(value), 100-abs(value))
         return "<div style='border:1px solid black;float:left;'><div style='width:%upx;height:20px;float:left'></div><div style='background:red;width:%upx;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='width:100px;height:20px;float:left'></div></div><div style='clear:both'></div>" % (100-abs(value), abs(value))
 
