@@ -14,6 +14,7 @@ class htmlFetcher:
         self.htmlElement = element
         self.htmlElementClasses = classes
         self.text = ''
+        self.results = {}
         self.coding = 'utf-8'
 
     def fetchHtmlData(self):

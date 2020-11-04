@@ -42,6 +42,13 @@ class Asset():
     def __init__(self, jsonData):
         self.data = jsonData
         self.isInitialized = False
+        self.currentPrice = None
+        self.originalValue = None
+        self.currentValue = None
+        # money change
+        self.income = None
+        # percent chage
+        self.change = None
 
     def Init(self):
         from indicators.StockData import StockData
