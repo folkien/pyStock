@@ -161,18 +161,15 @@ def Filter(stocks):
         # Zmiany
         if 'Z3' in stocks:
             change = stocks['Z3'][i]
-            if (change > 100):
-                change = 100
+            change = min(100, change)
             rating += change * 0.33
         if 'Z6' in stocks:
             change = stocks['Z6'][i]
-            if (change > 100):
-                change = 100
+            change = min(100, change)
             rating += change * 0.33
         if 'Z12' in stocks:
             change = stocks['Z12'][i]
-            if (change > 100):
-                change = 100
+            change = min(100, change)
             rating += change * 0.33
 
         ratings.append(rating)
