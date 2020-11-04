@@ -117,8 +117,8 @@ class StockAssets(object):
 
     @staticmethod
     def GetRandomHash():
-        hash = random.getrandbits(128)
-        hash_str = '%032x' % hash
+        hashnum = random.getrandbits(128)
+        hash_str = '%032x' % hashnum
         return hash_str
 
     # TODO :
@@ -149,9 +149,9 @@ class StockAssets(object):
         findAssets = []
         for entry in self.data:
             if ((entry['code'] == stockCode)
-                and ((onlyOpened is False) or (onlyOpened is True) and (entry['opened'] == True))
-                and ((onlyBuy == False) or (onlyBuy == True) and (entry['operation'] == 'buy'))
-                    and ((onlySell == False) or (onlySell == True) and (entry['operation'] == 'sell'))):
+                and ((onlyOpened is False) or (onlyOpened is True) and (entry['opened'] is True))
+                and ((onlyBuy is False) or (onlyBuy is True) and (entry['operation'] == 'buy'))
+                    and ((onlySell is False) or (onlySell is True) and (entry['operation'] == 'sell'))):
                 findAssets.append(entry)
         return findAssets
 

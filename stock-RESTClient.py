@@ -1,4 +1,5 @@
 from helpers.Stock import *
+from indicators.StockData import StockData
 from flask_restful import Resource, Api, reqparse
 from waitress import serve
 from flask import Flask, Response

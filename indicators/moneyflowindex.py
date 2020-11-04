@@ -62,7 +62,6 @@ class MoneyFlowIndex(indicator):
 
         posFlowAvg = CreateMovingAverage(posFlow, n)
         negFlowAvg = CreateMovingAverage(negFlow, n)
-        moneyRatio = posFlowAvg / negFlowAvg
         moneyFlowIndex = (100 * posFlowAvg) / (posFlowAvg + negFlowAvg)
         return moneyFlow, posFlow, negFlow, moneyFlowIndex
 
@@ -91,12 +90,12 @@ class MoneyFlowIndex(indicator):
         # MoneyFlowIndex
         plt.plot(self.toNumIndex(self.mfi), self.mfi, label='MFI'
                  + str(self.n), linewidth=1.0, color='#000000')
-        x_axis = self.toNumIndex(self.mfi)
 
         # OverBought
         overBought = CreateHorizontalLine(self.mfi.index, 80, 80, True)
         plt.plot(self.toNumIndex(overBought), overBought, '--',
                  label='Overbought', linewidth=1.0, color='#940006')
+#         x_axis = self.toNumIndex(self.mfi)
 #             plt.fill_between(x_axis, self.mfi, overBought['value'],
 #                              where=self.mfi>overBought.values,color='#ffb3b3')
         # OverBought - Gene Quong and Avrum Soudack

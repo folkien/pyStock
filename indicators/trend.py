@@ -9,15 +9,14 @@ import numpy
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from core.indicator import indicator
 
 
 class trend(indicator):
 
-    def __init__(self, data, type='rising'):
+    def __init__(self, data, ttype='rising'):
         indicator.__init__(self, 'Trend', 'trend', data.index)
-        self.type = type
+        self.type = ttype
         self.trends = self.Init(data)
 
     def Init(self, data):
@@ -120,19 +119,19 @@ class trend(indicator):
     @staticmethod
     def GetDistances(t, y, a, b, posFactor=1, negFactor=1):
         '''
-         Calculates sum of distances between line(at+b) and set of values(t,y)
+         Calculates distSum of distances between line(at+b) and set of values(t,y)
          Positive/negative factors could be used to diffrent calculate points
          below/above line.
         '''
-        sum = 0
+        distSum = 0
         for i in range(0, len(t)):
             liney = a*t[i] + b
             delta = (y[i]-liney)
             if (delta >= 0):
-                sum += posFactor*abs(delta)
+                distSum += posFactor*abs(delta)
             else:
-                sum += negFactor*abs(delta)
-        return sum
+                distSum += negFactor*abs(delta)
+        return distSum
 
     def Plot(self, tColor='black', tName='rising', tLinewidth=0.8, annotate=False):
         ''' Plots all trends found trends '''

@@ -11,7 +11,6 @@ from core.ReportSignals import *
 from core.TimeInterval import *
 from core.assets import StockAssets
 from indicators.StockData import StockData
-import matplotlib.dates as mdates
 from indicators.ichimoku import Ichimoku
 from indicators.candlestickpatterns import CandlestickPatterns
 from indicators.zigzag import ZigZag
