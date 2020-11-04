@@ -37,7 +37,7 @@ def ReportAsset(file, asset, currentClosePrice, currencySymbol):
 # Class with single asset
 
 
-class Asset(object):
+class Asset():
 
     def __init__(self, jsonData):
         self.data = jsonData
@@ -95,7 +95,7 @@ class Asset(object):
 
 
 # Stock Assets class
-class StockAssets(object):
+class StockAssets():
 
     def __init__(self, filepath='config/assets.json', extraReportFile='output/assets.md'):
         self.assets = []

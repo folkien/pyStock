@@ -2,7 +2,7 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 
-class CandlestickFinder(object):
+class CandlestickFinder():
     def __init__(self, name, required_count, target=None, type=''):
         self.name = name
         self.type = type
