@@ -81,7 +81,7 @@ def alarmCheck(value, alarm):
         alarms[i]['state'] = AlarmState.Inactive
         return True
     # Check if alarm should be reseted!
-    elif ((alarm['state'] == AlarmState.Inactive) and (diffrence <= valueChangeReset)):
+    if ((alarm['state'] == AlarmState.Inactive) and (diffrence <= valueChangeReset)):
         print('Alarm reseted!')
         alarms[i]['state'] = AlarmState.Active
         return True

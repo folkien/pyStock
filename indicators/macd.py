@@ -43,8 +43,7 @@ class MACD(indicator):
         absmax = max(self.hplus.values.max(), abs(self.hminus.values.min()))
         if (self.macd.values[-1] >= self.signal.values[-1]):
             return (self.hplus.values[-1]*100/absmax)
-        else:
-            return (self.hminus.values[-1]*100/absmax)
+        return (self.hminus.values[-1]*100/absmax)
 
     # Plot MACD
 

@@ -46,9 +46,8 @@ class htmlFetcher:
                 print('Fetched %uB from %s.' % (len(data), self.url))
                 self.text = self.text.replace('\n', '')
                 return True
-            else:
-                print('No data for %s !' % (self.url))
-                return False
+            print('No data for %s !' % (self.url))
+            return False
 
         return False
 
@@ -60,14 +59,13 @@ class htmlFetcher:
         'Gets filteres selection'
         if (not self.text):
             return ''
-        else:
-            soup = BeautifulSoup(self.text, 'lxml')
-            selectionText = str(
-                soup.find(self.htmlElement, class_=self.htmlElementClasses))
-            # Correct selection links to add basename
-            selectionText = re.sub("href=\"\/", "href=\"%s/" %
-                                   (self.hostname), selectionText)
-            return selectionText
+        soup = BeautifulSoup(self.text, 'lxml')
+        selectionText = str(
+            soup.find(self.htmlElement, class_=self.htmlElementClasses))
+        # Correct selection links to add basename
+        selectionText = re.sub("href=\"\/", "href=\"%s/" %
+                               (self.hostname), selectionText)
+        return selectionText
 
     def clean(self):
         'Clean class local data'
@@ -80,8 +78,7 @@ class htmlFetcher:
             selection = self.getSelection()
             self.clean()
             return selection
-        else:
-            return 'Fetcher failed for %s.\n\n' % self.url
+        return 'Fetcher failed for %s.\n\n' % self.url
 
 # testDocument = htmlFetcher("https://www.bankier.pl/inwestowanie/profile/quote.html?symbol=ELZAB",
 #                            "div", "box300 boxGrey border3 right")

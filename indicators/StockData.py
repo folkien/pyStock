@@ -81,8 +81,7 @@ class StockData():
     def GetValue(self, column='Close', days=0):
         if (column is self.data.columns) and (days < len(self.data.index)):
             return self.data[column][days]
-        else:
-            return 0.0
+        return 0.0
 
     # Returns current close price
     def GetReturnRates(self, days=1, column='Close'):
@@ -90,8 +89,7 @@ class StockData():
             startPrice = self.data[column][days]
             endPrice = self.data[column][0]
             return ((endPrice - startPrice) * 100) / startPrice
-        else:
-            return 0
+        return 0
 
     # Returns current close price
     def GetStockCode(self):
@@ -154,39 +152,34 @@ class StockData():
         ''' Checks special code. '''
         if (stockCode == '#saw'):
             return GenerateOHLCSawFunction(pd.bdate_range(beginDate, endDate))
-        elif (stockCode == '#trapeze'):
+        if (stockCode == '#trapeze'):
             return GenerateOHLCTrapezeFunction(pd.bdate_range(beginDate, endDate))
-        else:
-            return None
+        return None
 
     @staticmethod
     def Colorify(value):
         if type(value) in (float, numpy.float64):
             if (value >= 0):
                 return "<span style='color:green'>**+%2.2f**</span>" % (value)
-            else:
-                return "<span style='color:red'>**%2.2f**</span>" % (value)
+            return "<span style='color:red'>**%2.2f**</span>" % (value)
         elif type(value) in (int, numpy.int64):
             if (value >= 0):
                 return "<span style='color:green'>**+%u**</span>" % (value)
-            else:
-                return "<span style='color:red'>**%u**</span>" % (value)
+            return "<span style='color:red'>**%u**</span>" % (value)
 
     @staticmethod
     def FormatNumInt(value):
         if (value >= 1000000):
             return ('%2.3fmln' % (value/1000000))
-        elif (value >= 1000):
+        if (value >= 1000):
             return ('%2.3fk' % (value/1000))
-        else:
-            return ('%u' % value)
+        return ('%u' % value)
 
     @staticmethod
     def FormatUnifiedIndicator(value, inverted=False):
         if ((inverted == True) and (value < 0)) or ((inverted == False) and (value > 0)):
             return "<div style='border:1px solid black;float:left;'><div style='width:100px;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='background:green;width:%upx;height:20px;float:left'></div><div style='width:%upx;height:20px;float:left'></div></div><div style='clear:both'></div>" % (abs(value), 100-abs(value))
-        else:
-            return "<div style='border:1px solid black;float:left;'><div style='width:%upx;height:20px;float:left'></div><div style='background:red;width:%upx;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='width:100px;height:20px;float:left'></div></div><div style='clear:both'></div>" % (100-abs(value), abs(value))
+        return "<div style='border:1px solid black;float:left;'><div style='width:%upx;height:20px;float:left'></div><div style='background:red;width:%upx;height:20px;float:left'></div><div style='background:black;width:5px;height:20px;float:left'></div><div style='width:100px;height:20px;float:left'></div></div><div style='clear:both'></div>" % (100-abs(value), abs(value))
 
     def Report(self, f, interval):
         # select number of days in interval
@@ -286,15 +279,13 @@ class StockData():
     def GetAllData(self, name):
         if (name in self.data.columns):
             return self.data[name]
-        else:
-            return pd.DataFrame()
+        return pd.DataFrame()
 
     # Get named data
     def GetData(self, name=None):
         if (name in self.dataSubset.columns):
             return self.dataSubset[name]
-        else:
-            return self.dataSubset
+        return self.dataSubset
 
     # Get all assets
     def GetAllAssets(self):

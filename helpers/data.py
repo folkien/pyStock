@@ -31,13 +31,11 @@ def TimeShift(df, days):
             df.index.min(), df.index.max()+dt.timedelta(days=day_range))
         df_new = df.reindex(wideindex)
         return df_new.shift(days).dropna()
-    # Shift left - negative
-    else:
-        day_range = days-2*ceil(abs(days)/5+1)
-        wideindex = pd.bdate_range(
-            df.index.min()+dt.timedelta(days=day_range), df.index.max())
-        df_new = df.reindex(wideindex)
-        return df_new.shift(days).dropna()
+    day_range = days-2*ceil(abs(days)/5+1)
+    wideindex = pd.bdate_range(
+        df.index.min()+dt.timedelta(days=day_range), df.index.max())
+    df_new = df.reindex(wideindex)
+    return df_new.shift(days).dropna()
 
 
 def toNumIndex(index, df):

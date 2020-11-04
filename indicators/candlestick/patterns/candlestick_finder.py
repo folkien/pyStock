@@ -57,8 +57,7 @@ class CandlestickFinder(object):
             return {'name': self.name,
                     'type': self.type,
                     'data': pd.DataFrame(results, columns=['row', self.target]).set_index('row')}
-        else:
-            raise Exception('Data is not prepared to detect patterns')
+        raise Exception('Data is not prepared to detect patterns')
 
     def prepare_data(self, candles_df, ohlc):
 
