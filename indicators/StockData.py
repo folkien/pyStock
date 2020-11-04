@@ -162,7 +162,7 @@ class StockData():
             if (value >= 0):
                 return "<span style='color:green'>**+%2.2f**</span>" % (value)
             return "<span style='color:red'>**%2.2f**</span>" % (value)
-        elif type(value) in (int, numpy.int64):
+        if type(value) in (int, numpy.int64):
             if (value >= 0):
                 return "<span style='color:green'>**+%u**</span>" % (value)
             return "<span style='color:red'>**%u**</span>" % (value)
