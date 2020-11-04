@@ -114,7 +114,8 @@ class Ichimoku(indicator):
         self.__appendSignals(name, 'sell', level,  sell)
         self.__appendSignals(name, 'sellstrong', level,  sellstrong)
 
-    def __initIchimoku(self, open, high, low, close):
+    @staticmethod
+    def __initIchimoku(open, high, low, close):
         ''' Create Ichimoku indicator '''
         n9high = high.rolling(window=9, min_periods=0).max()
         n9low = low.rolling(window=9, min_periods=0).min()

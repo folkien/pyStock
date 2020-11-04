@@ -44,7 +44,8 @@ class MoneyFlowIndex(indicator):
         return self.MoneyFlow
 
     # Set MoneyFlowIndex indicator
-    def InitMoneyFlow(self, tp, volume, n):
+    @staticmethod
+    def InitMoneyFlow(tp, volume, n):
         moneyFlow = tp * volume
         posFlow = pd.Series()
         negFlow = pd.Series()

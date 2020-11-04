@@ -30,7 +30,8 @@ class WilliamsAlligator(indicator):
 #             self.buy  = fromTop
 
     # Set Bollinger indicator
-    def Init(self, price):
+    @staticmethod
+    def Init(price):
         jaw = CreateMovingAverage(price, 13, 8)
         teeth = CreateMovingAverage(price, 8, 5)
         lips = CreateMovingAverage(price, 5, 3)

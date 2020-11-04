@@ -27,19 +27,22 @@ class trend(indicator):
         else:
             return self.FindDowntrends(data)
 
-    def FindMaxPeaks(self, data, n=7):
+    @staticmethod
+    def FindMaxPeaks(data, n=7):
         '''Return series of max points from given data'''
         maxs = data.iloc[signal.argrelextrema(
             data.values, numpy.greater_equal, order=n)[0]]
         return maxs
 
-    def FindMinPeaks(self, data, n=7):
+    @staticmethod
+    def FindMinPeaks(data, n=7):
         '''Return series of min points from given data'''
         mins = data.iloc[signal.argrelextrema(
             data.values, numpy.less_equal, order=n)[0]]
         return mins
 
-    def GetTrendDaysLength(self, trend):
+    @staticmethod
+    def GetTrendDaysLength(trend):
         ''' Returns trend days length '''
         delta = trend.index[-1]-trend.index[0]
         return delta.days
@@ -103,7 +106,8 @@ class trend(indicator):
 
         return downtrends
 
-    def ExtendedTrendForward(self, trend, days=7):
+    @staticmethod
+    def ExtendedTrendForward(trend, days=7):
         # Delta of values
         dy = trend[-1] - trend[-2]
         # Time delta in days
@@ -114,7 +118,8 @@ class trend(indicator):
         y = trend[-1] + days * (dy / dt)
         return trend.append(pd.Series(y, index=[t]))
 
-    def GetDistances(self, t, y, a, b, posFactor=1, negFactor=1):
+    @staticmethod
+    def GetDistances(t, y, a, b, posFactor=1, negFactor=1):
         '''
          Calculates sum of distances between line(at+b) and set of values(t,y)
          Positive/negative factors could be used to diffrent calculate points

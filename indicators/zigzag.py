@@ -52,7 +52,8 @@ class ZigZag(indicator):
         zigzag = self.__filterPointsInBetween(zigzag)
         return zigzag
 
-    def __filterPointsInBetween(self, zigzag):
+    @staticmethod
+    def __filterPointsInBetween(zigzag):
         ''' Remove points in between in zigzag.'''
         i = 1
         while (i < (len(zigzag.index)-1)):
