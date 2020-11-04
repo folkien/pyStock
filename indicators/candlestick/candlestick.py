@@ -1,6 +1,6 @@
 import re
 
-__builders = dict()
+__builders = {}
 __default_ohlc = ['Open', 'High', 'Low', 'Close']
 
 
