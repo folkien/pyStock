@@ -5,6 +5,7 @@ Created on 3 sty 2020
 '''
 import json
 import os
+import logging
 
 
 def jsonRead(filename):
@@ -13,7 +14,7 @@ def jsonRead(filename):
         with open(filename, 'r') as f:
             data = json.load(f)
     else:
-        print('(JsonModule) File not exists!')
+        logging.debug('(JsonModule) File not exists!')
     return data
 
 
@@ -21,9 +22,9 @@ def jsonWrite(filename, data):
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4, sort_keys=True)
         f.close()
-    print('Written %s.\n' % (filename))
+        logging.debug('Written %s.\n' % (filename))
 
 
 def jsonShow(data):
     for entry in data:
-        print(entry)
+        logging.debug(entry)
