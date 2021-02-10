@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # append to a dataframe a.append(pd.DataFrame({'close':99.99},index=[datetime.datetime.now()])
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
 import sys
 import os
 import argparse
@@ -12,6 +13,7 @@ from core.TimeInterval import *
 from core.assets import StockAssets
 from indicators.StockData import StockData
 from indicators.ichimoku import Ichimoku
+from indicators.ichimokuPhase import IchimokuPhase
 from indicators.candlestickpatterns import CandlestickPatterns
 from indicators.zigzag import ZigZag
 
@@ -175,6 +177,9 @@ ichimoku = Ichimoku(stockData.GetData('Open'),
                     stockData.GetData('Low'),
                     stockData.GetData('Close')
                     )
+ichimokuPhase = IchimokuPhase(ichimoku,
+                              stockData.GetData('Close')
+                              )
 zigzag = ZigZag(stockData.GetData('Open'),
                 stockData.GetData('High'),
                 stockData.GetData('Low'),
@@ -188,21 +193,28 @@ if (args.patterns):
 # #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
 
-plot9 = plt.subplot(1, 1, 1)
+# Main ichimoku plot
+Rows = 6
+gs = gridspec.GridSpec(Rows, 1)
+plot9 = plt.subplot(gs[0:5])
 stockData.PlotAssets()
 ichimoku.Plot(plot9)
 stockData.PlotCandle(plot9)
 if (args.patterns):
     candlepatterns.Plot(plot9)
-# zigzag.Plot(plot9)
+plt.grid(b=True, which='major', axis='both', color='k')
+
+# Bottom ichimoku phase indicator
+plot10 = plt.subplot(gs[Rows - 1], sharex=plot9)
+ichimokuPhase.Plot(plot10)
+
+# Labels
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
 plt.title('%s - page 2' % stockData.GetStockCode())
 plt.legend(loc='upper left')
-# plt.minorticks_on()
-plt.grid(b=True, which='major', axis='both', color='k')
-# plt.grid(b=True, which='minor', axis='both')
+
 # Add return rates axle
-stockData.AddReturnRatesAxle(plot9)
+# stockData.AddReturnRatesAxle(plot9)
 
 
 # Plot to file or show
