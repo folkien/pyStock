@@ -9,7 +9,7 @@ class IchimokuPhase(indicator):
 
     def __init__(self, ichimoku, close):
         ''' Constructor '''
-        indicator.__init__(self, 'IchimokuPhase', 'momentum', close)
+        indicator.__init__(self, 'IchimokuPhase', 'momentum', close.index)
         self.phaseLine = self.__initIchimokuPhase(ichimoku)
 
     def _isBuy(self, text):
@@ -22,10 +22,12 @@ class IchimokuPhase(indicator):
 
     def __initIchimokuPhase(self, ichimoku):
         ''' Create IchimokuPhase indicator '''
-        phaseLine = pd.DataFrame(NaN, index=ichimoku.signals.index,
-                                 columns=['value'])
+        # Get signals data copy and sort by index
+        data = ichimoku.signals.sort_index()
+
+        phaseLine = {}
         phaseValue = 0
-        for index, signal in ichimoku.signals.iterrows():
+        for index, signal in data.iterrows():
             # Calculate new value
             if (self._isBuy(signal['type'])):
                 phaseValue = min(phaseValue+1, 12)
@@ -33,9 +35,9 @@ class IchimokuPhase(indicator):
                 phaseValue = max(phaseValue-1, -12)
 
             # Add to phase line
-            phaseLine['value'][index] = phaseValue
+            phaseLine[index] = phaseValue
 
-        return phaseLine
+        return pd.Series(phaseLine)
 
     def ExportSignals(self, reportSignals):
         ''' No indicators to Export.'''
