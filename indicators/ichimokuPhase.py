@@ -30,9 +30,9 @@ class IchimokuPhase(indicator):
         for index, signal in data.iterrows():
             # Calculate new value
             if (self._isBuy(signal['type'])):
-                phaseValue = min(phaseValue+1, 12)
+                phaseValue = min(phaseValue+1, 3)
             elif (self._isSell(signal['type'])):
-                phaseValue = max(phaseValue-1, -12)
+                phaseValue = max(phaseValue-1, -3)
 
             # Add to phase line
             phaseLine[index] = phaseValue
