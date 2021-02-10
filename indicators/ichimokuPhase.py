@@ -2,7 +2,8 @@
 import matplotlib.pyplot as plt
 from core.indicator import indicator
 import pandas as pd
-from numpy import NaN
+import numpy as np
+from helpers.DataOperations import CreateHorizontalLine
 
 
 class IchimokuPhase(indicator):
@@ -44,5 +45,32 @@ class IchimokuPhase(indicator):
 
     def Plot(self, ax):
         ''' Plotting method.'''
-        ax.plot(self.toNumIndex(self.phaseLine), self.phaseLine.values, '--', linewidth=1.0,
+        x_axis = self.toNumIndex(self.phaseLine)
+
+        # Trend rising
+        rising = CreateHorizontalLine(self.phaseLine.index, 2, 2, True)
+        plt.plot(self.toNumIndex(rising), rising, '--',
+                 label='Rising', color='#169400')
+        plt.fill_between(x_axis, self.phaseLine, rising['value'],
+                         where=self.phaseLine >= rising['value'], color='#b3ffb3')
+
+        # Trend falling
+        falling = CreateHorizontalLine(self.phaseLine.index, -2, -2, True)
+        plt.plot(self.toNumIndex(falling), falling, '--',
+                 label='Falling', color='#940006')
+        plt.fill_between(x_axis, self.phaseLine, falling['value'],
+                         where=self.phaseLine <= falling['value'], color='#ffb3b3')
+
+        # Phase line
+        ax.plot(self.toNumIndex(self.phaseLine), self.phaseLine.values, linewidth=1.0,
                 color='#000000', label=('IchimokuPhase'))
+
+        # Limits
+        ax.set_ylim([-4, 4])
+        ax.set_yticks(np.arange(-4, 4, 1))
+        # And a corresponding grid
+        ax.grid(which='both')
+
+        # Or if you want different settings for the grids:
+        ax.grid(which='minor', alpha=0.2)
+        ax.grid(which='major', alpha=0.5)

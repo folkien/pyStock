@@ -203,15 +203,18 @@ stockData.PlotCandle(plot9)
 if (args.patterns):
     candlepatterns.Plot(plot9)
 plt.grid(b=True, which='major', axis='both', color='k')
+# Labels
+plt.ylabel('Price (%s)' % (info.GetCurrency()))
+plt.title('%s - page 2' % stockData.GetStockCode())
+plt.legend(loc='upper left')
 
 # Bottom ichimoku phase indicator
 plot10 = plt.subplot(gs[Rows - 1], sharex=plot9)
 ichimokuPhase.Plot(plot10)
 
 # Labels
-plt.ylabel('Price (%s)' % (info.GetCurrency()))
-plt.title('%s - page 2' % stockData.GetStockCode())
-plt.legend(loc='upper left')
+plt.grid(b=True, which='major', axis='both', color='k')
+plt.ylabel('Value')
 
 # Add return rates axle
 # stockData.AddReturnRatesAxle(plot9)
