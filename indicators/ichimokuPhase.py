@@ -62,8 +62,8 @@ class IchimokuPhase(indicator):
                          where=self.phaseLine <= falling['value'], color='#ffb3b3')
 
         # Phase line
-        ax.plot(self.toNumIndex(self.phaseLine), self.phaseLine.values, linewidth=1.0,
-                color='#000000', label=('IchimokuPhase'))
+        ax.step(self.toNumIndex(self.phaseLine), self.phaseLine.values, linewidth=1.0,
+                color='#000000', label=('IchimokuPhase'), where='post')
 
         # Limits
         ax.set_ylim([-4, 4])
