@@ -30,6 +30,10 @@ class Ichimoku(indicator):
         fromBottom, fromTop = FindIntersections(self.tenkanSen, self.kijunSen)
         self.__filterAppendSignals('TenKij', 1, fromBottom, fromTop)
 
+        # ClosePrice and tenkans sen
+        fromBottom, fromTop = FindIntersections(close, self.tenkanSen)
+        self.__filterAppendSignals('CloseTen', 0, fromBottom, fromTop)
+
         # ClosePrice and kijun sen
         fromBottom, fromTop = FindIntersections(close, self.kijunSen)
         self.__filterAppendSignals('CloseKij', 0, fromBottom, fromTop)
