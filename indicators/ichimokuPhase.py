@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 from core.indicator import indicator
 import pandas as pd
+from numpy import NaN
 
 
 class IchimokuPhase(indicator):
@@ -17,23 +18,24 @@ class IchimokuPhase(indicator):
 
     def _isSell(self, text):
         ''' True if sell text'''
-        return (text is 'buy') or (text is 'buyweak') or (text is 'buystrong')
+        return (text is 'sell') or (text is 'sellweak') or (text is 'sellstrong')
 
     def __initIchimokuPhase(self, ichimoku):
         ''' Create IchimokuPhase indicator '''
-        phaseLine = {}
+        phaseLine = pd.DataFrame(NaN, index=ichimoku.signals.index,
+                                 columns=['value'])
         phaseValue = 0
         for index, signal in ichimoku.signals.iterrows():
             # Calculate new value
             if (self._isBuy(signal['type'])):
-                phaseValue = max(phaseValue+1, 12)
+                phaseValue = min(phaseValue+1, 12)
             elif (self._isSell(signal['type'])):
-                phaseValue = min(phaseValue-1, -12)
+                phaseValue = max(phaseValue-1, -12)
 
             # Add to phase line
-            phaseLine[index] = [phaseValue]
+            phaseLine['value'][index] = phaseValue
 
-        return pd.DataFrame.from_dict(phaseLine, orient='index')
+        return phaseLine
 
     def ExportSignals(self, reportSignals):
         ''' No indicators to Export.'''
