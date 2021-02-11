@@ -205,7 +205,7 @@ if (args.patterns):
 plt.grid(b=True, which='major', axis='both', color='k')
 # Labels
 plt.ylabel('Price (%s)' % (info.GetCurrency()))
-plt.title('%s - page 2' % stockData.GetStockCode())
+plt.title('Ichimoku %s' % stockData.GetStockCode())
 plt.legend(loc='upper left')
 
 # Bottom ichimoku phase indicator
