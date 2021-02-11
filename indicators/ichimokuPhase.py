@@ -43,23 +43,23 @@ class IchimokuPhase(indicator):
     def ExportSignals(self, reportSignals):
         ''' No indicators to Export.'''
 
+    def __plotBackground(self, x_axis, minY, maxY, color):
+        ''' Plots background between two lines.'''
+        # Create limits
+        top = CreateHorizontalLine(self.phaseLine.index, maxY, maxY, True)
+        bottom = CreateHorizontalLine(self.phaseLine.index, minY, minY, True)
+        # Fill between with color
+        plt.fill_between(x_axis, top['value'], bottom['value'], color=color)
+
     def Plot(self, ax):
         ''' Plotting method.'''
         x_axis = self.toNumIndex(self.phaseLine)
 
-        # Trend rising
-        rising = CreateHorizontalLine(self.phaseLine.index, 2, 2, True)
-        plt.plot(self.toNumIndex(rising), rising, '--',
-                 label='Rising', color='#169400')
-        plt.fill_between(x_axis, self.phaseLine, rising['value'],
-                         where=self.phaseLine >= rising['value'], color='#b3ffb3')
-
-        # Trend falling
-        falling = CreateHorizontalLine(self.phaseLine.index, -2, -2, True)
-        plt.plot(self.toNumIndex(falling), falling, '--',
-                 label='Falling', color='#940006')
-        plt.fill_between(x_axis, self.phaseLine, falling['value'],
-                         where=self.phaseLine <= falling['value'], color='#ffb3b3')
+        self.__plotBackground(x_axis, 1, 3, color='#b3ffb3')
+        self.__plotBackground(x_axis, -1, -3, color='#ffb3b3')
+        zero = CreateHorizontalLine(self.phaseLine.index, 0, 0)
+        plt.plot(self.toNumIndex(zero), zero, '--',
+                 linewidth=1.0, color='#333333')
 
         # Phase line
         ax.step(self.toNumIndex(self.phaseLine), self.phaseLine.values, linewidth=1.0,
@@ -70,7 +70,7 @@ class IchimokuPhase(indicator):
         ax.set_yticks(np.arange(-4, 4, 1))
         # And a corresponding grid
         ax.grid(which='both')
-
         # Or if you want different settings for the grids:
         ax.grid(which='minor', alpha=0.2)
         ax.grid(which='major', alpha=0.5)
+        plt.ylabel('Phase')

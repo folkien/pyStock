@@ -212,10 +212,6 @@ plt.legend(loc='upper left')
 plot10 = plt.subplot(gs[Rows - 1], sharex=plot9)
 ichimokuPhase.Plot(plot10)
 
-# Labels
-plt.grid(b=True, which='major', axis='both', color='k')
-plt.ylabel('Value')
-
 # Add return rates axle
 # stockData.AddReturnRatesAxle(plot9)
 
