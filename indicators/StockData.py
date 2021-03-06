@@ -130,6 +130,11 @@ class StockData():
             if ('/' in stockCode):
                 print('Fetching `%s` from crypto.' % (stockCode))
                 rxData = get_crypto_data(stockCode, beginDate, endDate)
+                rxData = rxData.rename(columns={'close': 'Close',
+                                                'high': 'High',
+                                                'low': 'Low',
+                                                'open': 'Open',
+                                                'volume': 'Volume'})
             else:
                 print('Fetching `%s` from stooq.' % (stockCode))
                 rxData = data.DataReader(
