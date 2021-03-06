@@ -20,6 +20,10 @@ class StockDatabase():
 
     # Store object in database
     def Save(self, objectName, object):
+        # Check object name for invalid characters
+        for character in ['\\', '/']:
+            objectName = objectName.replace(character, '@')
+        #
         filepath = self.directory + objectName + '.bin'
         with FileLock(filepath + '.lock', timeout=lockTimeout):
             with open(filepath, 'wb') as f:

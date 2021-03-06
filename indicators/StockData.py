@@ -14,6 +14,7 @@ from core.database import StockDatabase
 from helpers.data import toNumIndex, GenerateOHLCSawFunction, GenerateOHLCTrapezeFunction
 from pandas_datareader import data
 from core.assets import ReportAsset, PlotAsset
+from fastquant.data import get_crypto_data
 
 # StockData object which creates StockData data
 
@@ -125,8 +126,14 @@ class StockData():
 
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
         if (len(rxData) == 0):
-            print('Fetching `%s` from stooq.' % (stockCode))
-            rxData = data.DataReader(stockCode, 'stooq', beginDate, endDate)
+            # Crypto currencies are in format Currency1/Currency2
+            if ('/' in stockCode):
+                print('Fetching `%s` from crypto.' % (stockCode))
+                rxData = get_crypto_data(stockCode, beginDate, endDate)
+            else:
+                print('Fetching `%s` from stooq.' % (stockCode))
+                rxData = data.DataReader(
+                    stockCode, 'stooq', beginDate, endDate)
 
         # Use old data if exists
         if (len(rxData) == 0) and (self.cache.IsExists(stockCode) is True):
