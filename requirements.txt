@@ -11,7 +11,7 @@ mplfinance==0.12.7a0
 numpy==1.19.2
 pandas==0.25.3
 pandas-datareader==0.9.0
-Pillow==8.1.1
+Pillow==8.2.0
 pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2020.1
