@@ -5,7 +5,7 @@
 ![Size](https://img.shields.io/github/repo-size/folkien/pyStock)
 ![pythonversion](https://img.shields.io/badge/python-3.6-blue)
 
-pyStock - repository of stock analyze, alarm and follow tools.
+pyStock - repository of stock analyze, alarm and follow tools. [Deprecated and not maintained!]
 -------------
 pyStock is a bunch of tools used for stock market analyze, follow, and alarms.
 * stock-alarms - tool for setting stock alarms and notifiyng user about alarms.
